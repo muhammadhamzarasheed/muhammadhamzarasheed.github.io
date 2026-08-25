@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Muhammad Hamza</title>
-<meta name="description" content="Assessment Lead at UK Management College. Multi-partner regulatory compliance, assessment operations and data integrity in UK higher education.">
+<meta name="description" content="Assessment professional and ACCA finalist applying a finance discipline to academic assessment. Reconcile before you report, evidence every decision, build the audit trail as you go.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
 /* Committed single theme. Every colour is painted explicitly so the page
    holds its own ground whatever the viewer's system is set to. */
@@ -20,10 +20,11 @@
   --line-2:#333A3F;
   --text:#F2F4F5;
   --text-2:#A0A8AD;
-  --text-3:#6C757B;
+  --text-3:#7B858C;
   --brass:#C9AA7C;
   --brass-soft:rgba(201,170,124,.14);
   --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
   --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
   --shell:70rem;
   --r:1.125rem;
@@ -43,12 +44,29 @@ body{
   font-size:clamp(1rem,.965rem + .17vw,1.0625rem);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
   overflow-x:hidden;
   padding-top:4.25rem;
 }
 ::selection{background:var(--brass-soft);color:var(--text);}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+
+/* Thin dark scrollbar so the frame matches the page. Standard properties
+   only: mixing them with ::-webkit-scrollbar rules makes modern Chromium
+   drop the webkit styling entirely. */
+html{scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
+
+/* Film grain. A whisper of texture over everything, never interactive. */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:120;
+  pointer-events:none;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
 .shell{width:100%;max-width:var(--shell);margin:0 auto;padding:0 clamp(1.5rem,5vw,3.5rem);}
 
@@ -86,9 +104,12 @@ a{color:inherit;text-decoration:none;}
 .nav ul a{
   font-size:.875rem;
   color:var(--text-2);
-  transition:color .25s ease;
+  padding-bottom:3px;
+  border-bottom:1px solid transparent;
+  transition:color .25s ease,border-color .25s ease;
 }
 .nav ul a:hover{color:var(--text);}
+.nav ul a.live{color:var(--brass);border-bottom-color:var(--brass);}
 
 /* ---------- mobile menu ---------- */
 .burger{
@@ -168,9 +189,100 @@ html.menu-open{overflow:hidden;}
   .burger{display:flex;}
 }
 
+/* ---------- audit spine ---------- */
+/* The page keeps its own audit trail. A hairline on the left fills as
+   the visitor reads; each section is a node that settles brass once it
+   has been seen. The tally underneath counts sections reconciled. */
+.spine{
+  position:fixed;
+  left:clamp(1.25rem,2.5vw,2.5rem);
+  top:50%;
+  transform:translateY(-50%);
+  z-index:40;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+@media (min-width:68rem){ .spine{display:flex;} }
+.spine .rail{
+  position:relative;
+  width:1px;
+  height:min(44vh,26rem);
+  background:var(--line);
+}
+.spine .fill{
+  position:absolute;
+  top:0;
+  left:0;
+  width:1px;
+  height:0;
+  background:linear-gradient(to bottom,var(--brass),rgba(201,170,124,.35));
+}
+.spine .node{
+  position:absolute;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:23px;
+  height:23px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+}
+.spine .node::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--void);
+  border:1px solid var(--line-2);
+  transition:background .4s ease,border-color .4s ease,box-shadow .4s ease;
+}
+.spine .node.done::before{
+  background:var(--brass);
+  border-color:var(--brass);
+  box-shadow:0 0 10px rgba(201,170,124,.5);
+}
+.spine .node .tip{
+  position:absolute;
+  left:1.6rem;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:var(--mono);
+  font-size:.625rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-2);
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.4rem;
+  padding:.3rem .55rem;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+}
+.spine .node:hover .tip,
+.spine .node:focus-visible .tip{opacity:1;}
+.spine .tally{
+  margin-top:.9rem;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.625rem;
+  letter-spacing:.14em;
+  color:var(--text-3);
+  writing-mode:vertical-rl;
+}
+.spine .tally b{color:var(--brass);font-weight:400;}
+
 /* ---------- hero ---------- */
 .hero{
   position:relative;
+  min-height:calc(100vh - 4.25rem);
   min-height:calc(100svh - 4.25rem);
   display:flex;
   flex-direction:column;
@@ -179,6 +291,11 @@ html.menu-open{overflow:hidden;}
   text-align:center;
   padding:clamp(4rem,10vw,7rem) 0 clamp(3rem,6vw,5rem);
   overflow:hidden;
+}
+.field{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
 }
 .glow{
   position:absolute;
@@ -193,23 +310,64 @@ html.menu-open{overflow:hidden;}
 .hero .shell{position:relative;display:flex;flex-direction:column;align-items:center;gap:1.75rem;}
 h1{
   margin:0;
-  font-size:clamp(3.25rem,1.4rem + 8vw,7.5rem);
+  font-size:clamp(3.25rem,1.4rem + 8vw,8rem);
   font-weight:600;
   line-height:.96;
   letter-spacing:-.045em;
   text-wrap:balance;
 }
-.tag{
-  margin:0;
-  max-width:30ch;
-  font-size:clamp(1.25rem,1.05rem + .95vw,1.9rem);
-  font-weight:400;
-  line-height:1.32;
-  letter-spacing:-.021em;
-  color:var(--text-2);
-  text-wrap:balance;
+
+/* The method as a checklist that ticks itself on arrival. */
+.checks{
+  margin:.5rem 0 0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+  align-items:flex-start;
 }
-.tag b{color:var(--text);font-weight:500;}
+.chk{
+  display:flex;
+  align-items:flex-start;
+  gap:.8rem;
+  font-family:var(--mono);
+  font-size:.9375rem;
+  letter-spacing:.02em;
+  color:var(--text-3);
+  transition:color .6s ease;
+}
+.chk .box{
+  flex:none;
+  margin-top:.28rem;
+  width:15px;
+  height:15px;
+  border:1px solid var(--line-2);
+  border-radius:3px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:border-color .5s ease,background .5s ease,box-shadow .5s ease;
+}
+.chk .box svg{width:9px;height:8px;display:block;}
+.chk .box path{
+  fill:none;
+  stroke:var(--void);
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:12;
+  stroke-dashoffset:12;
+  transition:stroke-dashoffset .45s ease .15s;
+}
+.chk.done{color:var(--text);}
+.chk.done .box{
+  background:var(--brass);
+  border-color:var(--brass);
+  box-shadow:0 0 14px rgba(201,170,124,.35);
+}
+.chk.done .box path{stroke-dashoffset:0;}
+
 .creed{
   margin:0;
   max-width:46ch;
@@ -217,7 +375,13 @@ h1{
   font-size:1.0625rem;
   line-height:1.65;
 }
-.creed b{color:var(--brass);font-weight:500;}
+.creed b{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:1.1em;
+  color:var(--brass);
+}
 .cue{
   margin-top:.5rem;
   display:flex;
@@ -242,13 +406,14 @@ h1{
 .band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .band .shell{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+  grid-template-columns:1fr;
 }
 /* Stacked on narrow screens the divider has to be horizontal, or every
    figure below the first carries a stray vertical rule. */
 .fig{padding:2.25rem 1.75rem;text-align:center;border-top:1px solid var(--line);}
 .fig:first-child{border-top:0;}
 @media (min-width:48rem){
+  .band .shell{grid-template-columns:repeat(4,1fr);}
   .fig{border-top:0;border-left:1px solid var(--line);}
   .fig:first-child{border-left:0;}
 }
@@ -286,6 +451,125 @@ h2{
 .prose + .prose{margin-top:1.15rem;}
 .mid .prose{max-width:56ch;}
 
+/* ---------- principles ---------- */
+.principles{
+  margin-top:clamp(2.75rem,5vw,4rem);
+  width:100%;
+  text-align:left;
+  display:grid;
+  counter-reset:principle;
+}
+.principle{
+  display:grid;
+  gap:.75rem 2.5rem;
+  padding:2.25rem 1rem;
+  margin:0 -1rem;
+  border-top:1px solid var(--line);
+  border-radius:.6rem;
+  counter-increment:principle;
+  transition:background .35s ease;
+}
+@media (hover:hover){
+  .principle:hover{background:var(--raise);}
+}
+.principle:last-child{border-bottom:1px solid var(--line);}
+@media (min-width:48rem){
+  .principle{grid-template-columns:4.5rem minmax(0,1fr);align-items:start;}
+}
+.principle::before{
+  content:"0" counter(principle);
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.875rem;
+  letter-spacing:.1em;
+  color:var(--brass);
+  padding-top:.4rem;
+}
+.principle h3{
+  margin:0;
+  font-size:clamp(1.35rem,1.15rem + .9vw,1.85rem);
+  font-weight:600;
+  letter-spacing:-.025em;
+}
+.principle p{
+  margin:.75rem 0 0;
+  max-width:56ch;
+  color:var(--text-2);
+  font-size:1rem;
+  line-height:1.7;
+}
+
+/* ---------- illuminated quote ---------- */
+/* The equity argument gets the full stage: the page pins while the
+   statement lights word by word under the reader's own scrolling. */
+.quotepin{
+  position:relative;
+  height:230vh;
+  padding:0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.qsticky{
+  position:sticky;
+  top:0;
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1.75rem;
+  text-align:center;
+  padding:6rem 0 4rem;
+}
+.q{
+  margin:0;
+  max-width:26ch;
+  font-size:clamp(1.85rem,1.25rem + 2.7vw,3.6rem);
+  font-weight:500;
+  line-height:1.14;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.q p{margin:0;}
+.q p + p{margin-top:.8rem;}
+.q .w{color:rgba(242,244,245,.14);transition:color .3s ease;}
+.q .w.on{color:var(--text);}
+.q p.turn .w{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  color:rgba(201,170,124,.16);
+}
+.q p.turn .w.on{color:var(--brass);}
+.qclose{
+  margin:0;
+  max-width:52ch;
+  color:var(--text-2);
+  font-size:1.0625rem;
+  line-height:1.72;
+  transition:opacity .7s ease,transform .7s ease;
+}
+/* Hidden only once JS has claimed the page: with scripts off, the
+   closing line must simply be there. */
+.js .qclose{opacity:0;transform:translateY(12px);}
+.js .qclose.on{opacity:1;transform:none;}
+/* Reduced motion or no JS: everything lit, no pin theatrics. */
+.quotepin.still{height:auto;padding:clamp(5rem,11vw,9rem) 0;}
+.quotepin.still .qsticky{position:static;min-height:0;padding:0;}
+.quotepin.still .q .w{color:var(--text);}
+.quotepin.still .q p.turn .w{color:var(--brass);}
+.js .quotepin.still .qclose{opacity:1;transform:none;}
+/* Short viewports cannot fit the pinned quote: fall back to the same
+   static treatment rather than clipping it mid scroll. */
+@media (max-height:640px){
+  .quotepin{height:auto;padding:clamp(5rem,11vw,9rem) 0;}
+  .qsticky{position:static;min-height:0;padding:0;}
+  .q .w{color:var(--text);}
+  .q p.turn .w{color:var(--brass);}
+  .js .qclose{opacity:1;transform:none;}
+}
+
 /* ---------- tiles ---------- */
 .tiles{
   display:grid;
@@ -294,44 +578,80 @@ h2{
   margin-top:clamp(2.75rem,5vw,4rem);
   text-align:left;
   width:100%;
+  perspective:1100px;
 }
-.tile{
-  background:var(--raise);
-  border:1px solid var(--line);
-  border-radius:var(--r);
-  padding:1.9rem 1.75rem 2rem;
-  transition:background .3s ease,border-color .3s ease,transform .3s ease;
-}
-.tile:hover{background:var(--raise-2);border-color:var(--line-2);transform:translateY(-2px);}
 /* Six tiles, three across, two full rows. No row ends in a hole. */
 @media (min-width:64rem){
   .tiles{grid-template-columns:repeat(3,1fr);}
 }
+.tile{
+  position:relative;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  transition:background .3s ease,border-color .3s ease;
+}
+@media (hover:hover){
+  .tile:hover{background:var(--raise-2);}
+}
+/* Interior glow that follows the cursor. */
+.tile::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(201,170,124,.08),transparent 65%);
+  opacity:0;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+/* Brass ring on the border only, at the cursor. */
+.tile::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  padding:1px;
+  background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%),rgba(201,170,124,.55),transparent 70%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+  opacity:0;
+  transition:opacity .35s ease;
+  pointer-events:none;
+}
+@media (hover:hover) and (pointer:fine){
+  .tile:hover::before,
+  .tile:hover::after{opacity:1;}
+}
+.tin{
+  padding:1.9rem 1.75rem 2rem;
+  transition:transform .18s ease;
+  will-change:transform;
+}
 .tile h3{margin:0;font-size:1.0625rem;font-weight:600;letter-spacing:-.012em;}
 .tile p{margin:.75rem 0 0;font-size:.9375rem;line-height:1.62;color:var(--text-2);}
 
-/* ---------- creed / quote ---------- */
+/* ---------- bordered interludes ---------- */
 .creedbox{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-blockquote{
-  margin:0;
-  max-width:24ch;
-  font-size:clamp(1.85rem,1.25rem + 2.7vw,3.5rem);
-  font-weight:500;
-  line-height:1.1;
-  letter-spacing:-.035em;
-  text-wrap:balance;
-}
-blockquote em{color:var(--brass);font-style:italic;font-weight:400;}
-blockquote p{margin:0;}
-blockquote p + p{margin-top:.7rem;}
 
 /* ---------- record ---------- */
 .record{margin-top:clamp(2.5rem,5vw,3.5rem);width:100%;text-align:left;}
 .item{
   display:grid;
   gap:.55rem;
-  padding:1.85rem 0;
+  padding:1.85rem 1rem;
+  margin:0 -1rem;
   border-top:1px solid var(--line);
+  border-radius:.6rem;
+  transition:background .35s ease,box-shadow .35s ease;
+}
+@media (hover:hover){
+  .item:hover{
+    background:var(--raise);
+    box-shadow:inset 2px 0 0 var(--brass);
+  }
 }
 .item:last-child{border-bottom:1px solid var(--line);}
 @media (min-width:48rem){
@@ -405,6 +725,14 @@ blockquote p + p{margin-top:.7rem;}
   padding:.3rem .7rem;
   border:1px solid var(--line);
   border-radius:2rem;
+  transition:transform .25s ease,border-color .25s ease,color .25s ease;
+}
+@media (hover:hover){
+  .grp dd span:hover{
+    transform:rotate(-2.5deg) translateY(-2px);
+    border-color:var(--brass);
+    color:var(--text);
+  }
 }
 
 /* ---------- contact ---------- */
@@ -420,14 +748,88 @@ blockquote p + p{margin-top:.7rem;}
   border:1px solid var(--line);
   border-radius:var(--r);
   font-weight:500;
-  transition:background .3s ease,border-color .3s ease;
+  transition:background .3s ease,border-color .3s ease,transform .3s ease;
 }
-.reach a:hover{background:var(--raise-2);border-color:var(--brass);}
 .reach i{font-style:normal;font-family:var(--mono);font-size:.75rem;letter-spacing:.05em;color:var(--text-3);font-weight:400;}
-.reach a:hover i{color:var(--brass);}
+@media (hover:hover){
+  .reach a:hover{background:var(--raise-2);border-color:var(--brass);transform:translateY(-2px);}
+  .reach a:hover i{color:var(--brass);}
+}
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
-footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:baseline;}
+.hint{display:none;}
+@media (hover:hover) and (pointer:fine){
+  .hint{display:block;}
+  .hint kbd{
+    font-family:var(--mono);
+    font-size:.625rem;
+    border:1px solid var(--line-2);
+    border-bottom-width:2px;
+    border-radius:.3rem;
+    padding:.1rem .35rem;
+    color:var(--text-2);
+  }
+}
+
+/* ---------- palette ---------- */
+.pal{
+  position:fixed;
+  inset:0;
+  z-index:130;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:14vh 1.5rem 0;
+  background:rgba(10,11,12,.6);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease,visibility 0s .2s;
+}
+.pal.open{opacity:1;visibility:visible;transition:opacity .2s ease,visibility 0s 0s;}
+/* The author display:flex would otherwise defeat the hidden attribute. */
+.pal[hidden]{display:none;}
+.pal .card{
+  width:100%;
+  max-width:30rem;
+  background:var(--raise);
+  border:1px solid var(--line-2);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+  transform:translateY(-8px);
+  transition:transform .2s ease;
+}
+.pal.open .card{transform:none;}
+.pal input{
+  width:100%;
+  padding:1.05rem 1.25rem;
+  background:none;
+  border:0;
+  border-bottom:1px solid var(--line);
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.9375rem;
+  outline:none;
+}
+.pal input::placeholder{color:var(--text-3);}
+.pal ul{margin:0;padding:.4rem;list-style:none;max-height:46vh;overflow-y:auto;}
+.pal li{border-radius:.6rem;}
+.pal li a{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:1rem;
+  padding:.75rem .85rem;
+  border-radius:.6rem;
+  font-size:.9375rem;
+}
+.pal li.sel a,
+.pal li a:hover{background:var(--raise-2);color:var(--brass);}
+.pal li i{font-style:normal;font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);}
+.pal li.hide{display:none;}
 
 /* ---------- reveal ---------- */
 .js .up{opacity:0;transform:translateY(18px);}
@@ -441,10 +843,15 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 .js .up.d3{transition-delay:.24s;}
 .js .up.d4{transition-delay:.32s;}
 .js .up.d5{transition-delay:.4s;}
+/* Revealed cards must keep their own hover transitions: the reveal
+   shorthand would otherwise replace them and make hovers snap. */
+.js .tile.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .3s ease,border-color .3s ease;}
+.js .principle.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .35s ease;}
+.js .item.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .35s ease,box-shadow .35s ease;}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .up{opacity:1;transform:none;}
-  *{transition-duration:.001ms !important;animation-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -453,9 +860,9 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 <nav class="nav" id="nav">
   <div class="shell">
     <a class="sig" href="#top">Muhammad Hamza<span>.</span></a>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#practice">Practice</a></li>
+    <ul id="navlinks">
+      <li><a href="#method">Method</a></li>
+      <li><a href="#now">Now</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#elsewhere">Elsewhere</a></li>
@@ -466,93 +873,129 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 </nav>
 
 <div class="menu" id="menu">
-  <a href="#about">About</a>
-  <a href="#practice">Practice</a>
+  <a href="#method">Method</a>
+  <a href="#now">Now</a>
   <a href="#experience">Experience</a>
   <a href="#education">Education</a>
   <a href="#elsewhere">Elsewhere</a>
   <a href="#contact">Contact</a>
 </div>
 
+<aside class="spine" id="spine" aria-label="Reading progress">
+  <div class="rail" id="rail"><div class="fill" id="fill"></div></div>
+  <span class="tally" id="tally"><b>00</b>/06 reconciled</span>
+</aside>
+
 <main id="top">
 
-  <header class="hero">
+  <header class="hero" id="hero">
+    <canvas class="field" id="field" aria-hidden="true"></canvas>
     <div class="glow"></div>
     <div class="shell">
-      <p class="label up">Assessment operations <b>&middot;</b> UK higher education</p>
+      <p class="label up">Finance discipline <b>&middot;</b> Academic assessment</p>
       <h1 class="up d1">Muhammad Hamza</h1>
-      <p class="tag up d2"><b>Assessment Lead</b> at UK Management College. ACCA finalist, MSc Accounting and Finance.</p>
-      <p class="creed up d3">A finance discipline applied to academic assessment. <b>Reconcile before you report.</b> Evidence every decision. Build the audit trail as you go, not after the fact.</p>
-      <p class="label up d4">Manchester Area, United Kingdom</p>
+      <ul class="checks up d2" id="checks" aria-label="Method">
+        <li class="chk"><span class="box" aria-hidden="true"><svg viewBox="0 0 10 8"><path d="M1 4.2 3.6 6.8 9 1.4"/></svg></span>Reconcile before you report</li>
+        <li class="chk"><span class="box" aria-hidden="true"><svg viewBox="0 0 10 8"><path d="M1 4.2 3.6 6.8 9 1.4"/></svg></span>Evidence every decision</li>
+        <li class="chk"><span class="box" aria-hidden="true"><svg viewBox="0 0 10 8"><path d="M1 4.2 3.6 6.8 9 1.4"/></svg></span>Build the audit trail as you go</li>
+      </ul>
+      <p class="creed up d3">Assessment professional and ACCA finalist, working where <b>financial reporting and academic governance</b> borrow from each other. The systems I run decide progression, awards and appeals, so they are built to survive scrutiny.</p>
+      <p class="label up d4">Assessment Lead, UK Management College &middot; Manchester</p>
       <span class="cue up d5"><i></i></span>
     </div>
   </header>
 
   <section class="band" style="padding:0;">
     <dl class="shell">
-      <div class="fig up"><dt>04</dt><dd>Validating partner universities</dd></div>
-      <div class="fig up d1"><dt>10/13</dt><dd>ACCA papers passed</dd></div>
-      <div class="fig up d2"><dt>MSc</dt><dd>Accounting and Finance, Merit</dd></div>
-      <div class="fig up d3"><dt>PgC</dt><dd>Teaching and Learning, in progress</dd></div>
+      <div class="fig up"><dt><span class="odo" data-final="10">10</span>/13</dt><dd>ACCA papers passed, finalist</dd></div>
+      <div class="fig up d1"><dt>MSc</dt><dd>Accounting and Finance, Merit</dd></div>
+      <div class="fig up d2"><dt>PgC</dt><dd>Teaching and Learning, in progress</dd></div>
+      <div class="fig up d3"><dt><span class="odo" data-final="2019" data-from="2026">2019</span></dt><dd>Working with numbers since</dd></div>
     </dl>
   </section>
 
-  <section id="about">
+  <section id="method">
     <div class="shell mid">
-      <p class="label up">About</p>
-      <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
-      <p class="prose up d2">Four validating partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at the same time. Progression, resits, capping and award eligibility all rest on data that has to hold up under scrutiny. Getting it right the first time is the job.</p>
-    </div>
-  </section>
+      <p class="label up"><b>01</b> &middot; Method</p>
+      <h2 class="up d1">Three rules, borrowed from audit, applied to assessment.</h2>
+      <p class="prose up d2">Assessment data decides progression, awards and appeals. It deserves the same discipline a financial statement gets, and the discipline travels: it does not belong to any one employer, rulebook or system.</p>
 
-  <section id="practice" style="padding-top:0;">
-    <div class="shell mid">
-      <p class="label up">Practice</p>
-      <h2 class="up d1">What the work actually involves.</h2>
-
-      <div class="tiles">
-        <article class="tile up">
-          <h3>Multi-partner compliance</h3>
-          <p>Applying four distinct sets of academic regulations correctly and consistently, so every decision is defensible against the right rulebook.</p>
+      <div class="principles">
+        <article class="principle up">
+          <div>
+            <h3>Reconcile before you report</h3>
+            <p>A figure that reaches a board, an examiner or a student record has already been checked against its source. Trust is built at the point of preparation, not defended after something breaks.</p>
+          </div>
         </article>
-        <article class="tile up d1">
-          <h3>Assessment operations</h3>
-          <p>Submission tracking, marks processing and results workflows across the full programme portfolio, from deadline to board.</p>
+        <article class="principle up">
+          <div>
+            <h3>Evidence every decision</h3>
+            <p>Every outcome should trace back to the regulation and the data that produced it. If a decision cannot be defended line by line against the right rulebook, it is not finished.</p>
+          </div>
         </article>
-        <article class="tile up d2">
-          <h3>Process translation</h3>
-          <p>Turning partner regulations into working procedure that operational teams can actually follow, rather than leaving interpretation to chance.</p>
-        </article>
-        <article class="tile up d3">
-          <h3>Data and reporting</h3>
-          <p>Advanced Excel used for reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record.</p>
-        </article>
-        <article class="tile up d4">
-          <h3>Progression and awards</h3>
-          <p>Progression, resits, capping and award eligibility, applied so that every outcome can be traced back to the regulation that produced it.</p>
-        </article>
-        <article class="tile up d5">
-          <h3>Partnership and collaboration</h3>
-          <p>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</p>
+        <article class="principle up">
+          <div>
+            <h3>Build the audit trail as you go</h3>
+            <p>Documentation written after the fact is reconstruction. The record should exist because the work was done properly the first time, not because somebody asked for it later.</p>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="creedbox">
-    <div class="shell mid">
-      <p class="label up">Position</p>
-      <blockquote class="up d1">
-        <p>A marking error does not land evenly. It lands hardest on the students with the least capacity to challenge it.</p>
-        <p><em>Fair process is not separate from good process. It is the point of it.</em></p>
-      </blockquote>
+  <section class="quotepin" id="quotepin">
+    <div class="qsticky">
+      <div class="shell mid" style="gap:1.75rem;">
+        <p class="label">Why it matters</p>
+        <blockquote class="q" id="quote">
+          <p>A marking error, a misapplied regulation or a missed extenuating circumstance does not land evenly. It lands hardest on the students with the least capacity to challenge it.</p>
+          <p class="turn">Fair process is not separate from good process. It is the point of it.</p>
+        </blockquote>
+        <p class="qclose" id="qclose">Accuracy in assessment is an equity issue before it is an administrative one, and that is the reason for the method, not a nice side effect of it.</p>
+      </div>
     </div>
   </section>
 
-  <section id="experience">
+  <section id="now">
     <div class="shell mid">
-      <p class="label up">Experience</p>
-      <h2 class="up d1">Where the practice was built.</h2>
+      <p class="label up"><b>02</b> &middot; Now</p>
+      <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
+      <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across multi-campus programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
+
+      <div class="tiles" id="tiles">
+        <article class="tile up"><div class="tin">
+          <h3>Regulatory compliance</h3>
+          <p>Holding several rulebooks in play at once and applying the right one, correctly and consistently, to every decision.</p>
+        </div></article>
+        <article class="tile up d1"><div class="tin">
+          <h3>Assessment operations</h3>
+          <p>Submission tracking, marks processing and results workflows across the full programme portfolio, from deadline to board.</p>
+        </div></article>
+        <article class="tile up d2"><div class="tin">
+          <h3>Process translation</h3>
+          <p>Turning regulation into working procedure that operational teams can actually follow, rather than leaving interpretation to chance.</p>
+        </div></article>
+        <article class="tile up d3"><div class="tin">
+          <h3>Data and reporting</h3>
+          <p>Advanced Excel used for reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record.</p>
+        </div></article>
+        <article class="tile up d4"><div class="tin">
+          <h3>Progression and awards</h3>
+          <p>Progression, resits, capping and award eligibility, applied so that every outcome can be traced back to the regulation that produced it.</p>
+        </div></article>
+        <article class="tile up d5"><div class="tin">
+          <h3>Partnership and collaboration</h3>
+          <p>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</p>
+        </div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" style="padding-top:0;">
+    <div class="shell mid">
+      <p class="label up"><b>03</b> &middot; Experience</p>
+      <h2 class="up d1">Where the method was built.</h2>
+      <p class="prose up d2">Finance first, then education. The order matters: the habits came from accounting, and assessment is where they turned out to be needed most.</p>
 
       <div class="record">
         <article class="item up">
@@ -589,7 +1032,7 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
           <div>
             <h3>Accounting Associate</h3>
             <p class="who">Atom Services</p>
-            <p class="note">Accounts payable and receivable, reconciliations, financial and cost accounting under IFRS, alongside long form content writing for the business.</p>
+            <p class="note">Accounts payable and receivable, reconciliations, financial and cost accounting under IFRS, alongside long form content writing for the business. Where reconcile before you report stopped being advice and became habit.</p>
             <ul class="prior">
               <li><span>Content Writer</span> <i>Apr 2019 to Dec 2021</i></li>
             </ul>
@@ -611,7 +1054,7 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 
   <section id="education" style="padding-top:0;">
     <div class="shell mid">
-      <p class="label up">Education</p>
+      <p class="label up"><b>04</b> &middot; Education</p>
       <h2 class="up d1">Still studying, deliberately.</h2>
       <p class="prose up d2">Assessment administration works better when the person running it understands assessment design, not just assessment processing. Knowing why a rubric is built a certain way changes how you handle the edge cases it produces.</p>
 
@@ -676,10 +1119,10 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 
   <section id="elsewhere" class="creedbox">
     <div class="shell mid">
-      <p class="label up">Field notes</p>
+      <p class="label up"><b>05</b> &middot; Field notes</p>
       <h2 class="up d1">The part I do not try to control.</h2>
-      <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. New Year in Edinburgh, long walks in the Peak District, and all four nations of the country I live in. Pakistan whenever I can get back. None of it had to tie out.</p>
-      <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too. Four validating partners, four sets of regulations, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
+      <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. Pakistan whenever I can get back. And the country I live in gets the spare weekends: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, all four nations at one time or another, New Year in London one year and Edinburgh the next. None of it had to tie out.</p>
+      <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
       <p class="prose up d2">It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
       <p class="prose up d2">The rest, que sera, sera.</p>
 
@@ -702,7 +1145,7 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 
   <section id="contact">
     <div class="shell mid">
-      <p class="label up">Contact</p>
+      <p class="label up"><b>06</b> &middot; Contact</p>
       <h2 class="up d1">Open to connecting.</h2>
       <p class="prose up d2">I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
       <div class="reach up d3">
@@ -717,13 +1160,32 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
 <footer>
   <div class="shell">
     <p class="label">Muhammad Hamza</p>
-    <p class="label">Assessment Lead, UK Management College</p>
+    <p class="label hint">Press <kbd>/</kbd> to navigate</p>
+    <p class="label">Reconcile before you report</p>
   </div>
 </footer>
 
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Quick navigation" hidden>
+  <div class="card">
+    <input id="palq" type="text" placeholder="Where to?" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="pallist" aria-autocomplete="list" aria-label="Search destinations">
+    <ul id="pallist" role="listbox" aria-label="Destinations">
+      <li role="option" id="palopt-1" aria-selected="false"><a href="#method" tabindex="-1">Method <i>section</i></a></li>
+      <li role="option" id="palopt-2" aria-selected="false"><a href="#now" tabindex="-1">Now <i>section</i></a></li>
+      <li role="option" id="palopt-3" aria-selected="false"><a href="#experience" tabindex="-1">Experience <i>section</i></a></li>
+      <li role="option" id="palopt-4" aria-selected="false"><a href="#education" tabindex="-1">Education <i>section</i></a></li>
+      <li role="option" id="palopt-5" aria-selected="false"><a href="#elsewhere" tabindex="-1">Elsewhere <i>section</i></a></li>
+      <li role="option" id="palopt-6" aria-selected="false"><a href="#contact" tabindex="-1">Contact <i>section</i></a></li>
+      <li role="option" id="palopt-7" aria-selected="false"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" tabindex="-1">LinkedIn <i>profile</i></a></li>
+      <li role="option" id="palopt-8" aria-selected="false"><a href="mailto:hamzarasheedd@gmail.com" tabindex="-1">Email <i>write</i></a></li>
+    </ul>
+  </div>
+</div>
+
 <script>
 document.documentElement.classList.add("js");
+var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ---------- reveal + nav shade ---------- */
 (function () {
   var items = [].slice.call(document.querySelectorAll(".up"));
   var nav = document.getElementById("nav");
@@ -754,8 +1216,16 @@ document.documentElement.classList.add("js");
   window.addEventListener("resize", schedule);
   window.addEventListener("hashchange", schedule);
   window.addEventListener("load", schedule);
+  document.addEventListener("visibilitychange", schedule);
+  // Keyboard focus can land inside a not-yet-revealed block; it must
+  // never sit on invisible content.
+  document.addEventListener("focusin", function (e) {
+    var el = e.target.closest ? e.target.closest(".up") : null;
+    if (el) { el.classList.add("on"); }
+  });
 })();
 
+/* ---------- mobile menu ---------- */
 (function () {
   var burger = document.getElementById("burger");
   var menu = document.getElementById("menu");
@@ -779,13 +1249,393 @@ document.documentElement.classList.add("js");
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { set(false); }
+    var open = burger.getAttribute("aria-expanded") === "true";
+    if (!open) { return; }
+    if (e.key === "Escape") { set(false); return; }
+    // The open menu is an opaque overlay: keep Tab inside it.
+    if (e.key === "Tab") {
+      var focusables = [burger].concat([].slice.call(menu.querySelectorAll("a")));
+      var i = focusables.indexOf(document.activeElement);
+      if (i === -1) { i = 0; }
+      var next = e.shiftKey ? i - 1 : i + 1;
+      if (next < 0) { next = focusables.length - 1; }
+      if (next >= focusables.length) { next = 0; }
+      e.preventDefault();
+      focusables[next].focus();
+    }
   });
 
   // Rotating to landscape can cross the breakpoint and hide the button
-  // while the panel is still open, stranding the page under it.
+  // while the panel is still open, stranding the page under it. Match
+  // the CSS query itself so user font scaling cannot desync the two.
+  var wide = window.matchMedia("(min-width: 52.0625rem)");
   window.addEventListener("resize", function () {
-    if (window.innerWidth > 832) { set(false); }
+    if (wide.matches) { set(false); }
+  });
+})();
+
+/* ---------- hero checklist ---------- */
+(function () {
+  var checks = [].slice.call(document.querySelectorAll("#checks .chk"));
+  if (!checks.length) { return; }
+  if (RM) {
+    checks.forEach(function (c) { c.classList.add("done"); });
+    return;
+  }
+  checks.forEach(function (c, i) {
+    setTimeout(function () { c.classList.add("done"); }, 900 + i * 450);
+  });
+})();
+
+/* ---------- audit spine ---------- */
+(function () {
+  var spine = document.getElementById("spine");
+  var rail = document.getElementById("rail");
+  var fill = document.getElementById("fill");
+  var tally = document.getElementById("tally");
+  if (!spine || !rail) { return; }
+
+  var ids = ["method", "now", "experience", "education", "elsewhere", "contact"];
+  var names = ["Method", "Now", "Experience", "Education", "Elsewhere", "Contact"];
+  var sections = ids.map(function (id) { return document.getElementById(id); });
+  var nodes = ids.map(function (id, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "node";
+    // Mouse affordance only: keyboard users already have the nav links,
+    // and focusing here would strand focus mid page edge.
+    b.tabIndex = -1;
+    b.setAttribute("aria-label", "Go to " + names[i]);
+    b.style.top = ((i / (ids.length - 1)) * 100) + "%";
+    b.innerHTML = '<span class="tip">' + names[i] + "</span>";
+    b.addEventListener("click", function () {
+      sections[i].scrollIntoView({ behavior: RM ? "auto" : "smooth" });
+    });
+    rail.appendChild(b);
+    return b;
+  });
+
+  var queued = false;
+  var shown = window.matchMedia("(min-width:68rem)");
+  function frame() {
+    queued = false;
+    // Below 68rem the spine is display:none; skip the layout reads.
+    if (!shown.matches) { return; }
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    fill.style.height = (p * 100) + "%";
+    var seen = 0;
+    var mid = window.innerHeight * 0.55;
+    sections.forEach(function (s, i) {
+      var done = s.getBoundingClientRect().top < mid;
+      nodes[i].classList.toggle("done", done);
+      if (done) { seen += 1; }
+    });
+    tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/06 reconciled";
+  }
+  function schedule() {
+    if (queued) { return; }
+    queued = true;
+    window.requestAnimationFrame(frame);
+  }
+  frame();
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  document.addEventListener("visibilitychange", schedule);
+})();
+
+/* ---------- active nav link ---------- */
+(function () {
+  var links = [].slice.call(document.querySelectorAll("#navlinks a"));
+  if (!links.length || !("IntersectionObserver" in window)) { return; }
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute("href").slice(1)] = a; });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        links.forEach(function (a) { a.classList.remove("live"); });
+        var a = map[e.target.id];
+        if (a) { a.classList.add("live"); }
+      }
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  Object.keys(map).forEach(function (id) {
+    var s = document.getElementById(id);
+    if (s) { io.observe(s); }
+  });
+})();
+
+/* ---------- odometers ---------- */
+(function () {
+  var odos = [].slice.call(document.querySelectorAll(".odo"));
+  if (!odos.length) { return; }
+  function run(el) {
+    var final = parseInt(el.getAttribute("data-final"), 10);
+    var from = parseInt(el.getAttribute("data-from") || "0", 10);
+    if (RM) { el.textContent = final; return; }
+    var t0 = null;
+    var dur = 1100;
+    function tick(t) {
+      if (!t0) { t0 = t; }
+      var p = Math.min(1, (t - t0) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (final - from) * e);
+      if (p < 1) { window.requestAnimationFrame(tick); }
+    }
+    window.requestAnimationFrame(tick);
+  }
+  if (!("IntersectionObserver" in window)) {
+    odos.forEach(function (el) { el.textContent = el.getAttribute("data-final"); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { run(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.6 });
+  odos.forEach(function (el) { io.observe(el); });
+})();
+
+/* ---------- illuminated quote ---------- */
+(function () {
+  var pin = document.getElementById("quotepin");
+  var quote = document.getElementById("quote");
+  var close = document.getElementById("qclose");
+  if (!pin || !quote) { return; }
+
+  // Wrap every word so it can light individually. The turn paragraph
+  // keeps its class so the brass italics survive the split.
+  var words = [];
+  [].slice.call(quote.querySelectorAll("p")).forEach(function (p) {
+    var parts = p.textContent.split(/\s+/).filter(Boolean);
+    p.textContent = "";
+    parts.forEach(function (w, i) {
+      var s = document.createElement("span");
+      s.className = "w";
+      s.textContent = w;
+      p.appendChild(s);
+      if (i < parts.length - 1) { p.appendChild(document.createTextNode(" ")); }
+      words.push(s);
+    });
+  });
+
+  if (RM) {
+    pin.classList.add("still");
+    return;
+  }
+
+  var queued = false;
+  function frame() {
+    queued = false;
+    var r = pin.getBoundingClientRect();
+    var travel = r.height - window.innerHeight;
+    var p = travel > 0 ? Math.min(1, Math.max(0, -r.top / travel)) : 1;
+    var lit = Math.floor(p * words.length * 1.18);
+    words.forEach(function (w, i) { w.classList.toggle("on", i < lit); });
+    close.classList.toggle("on", p > 0.86);
+  }
+  function schedule() {
+    if (queued) { return; }
+    queued = true;
+    window.requestAnimationFrame(frame);
+  }
+  frame();
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  document.addEventListener("visibilitychange", schedule);
+})();
+
+/* ---------- tile glow and tilt ---------- */
+(function () {
+  if (RM || !window.matchMedia("(hover:hover) and (pointer:fine)").matches) { return; }
+  var tiles = [].slice.call(document.querySelectorAll(".tile"));
+  tiles.forEach(function (tile) {
+    var tin = tile.querySelector(".tin");
+    tile.addEventListener("pointermove", function (e) {
+      // Hybrid laptops pass the hover-capability check for the mouse;
+      // a finger dragged across the screen must not tilt anything.
+      if (e.pointerType && e.pointerType !== "mouse") { return; }
+      var r = tile.getBoundingClientRect();
+      var x = e.clientX - r.left;
+      var y = e.clientY - r.top;
+      tile.style.setProperty("--mx", (x / r.width * 100) + "%");
+      tile.style.setProperty("--my", (y / r.height * 100) + "%");
+      var rx = ((y / r.height) - 0.5) * -5;
+      var ry = ((x / r.width) - 0.5) * 5;
+      tin.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+    });
+    tile.addEventListener("pointerleave", function () {
+      tin.style.transform = "";
+    });
+  });
+})();
+
+/* ---------- hero canvas: the number field ---------- */
+(function () {
+  var canvas = document.getElementById("field");
+  var hero = document.getElementById("hero");
+  if (!canvas || RM) { return; }
+  var ctx = canvas.getContext("2d");
+  if (!ctx) { return; }
+
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var W = 0, H = 0, parts = [], running = false, raf = 0, heroVis = true;
+  var px = 0.5, py = 0.5;
+
+  function size() {
+    // Mobile URL bars fire resize without changing the hero box; a
+    // rebuild would teleport every drifting digit for no reason.
+    if (parts.length && W === hero.clientWidth && H === hero.clientHeight) { return; }
+    W = hero.clientWidth;
+    H = hero.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(80, Math.max(26, (W * H) / 26000)));
+    parts = [];
+    for (var i = 0; i < n; i++) {
+      parts.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: (Math.random() - 0.5) * 0.1 - 0.03,
+        s: 10 + Math.random() * 4,
+        a: 0.04 + Math.random() * 0.07,
+        d: Math.floor(Math.random() * 10),
+        depth: 0.35 + Math.random() * 0.65,
+        pulse: 0
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var ox = (px - 0.5) * 26;
+    var oy = (py - 0.5) * 18;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -20) { p.x = W + 20; }
+      if (p.x > W + 20) { p.x = -20; }
+      if (p.y < -20) { p.y = H + 20; }
+      if (p.y > H + 20) { p.y = -20; }
+      if (p.pulse > 0) { p.pulse -= 0.012; }
+      else if (Math.random() < 0.0006) { p.pulse = 1; p.d = Math.floor(Math.random() * 10); }
+      ctx.font = p.s + 'px "IBM Plex Mono", monospace';
+      if (p.pulse > 0) {
+        ctx.fillStyle = "rgba(201,170,124," + (0.30 * p.pulse).toFixed(3) + ")";
+      } else {
+        ctx.fillStyle = "rgba(160,168,173," + p.a.toFixed(3) + ")";
+      }
+      ctx.fillText(String(p.d), p.x + ox * p.depth, p.y + oy * p.depth);
+    }
+    raf = window.requestAnimationFrame(draw);
+  }
+
+  function start() { if (!running && heroVis && !document.hidden) { running = true; raf = window.requestAnimationFrame(draw); } }
+  function stop() { running = false; window.cancelAnimationFrame(raf); }
+
+  size();
+  window.addEventListener("resize", size);
+  window.addEventListener("pointermove", function (e) {
+    px = e.clientX / window.innerWidth;
+    py = e.clientY / window.innerHeight;
+  }, { passive: true });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { stop(); } else { start(); }
+  });
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        heroVis = e.isIntersecting;
+        if (heroVis) { start(); } else { stop(); }
+      });
+    }).observe(hero);
+  } else {
+    start();
+  }
+})();
+
+/* ---------- quick navigation palette ---------- */
+(function () {
+  var pal = document.getElementById("pal");
+  var input = document.getElementById("palq");
+  var list = document.getElementById("pallist");
+  if (!pal || !input) { return; }
+  var rows = [].slice.call(list.querySelectorAll("li"));
+  var last = null;
+
+  function visible() {
+    return rows.filter(function (r) { return !r.classList.contains("hide"); });
+  }
+  function select(row) {
+    rows.forEach(function (r) {
+      r.classList.remove("sel");
+      r.setAttribute("aria-selected", "false");
+    });
+    if (row) {
+      row.classList.add("sel");
+      row.setAttribute("aria-selected", "true");
+      input.setAttribute("aria-activedescendant", row.id);
+    } else {
+      input.removeAttribute("aria-activedescendant");
+    }
+  }
+  function open() {
+    last = document.activeElement;
+    pal.hidden = false;
+    input.value = "";
+    rows.forEach(function (r) { r.classList.remove("hide"); });
+    select(rows[0]);
+    // Flush the closed-state styles so the fade has a start state, then
+    // open synchronously: focus() is a silent no-op while the pane is
+    // still visibility:hidden, and a deferred frame is not guaranteed.
+    void pal.offsetWidth;
+    pal.classList.add("open");
+    input.focus();
+  }
+  function shut() {
+    pal.classList.remove("open");
+    window.setTimeout(function () { pal.hidden = true; }, 220);
+    if (last && last.focus) { last.focus(); }
+  }
+  function filter() {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.classList.toggle("hide", q !== "" && r.textContent.toLowerCase().indexOf(q) === -1);
+    });
+    select(visible()[0] || null);
+  }
+
+  document.addEventListener("keydown", function (e) {
+    var typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+    if (!pal.hidden) {
+      if (e.key === "Escape") { e.preventDefault(); shut(); return; }
+      // The dialog claims aria-modal, so Tab must not walk out of it.
+      if (e.key === "Tab") { e.preventDefault(); input.focus(); return; }
+      var vis = visible();
+      var i = vis.indexOf(list.querySelector("li.sel"));
+      if (e.key === "ArrowDown") { e.preventDefault(); select(vis[Math.min(vis.length - 1, i + 1)]); }
+      if (e.key === "ArrowUp") { e.preventDefault(); select(vis[Math.max(0, i - 1)]); }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        var sel = list.querySelector("li.sel a");
+        if (sel) { shut(); sel.click(); }
+      }
+      return;
+    }
+    if ((e.key === "/" && !typing) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")) {
+      e.preventDefault();
+      open();
+    }
+  });
+  input.addEventListener("input", filter);
+  pal.addEventListener("click", function (e) {
+    if (e.target === pal) { shut(); }
+    if (e.target.closest("a")) { shut(); }
   });
 })();
 </script>
