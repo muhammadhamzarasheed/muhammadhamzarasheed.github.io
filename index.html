@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhammad Hamza</title>
+<meta name="description" content="Assessment Lead at UK Management College. Multi-partner regulatory compliance, assessment operations and data integrity in UK higher education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root{
+  --paper:#F4F6F5;
+  --surface:#FFFFFF;
+  --ink:#131A1C;
+  --ink-2:#4B585C;
+  --ink-3:#6E7C80;
+  --rule:#D5DBD9;
+  --rule-strong:#AAB5B2;
+  --accent:#0E5C48;
+  --accent-soft:#E3EDE9;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --col:66ch;
+  --rail:9.5rem;
+  --gap:2.75rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1315;
+    --surface:#141B1D;
+    --ink:#E9EEEC;
+    --ink-2:#A3B0AE;
+    --ink-3:#7D8C8A;
+    --rule:#26312F;
+    --rule-strong:#3E4C4A;
+    --accent:#6FC7AA;
+    --accent-soft:#16302A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1315;
+  --surface:#141B1D;
+  --ink:#E9EEEC;
+  --ink-2:#A3B0AE;
+  --ink-3:#7D8C8A;
+  --rule:#26312F;
+  --rule-strong:#3E4C4A;
+  --accent:#6FC7AA;
+  --accent-soft:#16302A;
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:clamp(1rem,0.96rem + 0.2vw,1.0625rem);
+  line-height:1.62;
+}
+::selection{background:var(--accent-soft);color:var(--ink);}
+a{color:inherit;}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+.wrap{width:100%;max-width:62rem;margin:0 auto;padding:0 clamp(1.25rem,4vw,3rem);}
+
+.masthead{border-bottom:1px solid var(--rule);}
+.masthead .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:1.5rem;padding-top:1.15rem;padding-bottom:1.15rem;flex-wrap:wrap;}
+.mark{font-family:var(--mono);font-size:.8125rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;}
+.mark b{font-weight:500;}
+.mark i{font-style:normal;color:var(--accent);}
+.nav{display:flex;gap:1.35rem;flex-wrap:wrap;}
+.nav a{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease;}
+.nav a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+
+.hero{padding:clamp(3.25rem,9vw,6.5rem) 0 clamp(2rem,4vw,3rem);}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;}
+h1{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:clamp(2.75rem,1.7rem + 5.2vw,5.25rem);
+  line-height:1.02;
+  letter-spacing:-.018em;
+  margin:.7rem 0 0;
+  text-wrap:balance;
+}
+.headline{
+  font-family:var(--serif);
+  font-size:clamp(1.2rem,1.06rem + .7vw,1.6rem);
+  line-height:1.4;
+  color:var(--ink-2);
+  max-width:36ch;
+  margin:1.1rem 0 0;
+  text-wrap:balance;
+}
+.thesis{max-width:52ch;margin:1.9rem 0 0;}
+.thesis b{font-weight:600;color:var(--accent);}
+.stamp{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;color:var(--ink-3);margin:1.6rem 0 0;text-transform:uppercase;}
+
+.ledger{
+  margin:clamp(2.5rem,6vw,4rem) 0 0;
+  border-top:1px solid var(--rule-strong);
+  border-bottom:1px solid var(--rule-strong);
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));
+}
+.ledger div{padding:1.15rem 1.25rem 1.2rem;border-left:1px solid var(--rule);}
+.ledger div:first-child{border-left:0;padding-left:0;}
+.ledger dt{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:1.5rem;
+  font-weight:500;
+  letter-spacing:-.01em;
+  color:var(--accent);
+  line-height:1.1;
+}
+.ledger dd{margin:.45rem 0 0;font-size:.8125rem;line-height:1.42;color:var(--ink-2);}
+
+.sec{border-top:1px solid var(--rule);padding:clamp(2.75rem,6vw,4.5rem) 0;}
+.sec-grid{display:grid;gap:1.25rem;}
+@media (min-width:56rem){
+  .sec-grid{grid-template-columns:var(--rail) minmax(0,1fr);gap:var(--gap);}
+  .rail{padding-top:.5rem;}
+  .rail .eyebrow{position:sticky;top:1.5rem;}
+}
+.col{max-width:var(--col);}
+.col p{margin:0;}
+.col p + p{margin-top:1.05rem;}
+h2{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:clamp(1.55rem,1.35rem + .8vw,2.1rem);
+  line-height:1.18;
+  letter-spacing:-.012em;
+  margin:0 0 1.35rem;
+  text-wrap:balance;
+}
+.lede{font-family:var(--serif);font-size:1.2rem;line-height:1.55;color:var(--ink);}
+
+.rows{margin:1.75rem 0 0;border-top:1px solid var(--rule-strong);}
+.rows .row{
+  display:grid;
+  gap:.3rem .5rem;
+  padding:1.1rem 0 1.2rem;
+  border-bottom:1px solid var(--rule);
+}
+@media (min-width:40rem){
+  .rows .row{grid-template-columns:13rem minmax(0,1fr);gap:1.75rem;}
+}
+.rows dt{font-weight:600;line-height:1.4;}
+.rows dd{margin:0;color:var(--ink-2);font-size:.96875rem;}
+
+.quote{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:clamp(2.75rem,7vw,4.75rem) 0;margin:0;}
+.quote blockquote{margin:0;max-width:26ch;}
+.quote p{
+  font-family:var(--serif);
+  font-size:clamp(1.5rem,1.15rem + 1.6vw,2.4rem);
+  line-height:1.24;
+  letter-spacing:-.014em;
+  margin:0;
+  text-wrap:balance;
+}
+.quote p + p{margin-top:.9rem;}
+.quote .turn{color:var(--accent);font-style:italic;}
+.quote figcaption{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:1.9rem;}
+
+.entries{border-top:1px solid var(--rule-strong);margin-top:1.75rem;}
+.entry{padding:1.4rem 0 1.55rem;border-bottom:1px solid var(--rule);display:grid;gap:.5rem;}
+@media (min-width:46rem){
+  .entry{grid-template-columns:minmax(0,1fr) 11rem;gap:1.75rem;align-items:start;}
+  .entry .when{text-align:right;}
+}
+.entry h3{font-size:1.0625rem;font-weight:600;margin:0;line-height:1.35;}
+.entry .org{font-family:var(--mono);font-size:.78rem;letter-spacing:.05em;color:var(--accent);margin:.3rem 0 0;text-transform:uppercase;}
+.entry p.detail{margin:.75rem 0 0;color:var(--ink-2);font-size:.9375rem;max-width:58ch;}
+.when{font-family:var(--mono);font-size:.78rem;font-variant-numeric:tabular-nums;color:var(--ink-3);letter-spacing:.01em;line-height:1.55;}
+.when em{display:block;font-style:normal;color:var(--accent);}
+.sub{margin:.9rem 0 0;padding:0;list-style:none;border-left:1px solid var(--rule-strong);}
+.sub li{padding:.4rem 0 .4rem 1rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.9375rem;}
+.sub li i{font-style:normal;font-family:var(--mono);font-size:.75rem;color:var(--ink-3);font-variant-numeric:tabular-nums;}
+
+.skills{display:grid;gap:1.6rem;border-top:1px solid var(--rule-strong);margin-top:1.75rem;padding-top:1.6rem;}
+@media (min-width:44rem){.skills{grid-template-columns:1fr 1fr;gap:1.9rem 2.5rem;}}
+.skills h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .55rem;font-weight:500;}
+.skills p{margin:0;font-size:.96875rem;color:var(--ink-2);}
+
+.links{border-top:1px solid var(--rule-strong);margin-top:1.75rem;}
+.links a{
+  display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;
+  padding:1.05rem 0;border-bottom:1px solid var(--rule);
+  text-decoration:none;font-weight:500;
+  transition:color .2s ease,padding-left .2s ease;
+}
+.links a:hover{color:var(--accent);padding-left:.4rem;}
+.links a i{font-style:normal;font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.03em;font-weight:400;}
+.links a:hover i{color:var(--accent);}
+
+footer.site{border-top:1px solid var(--rule);padding:2rem 0 3.5rem;}
+footer.site p{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0;line-height:1.9;}
+
+.js .rise{opacity:0;transform:translateY(14px);}
+.js .rise.in{opacity:1;transform:none;transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1);}
+.js .hero .rise:nth-child(1){transition-delay:.05s;}
+.js .hero .rise:nth-child(2){transition-delay:.12s;}
+.js .hero .rise:nth-child(3){transition-delay:.19s;}
+.js .hero .rise:nth-child(4){transition-delay:.26s;}
+.js .hero .rise:nth-child(5){transition-delay:.33s;}
+.js .hero .rise:nth-child(6){transition-delay:.4s;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  .js .rise{opacity:1;transform:none;}
+  *{transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="#top"><b>Muhammad Hamza</b> <i>/</i> Assessment Lead</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#practice">Practice</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow rise">Assessment operations, UK higher education</span>
+      <h1 class="rise">Muhammad Hamza</h1>
+      <p class="headline rise">Assessment Lead at UK Management College. ACCA finalist, MSc Accounting and Finance.</p>
+      <p class="thesis rise">I bring a finance discipline to academic assessment: <b>reconcile before you report</b>, evidence every decision, and build the audit trail as you go rather than after the fact.</p>
+      <p class="stamp rise">Manchester Area, United Kingdom &nbsp;&middot;&nbsp; He / Him</p>
+      <dl class="ledger rise">
+        <div>
+          <dt>04</dt>
+          <dd>Validating partner universities, four regulation sets running at once</dd>
+        </div>
+        <div>
+          <dt>10/13</dt>
+          <dd>ACCA papers passed, finalist</dd>
+        </div>
+        <div>
+          <dt>MSc</dt>
+          <dd>Accounting and Finance, Merit</dd>
+        </div>
+        <div>
+          <dt>PgC</dt>
+          <dd>Teaching and Learning in Professional and Higher Education, in progress</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec" id="about">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">About</span></div>
+      <div class="col rise">
+        <h2>Decisions that have to survive a board, an auditor or an appeal.</h2>
+        <p class="lede">As Assessment Lead at UKMC, I own assessment operations and regulatory compliance across multi-campus programmes delivered with four validating partner universities.</p>
+        <p>Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at the same time. Progression, resits, capping and award eligibility all rest on data that has to hold up under scrutiny. Getting it right the first time is the job.</p>
+        <p>I am currently studying for a Postgraduate Certificate in Teaching and Learning in Professional and Higher Education, which is deliberate. Assessment administration works better when the person running it understands assessment design, not just assessment processing. Knowing why a rubric is built a certain way changes how you handle the edge cases it produces.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="practice">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Practice</span></div>
+      <div class="col rise">
+        <h2>What I do</h2>
+        <dl class="rows">
+          <div class="row">
+            <dt>Multi-partner compliance</dt>
+            <dd>Applying four distinct sets of academic regulations correctly and consistently, so every decision is defensible against the right rulebook.</dd>
+          </div>
+          <div class="row">
+            <dt>Assessment operations</dt>
+            <dd>Submission tracking, marks processing and results workflows across the full programme portfolio, from deadline to board.</dd>
+          </div>
+          <div class="row">
+            <dt>Process translation</dt>
+            <dd>Turning partner regulations into working procedure that operational teams can actually follow, rather than leaving interpretation to chance.</dd>
+          </div>
+          <div class="row">
+            <dt>Data and reporting</dt>
+            <dd>Advanced Excel used for reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record.</dd>
+          </div>
+          <div class="row">
+            <dt>Partnership and collaboration</dt>
+            <dd>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <figure class="quote">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Position</span></div>
+      <div class="rise">
+        <blockquote>
+          <p>A marking error or a misapplied regulation does not land evenly. It lands hardest on the students with the least capacity to challenge it.</p>
+          <p class="turn">Fair process is not separate from good process. It is the point of it.</p>
+        </blockquote>
+        <figcaption>Why accuracy is an equity issue</figcaption>
+      </div>
+    </div>
+  </figure>
+
+  <section class="sec" id="experience">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Experience</span></div>
+      <div class="col rise">
+        <h2>Experience</h2>
+        <div class="entries">
+
+          <article class="entry">
+            <div>
+              <h3>Assessment Lead</h3>
+              <p class="org">UK Management College</p>
+              <p class="detail">Leading assessment operations within Academic Services, supporting the coordination, administration and quality assurance of assessment processes across academic programmes. The role covers assessment cycles, submission tracking, results preparation, resit coordination, operational reporting and stakeholder communication, keeping processes timely, accurate, compliant and student focused.</p>
+              <ul class="sub">
+                <li><span>Assessment Support Coordinator, UKMC</span> <i>Feb 2025 to Jul 2026</i></li>
+              </ul>
+            </div>
+            <p class="when"><em>Jul 2026 to present</em>Manchester, hybrid<br>Full time</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>Student Voice Representative</h3>
+              <p class="org">BPP Students Association</p>
+              <p class="detail">Acting as a liaison between students and university staff, collecting and communicating feedback to improve the academic and social experience, and making sure student perspectives were heard and addressed.</p>
+              <ul class="sub">
+                <li><span>Student Ambassador, BPP</span> <i>Feb 2024 to Feb 2025</i></li>
+              </ul>
+            </div>
+            <p class="when"><em>Jul 2024 to Feb 2025</em>Greater London<br>Volunteer</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>Accounting Associate</h3>
+              <p class="org">Atom Services</p>
+              <p class="detail">Accounts payable and receivable, reconciliations, financial accounting and cost accounting work under IFRS. Also wrote long form content for the business alongside the finance role.</p>
+              <ul class="sub">
+                <li><span>Content Writer, Atom Services</span> <i>Apr 2019 to Dec 2021</i></li>
+              </ul>
+            </div>
+            <p class="when"><em>Jan 2019 to Dec 2021</em>Remote<br>Full time</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>Sales Associate</h3>
+              <p class="org">Skechers</p>
+              <p class="detail">Customer service, sales transactions and store organisation in a high volume retail environment, held alongside study and, later, full time work.</p>
+            </div>
+            <p class="when"><em>Sep 2022 to present</em>London<br>Part time</p>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="education">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Education</span></div>
+      <div class="col rise">
+        <h2>Qualifications</h2>
+        <div class="entries">
+
+          <article class="entry">
+            <div>
+              <h3>PgC, Teaching and Learning in Professional and Higher Education</h3>
+              <p class="org">University of Cumbria</p>
+            </div>
+            <p class="when"><em>Jan 2026 to Jan 2027</em>In progress</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>ACCA, Accounting and Finance</h3>
+              <p class="org">Association of Chartered Certified Accountants</p>
+            </div>
+            <p class="when"><em>Dec 2024 to Dec 2026</em>Part qualified, 10 of 13</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>MSc Accounting and Finance</h3>
+              <p class="org">BPP University</p>
+            </div>
+            <p class="when"><em>May 2024 to Mar 2025</em>Merit</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>Advanced Diploma, Accounting and Finance</h3>
+              <p class="org">BPP University</p>
+            </div>
+            <p class="when"><em>May 2022 to May 2024</em>Merit</p>
+          </article>
+
+          <article class="entry">
+            <div>
+              <h3>Certificate in Accounting and Finance</h3>
+              <p class="org">ICAP</p>
+            </div>
+            <p class="when"><em>2018 to 2021</em>Pakistan</p>
+          </article>
+
+        </div>
+
+        <div class="skills">
+          <div>
+            <h3>Assessment and regulation</h3>
+            <p>Academic regulations, progression and award decisions, resits and capping, extenuating circumstances, assessment boards, quality assurance, process documentation.</p>
+          </div>
+          <div>
+            <h3>Data and reporting</h3>
+            <p>Advanced Excel, reconciliation, exception reporting, error detection, marks processing, operational reporting, data integrity.</p>
+          </div>
+          <div>
+            <h3>Finance</h3>
+            <p>Financial accounting, IFRS, account reconciliation, accounts payable, accounts receivable, cost accounting, tax accounting.</p>
+          </div>
+          <div>
+            <h3>Working with people</h3>
+            <p>Partner university liaison, stakeholder communication, student advocacy, cross team collaboration, research and writing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Contact</span></div>
+      <div class="col rise">
+        <h2>Open to connecting</h2>
+        <p>I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
+        <div class="links">
+          <a href="https://www.linkedin.com/in/muhammadhamzarasheed/"><span>LinkedIn</span> <i>in/muhammadhamzarasheed</i></a>
+          <a href="mailto:hamzarasheedd@gmail.com"><span>Email</span> <i>hamzarasheedd@gmail.com</i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Muhammad Hamza &nbsp;&middot;&nbsp; Assessment Lead, UK Management College<br>Manchester Area, United Kingdom</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add("js");
+(function () {
+  var items = document.querySelectorAll(".rise");
+  if (!("IntersectionObserver" in window)) {
+    items.forEach(function (el) { el.classList.add("in"); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+  items.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
