@@ -189,24 +189,38 @@ h2{
 .skills p{margin:0;font-size:.96875rem;color:var(--ink-2);}
 
 .places{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
-  list-style:none;
   margin:2rem 0 0;
-  padding:0;
   border-top:1px solid var(--rule-strong);
   border-bottom:1px solid var(--rule-strong);
 }
-.places li{
+.places .grp{
+  display:grid;
+  gap:.3rem 1.75rem;
+  padding:.95rem 0;
+  border-bottom:1px solid var(--rule);
+}
+.places .grp:last-child{border-bottom:0;}
+@media (min-width:40rem){
+  .places .grp{grid-template-columns:8.5rem minmax(0,1fr);align-items:baseline;}
+}
+.places dt{
+  font-family:var(--mono);
+  font-size:.7rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.places dd{
+  margin:0;
   font-family:var(--mono);
   font-size:.75rem;
-  letter-spacing:.1em;
+  letter-spacing:.09em;
   text-transform:uppercase;
   color:var(--ink-2);
-  padding:.9rem 1rem;
-  border-left:1px solid var(--rule);
+  line-height:1.95;
 }
-.places li:first-child{border-left:0;padding-left:0;}
+.places dd span{display:inline-block;margin-right:1.4rem;}
+.places dd span:last-child{margin-right:0;}
 
 .links{border-top:1px solid var(--rule-strong);margin-top:1.75rem;}
 .links a{
@@ -472,22 +486,24 @@ footer.site p{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-
       <div class="rail"><span class="eyebrow">Field notes</span></div>
       <div class="col rise">
         <h2>The part I do not try to control</h2>
-        <p>At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. New Year in Edinburgh. Long walks in the Peak District and across Northern Ireland. Pakistan whenever I can get back. None of it had to tie out.</p>
+        <p>At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. New Year in Edinburgh, long walks in the Peak District, and all four nations of the country I live in. Pakistan whenever I can get back. None of it had to tie out.</p>
         <p>Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too. Four validating partners, four sets of regulations, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
         <p>It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
         <p>The rest, que sera, sera.</p>
-        <ul class="places">
-          <li>Pakistan</li>
-          <li>Scotland</li>
-          <li>N. Ireland</li>
-          <li>Peak District</li>
-          <li>Gibraltar</li>
-          <li>Italy</li>
-          <li>Germany</li>
-          <li>Austria</li>
-          <li>Albania</li>
-          <li>T&uuml;rkiye</li>
-        </ul>
+        <dl class="places">
+          <div class="grp">
+            <dt>Home</dt>
+            <dd><span>England</span><span>Scotland</span><span>Wales</span><span>N. Ireland</span></dd>
+          </div>
+          <div class="grp">
+            <dt>Back home</dt>
+            <dd><span>Pakistan</span></dd>
+          </div>
+          <div class="grp">
+            <dt>Further out</dt>
+            <dd><span>Gibraltar</span><span>Italy</span><span>Germany</span><span>Austria</span><span>Albania</span><span>T&uuml;rkiye</span></dd>
+          </div>
+        </dl>
       </div>
     </div>
   </section>
@@ -517,20 +533,33 @@ footer.site p{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-
 <script>
 document.documentElement.classList.add("js");
 (function () {
-  var items = document.querySelectorAll(".rise");
-  if (!("IntersectionObserver" in window)) {
-    items.forEach(function (el) { el.classList.add("in"); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("in");
-        io.unobserve(entry.target);
-      }
+  var items = [].slice.call(document.querySelectorAll(".rise"));
+  var queued = false;
+
+  // Anything at or above the fold is revealed, including elements already
+  // scrolled past. A jump to an anchor must never leave a section stranded
+  // at opacity 0.
+  function reveal() {
+    queued = false;
+    var fold = window.innerHeight * 0.92;
+    items = items.filter(function (el) {
+      if (el.getBoundingClientRect().top >= fold) { return true; }
+      el.classList.add("in");
+      return false;
     });
-  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-  items.forEach(function (el) { io.observe(el); });
+  }
+
+  function schedule() {
+    if (queued) { return; }
+    queued = true;
+    window.requestAnimationFrame(reveal);
+  }
+
+  reveal();
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  window.addEventListener("hashchange", schedule);
+  window.addEventListener("load", schedule);
 })();
 </script>
 
