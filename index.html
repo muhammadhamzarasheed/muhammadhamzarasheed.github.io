@@ -770,6 +770,10 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   .item .meta{text-align:right;}
 }
 .item h3{margin:0;font-size:1.125rem;font-weight:600;letter-spacing:-.015em;}
+.item h3 a{transition:color .25s ease;}
+@media (hover:hover){
+  .item:hover h3 a{color:var(--brass);}
+}
 .item .who{margin:.35rem 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:var(--brass);}
 .item .note{margin:.9rem 0 0;font-size:.9375rem;line-height:1.65;color:var(--text-2);max-width:56ch;}
 .meta{
@@ -978,6 +982,7 @@ footer .label a:hover{color:var(--brass);}
       <li><a href="#now">Now</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
+      <li><a href="#journal">Journal</a></li>
       <li><a href="#elsewhere">Elsewhere</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -990,13 +995,14 @@ footer .label a:hover{color:var(--brass);}
   <a href="#now">Now</a>
   <a href="#experience">Experience</a>
   <a href="#education">Education</a>
+  <a href="#journal">Journal</a>
   <a href="#elsewhere">Elsewhere</a>
   <a href="#contact">Contact</a>
 </div>
 
 <aside class="spine" id="spine" aria-label="Reading progress">
   <div class="rail" id="rail"><div class="fill" id="fill"></div></div>
-  <span class="tally" id="tally"><b>00</b>/06 reconciled</span>
+  <span class="tally" id="tally"><b>00</b>/07 reconciled</span>
 </aside>
 
 <main id="top">
@@ -1083,7 +1089,7 @@ footer .label a:hover{color:var(--brass);}
           <p class="turn">Fair process is not separate from good process. It is the point of it.</p>
         </blockquote>
         <p class="qclose" id="qclose">Accuracy in assessment is an equity issue before it is an administrative one, and that is the reason for the method, not a nice side effect of it.</p>
-        <a class="qclose qlink" href="/notes/accuracy-is-an-equity-issue/">Read the full argument</a>
+        <a class="qclose qlink" href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener">Read the full argument</a>
       </div>
     </div>
   </section>
@@ -1249,9 +1255,52 @@ footer .label a:hover{color:var(--brass);}
     </div>
   </section>
 
+  <section id="journal" style="padding-top:0;">
+    <div class="shell mid">
+      <p class="label up"><b>05</b> &middot; Journal</p>
+      <h2 class="up d1">Written down plainly.</h2>
+      <p class="prose up d2">Occasional essays on assessment, fairness, and the habits that carry between finance and education. Each one opens in its own tab, so the record stays where you left it.</p>
+
+      <div class="record">
+        <article class="item up">
+          <div>
+            <h3><a href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener">Accuracy is an equity issue</a></h3>
+            <p class="who">Entry 01</p>
+            <p class="note">Why assessment data deserves the discipline of a set of accounts, and who a marking error really lands on.</p>
+          </div>
+          <p class="meta"><b>August 2026</b>3 minute read</p>
+        </article>
+        <article class="item up">
+          <div>
+            <h3><a href="/notes/starting-over-is-not-going-backwards/" target="_blank" rel="noopener">Starting over is not going backwards</a></h3>
+            <p class="who">Entry 02</p>
+            <p class="note">Leaving years of CA behind to restart with ACCA felt like a setback. It was a balance brought forward.</p>
+          </div>
+          <p class="meta"><b>August 2026</b>3 minute read</p>
+        </article>
+        <article class="item up">
+          <div>
+            <h3><a href="/notes/the-person-you-are-becoming/" target="_blank" rel="noopener">The person you are becoming</a></h3>
+            <p class="who">Entry 03</p>
+            <p class="note">Bourdieu, moving goalposts, and the one asset nobody else can revalue.</p>
+          </div>
+          <p class="meta"><b>August 2026</b>4 minute read</p>
+        </article>
+        <article class="item up">
+          <div>
+            <h3><a href="/notes/rest-is-not-a-reward/" target="_blank" rel="noopener">Rest is not a reward</a></h3>
+            <p class="who">Entry 04</p>
+            <p class="note">Three years of deadlines taught me that breaks are not a luxury you earn. They are how you keep going.</p>
+          </div>
+          <p class="meta"><b>August 2026</b>3 minute read</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section id="elsewhere" class="creedbox">
     <div class="shell mid">
-      <p class="label up"><b>05</b> &middot; Field notes</p>
+      <p class="label up"><b>06</b> &middot; Field notes</p>
       <h2 class="up d1">The part I do not try to control.</h2>
       <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. Pakistan whenever I can get back. And the country I live in gets the spare weekends: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, all four nations at one time or another, New Year in London one year and Edinburgh the next. None of it had to tie out.</p>
       <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
@@ -1277,7 +1326,7 @@ footer .label a:hover{color:var(--brass);}
 
   <section id="contact">
     <div class="shell mid">
-      <p class="label up"><b>06</b> &middot; Contact</p>
+      <p class="label up"><b>07</b> &middot; Contact</p>
       <h2 class="up d1">Open to connecting.</h2>
       <p class="prose up d2">I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
       <div class="reach up d3">
@@ -1308,7 +1357,11 @@ footer .label a:hover{color:var(--brass);}
       <li role="option" id="palopt-5" aria-selected="false"><a href="#elsewhere" tabindex="-1">Elsewhere <i>section</i></a></li>
       <li role="option" id="palopt-6" aria-selected="false"><a href="#contact" tabindex="-1">Contact <i>section</i></a></li>
       <li role="option" id="palopt-9" aria-selected="false"><a href="#reconcile" tabindex="-1">Reconcile this <i>prove it</i></a></li>
-      <li role="option" id="palopt-10" aria-selected="false"><a href="/notes/accuracy-is-an-equity-issue/" tabindex="-1">Accuracy is an equity issue <i>essay</i></a></li>
+      <li role="option" id="palopt-12" aria-selected="false"><a href="#journal" tabindex="-1">Journal <i>section</i></a></li>
+      <li role="option" id="palopt-10" aria-selected="false"><a href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener" tabindex="-1">Accuracy is an equity issue <i>entry</i></a></li>
+      <li role="option" id="palopt-13" aria-selected="false"><a href="/notes/starting-over-is-not-going-backwards/" target="_blank" rel="noopener" tabindex="-1">Starting over is not going backwards <i>entry</i></a></li>
+      <li role="option" id="palopt-14" aria-selected="false"><a href="/notes/the-person-you-are-becoming/" target="_blank" rel="noopener" tabindex="-1">The person you are becoming <i>entry</i></a></li>
+      <li role="option" id="palopt-15" aria-selected="false"><a href="/notes/rest-is-not-a-reward/" target="_blank" rel="noopener" tabindex="-1">Rest is not a reward <i>entry</i></a></li>
       <li role="option" id="palopt-7" aria-selected="false"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" tabindex="-1">LinkedIn <i>profile</i></a></li>
       <li role="option" id="palopt-8" aria-selected="false"><a href="mailto:hamzarasheedd@gmail.com" tabindex="-1">Email <i>write</i></a></li>
     </ul>
@@ -1429,8 +1482,8 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var tally = document.getElementById("tally");
   if (!spine || !rail) { return; }
 
-  var ids = ["method", "now", "experience", "education", "elsewhere", "contact"];
-  var names = ["Method", "Now", "Experience", "Education", "Elsewhere", "Contact"];
+  var ids = ["method", "now", "experience", "education", "journal", "elsewhere", "contact"];
+  var names = ["Method", "Now", "Experience", "Education", "Journal", "Elsewhere", "Contact"];
   var sections = ids.map(function (id) { return document.getElementById(id); });
   var nodes = ids.map(function (id, i) {
     var b = document.createElement("button");
@@ -1466,7 +1519,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       nodes[i].classList.toggle("done", done);
       if (done) { seen += 1; }
     });
-    tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/06 reconciled";
+    tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/" + String(ids.length).padStart(2, "0") + " reconciled";
   }
   function schedule() {
     if (queued) { return; }
