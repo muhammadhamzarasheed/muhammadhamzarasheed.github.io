@@ -44,6 +44,7 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  padding-top:4.25rem;
 }
 ::selection{background:var(--brass-soft);color:var(--text);}
 a{color:inherit;text-decoration:none;}
@@ -62,9 +63,14 @@ a{color:inherit;text-decoration:none;}
 .label b{color:var(--brass);font-weight:400;}
 
 /* ---------- nav ---------- */
+/* Fixed, not sticky. Locking scroll with overflow:hidden on the root
+   kills sticky containment, which scrolled the bar and its close button
+   off screen whenever the menu was opened partway down the page. */
 .nav{
-  position:sticky;
+  position:fixed;
   top:0;
+  left:0;
+  right:0;
   z-index:50;
   background:rgba(10,11,12,.66);
   backdrop-filter:saturate(180%) blur(20px);
@@ -83,7 +89,84 @@ a{color:inherit;text-decoration:none;}
   transition:color .25s ease;
 }
 .nav ul a:hover{color:var(--text);}
-@media (max-width:52rem){ .nav ul{display:none;} }
+
+/* ---------- mobile menu ---------- */
+.burger{
+  display:none;
+  width:2.75rem;
+  height:2.75rem;
+  margin-right:-.75rem;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:0;
+  background:none;
+  color:var(--text);
+  cursor:pointer;
+}
+.burger i{
+  position:relative;
+  display:block;
+  width:1.15rem;
+  height:1px;
+  background:currentColor;
+  transition:background .2s ease;
+}
+.burger i::before,
+.burger i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:100%;
+  height:1px;
+  background:currentColor;
+  transition:top .28s ease,transform .28s ease;
+}
+.burger i::before{top:-6px;}
+.burger i::after{top:6px;}
+.burger[aria-expanded="true"] i{background:transparent;}
+.burger[aria-expanded="true"] i::before{top:0;transform:rotate(45deg);}
+.burger[aria-expanded="true"] i::after{top:0;transform:rotate(-45deg);}
+
+.menu{
+  position:fixed;
+  top:4.25rem;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:45;
+  display:flex;
+  flex-direction:column;
+  padding:1rem clamp(1.5rem,5vw,3.5rem) 3rem;
+  background:rgba(10,11,12,.95);
+  backdrop-filter:saturate(180%) blur(24px);
+  -webkit-backdrop-filter:saturate(180%) blur(24px);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-10px);
+  transition:opacity .3s ease,transform .3s ease,visibility 0s .3s;
+  overflow-y:auto;
+}
+.menu.open{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .3s ease,transform .3s ease,visibility 0s 0s;
+}
+.menu a{
+  padding:1.2rem 0;
+  border-bottom:1px solid var(--line);
+  font-size:1.5rem;
+  font-weight:500;
+  letter-spacing:-.025em;
+}
+.menu a:last-child{border-bottom:0;}
+html.menu-open{overflow:hidden;}
+
+@media (max-width:52rem){
+  .nav ul{display:none;}
+  .burger{display:flex;}
+}
 
 /* ---------- hero ---------- */
 .hero{
@@ -378,8 +461,18 @@ footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wr
       <li><a href="#elsewhere">Elsewhere</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
   </div>
 </nav>
+
+<div class="menu" id="menu">
+  <a href="#about">About</a>
+  <a href="#practice">Practice</a>
+  <a href="#experience">Experience</a>
+  <a href="#education">Education</a>
+  <a href="#elsewhere">Elsewhere</a>
+  <a href="#contact">Contact</a>
+</div>
 
 <main id="top">
 
@@ -661,6 +754,39 @@ document.documentElement.classList.add("js");
   window.addEventListener("resize", schedule);
   window.addEventListener("hashchange", schedule);
   window.addEventListener("load", schedule);
+})();
+
+(function () {
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("menu");
+  if (!burger || !menu) { return; }
+
+  function set(open) {
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.classList.toggle("open", open);
+    document.documentElement.classList.toggle("menu-open", open);
+  }
+
+  burger.addEventListener("click", function () {
+    set(burger.getAttribute("aria-expanded") !== "true");
+  });
+
+  // Tapping a destination should close the menu, not leave it covering
+  // the section it just jumped to.
+  menu.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { set(false); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { set(false); }
+  });
+
+  // Rotating to landscape can cross the breakpoint and hide the button
+  // while the panel is still open, stranding the page under it.
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 832) { set(false); }
+  });
 })();
 </script>
 
