@@ -188,6 +188,26 @@ h2{
 .skills h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .55rem;font-weight:500;}
 .skills p{margin:0;font-size:.96875rem;color:var(--ink-2);}
 
+.places{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+  list-style:none;
+  margin:2rem 0 0;
+  padding:0;
+  border-top:1px solid var(--rule-strong);
+  border-bottom:1px solid var(--rule-strong);
+}
+.places li{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink-2);
+  padding:.9rem 1rem;
+  border-left:1px solid var(--rule);
+}
+.places li:first-child{border-left:0;padding-left:0;}
+
 .links{border-top:1px solid var(--rule-strong);margin-top:1.75rem;}
 .links a{
   display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;
@@ -227,6 +247,7 @@ footer.site p{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-
       <a href="#practice">Practice</a>
       <a href="#experience">Experience</a>
       <a href="#education">Education</a>
+      <a href="#elsewhere">Elsewhere</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -442,6 +463,31 @@ footer.site p{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-
             <p>Partner university liaison, stakeholder communication, student advocacy, cross team collaboration, research and writing.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="elsewhere">
+    <div class="wrap sec-grid">
+      <div class="rail"><span class="eyebrow">Field notes</span></div>
+      <div class="col rise">
+        <h2>The part I do not try to control</h2>
+        <p>At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. New Year in Edinburgh. Long walks in the Peak District and across Northern Ireland. Pakistan whenever I can get back. None of it had to tie out.</p>
+        <p>Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too. Four validating partners, four sets of regulations, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
+        <p>It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
+        <p>The rest, que sera, sera.</p>
+        <ul class="places">
+          <li>Pakistan</li>
+          <li>Scotland</li>
+          <li>N. Ireland</li>
+          <li>Peak District</li>
+          <li>Gibraltar</li>
+          <li>Italy</li>
+          <li>Germany</li>
+          <li>Austria</li>
+          <li>Albania</li>
+          <li>T&uuml;rkiye</li>
+        </ul>
       </div>
     </div>
   </section>
