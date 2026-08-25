@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accuracy is an equity issue</title>
+<meta name="description" content="A marking error does not land evenly. Why assessment data deserves the discipline of a set of accounts, by Muhammad Hamza.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/notes/accuracy-is-an-equity-issue/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="Accuracy is an equity issue">
+<meta property="og:description" content="A marking error does not land evenly. Why assessment data deserves the discipline of a set of accounts.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/notes/accuracy-is-an-equity-issue/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Accuracy is an equity issue">
+<meta name="twitter:description" content="A marking error does not land evenly. Why assessment data deserves the discipline of a set of accounts.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Accuracy is an equity issue",
+  "description": "Why assessment data deserves the discipline of a set of accounts.",
+  "image": ["https://muhammadhamza.co.uk/og.jpg"],
+  "datePublished": "2026-08-25",
+  "dateModified": "2026-08-25",
+  "inLanguage": "en-GB",
+  "mainEntityOfPage": "https://muhammadhamza.co.uk/notes/accuracy-is-an-equity-issue/",
+  "author": {
+    "@type": "Person",
+    "name": "Muhammad Hamza",
+    "url": "https://muhammadhamza.co.uk/"
+  }
+}
+</script>
+<style>
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --line:#22262A;
+  --text:#F2F4F5;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+
+article{
+  max-width:44rem;
+  margin:0 auto;
+  padding:clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+.byline b{color:var(--text-2);font-weight:400;}
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:2.75rem 0;
+}
+article p{margin:0 0 1.5rem;color:var(--text-2);max-width:66ch;}
+article p.lede{color:var(--text);font-size:1.09em;}
+article p b{color:var(--text);font-weight:600;}
+article em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.06em;
+  color:var(--brass);
+}
+.pull{
+  margin:2.75rem 0;
+  padding:0;
+  border:0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.5rem,1.2rem + 1.4vw,2.1rem);
+  line-height:1.3;
+  letter-spacing:-.015em;
+  color:var(--brass);
+  max-width:24ch;
+  text-wrap:balance;
+}
+.sign{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin-top:3rem;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.sign svg{height:.95rem;width:auto;color:var(--brass);flex:none;}
+footer{
+  border-top:1px solid var(--line);
+  margin-top:2rem;
+}
+footer .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/">The record</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <p class="label"><b>Notes</b> &middot; 01</p>
+  <h1>Accuracy is an equity issue</h1>
+  <p class="byline"><b>Muhammad Hamza</b> &middot; Assessment Lead &middot; August 2026 &middot; 3 minute read</p>
+
+  <hr>
+
+  <p class="lede">Assessment offices talk about accuracy as an administrative virtue. Clean data, tidy marksheets, boards that run to time. The framing undersells what is actually at stake. A marking error, a misapplied regulation or a missed extenuating circumstance is not a blemish on a spreadsheet. It is a decision about someone's future, made wrongly, by accident, with nobody noticing.</p>
+
+  <p>I came to assessment from accounting, and the move taught me something uncomfortable. In finance, when a figure is wrong, money lands in the wrong place, and an entire discipline exists to stop that happening: reconciliation, double entry, evidence for every adjustment, an audit trail built as the work is done. The controls are mature because the stakes are taken seriously.</p>
+
+  <p>In assessment, the figure is not money. A total decides whether a student progresses, whether a resit is capped, what classification they graduate with, and in some cases whether they can stay in the country. Stakes like these deserve at least the standard of care a set of accounts gets. They do not always receive it, because a mark feels like administration right up until the moment somebody challenges it.</p>
+
+  <p>And here is the part that turns a data quality problem into a fairness problem: <b>errors do not land evenly.</b></p>
+
+  <p>The student who challenges a wrong mark is usually the one with the confidence to write the email. They have a parent who went to university, or the fluency to quote a regulation back at the institution, or simply the learned certainty that systems answer to them. When their error is caught, the process gets called robust.</p>
+
+  <p>The student the error lands on is working nights. Or the first in their family to study at this level. Or reading the regulations in their second language. Or carrying the quiet belief that if the institution says 39, it must be 39. They do not appeal. The error stands, and it compounds: a capped resit, a lower classification, a door that closes without a sound.</p>
+
+  <p class="pull">The regulation was written for the student who never finds it.</p>
+
+  <p>The regulation sets I work with contain provisions written precisely for students in difficulty. Extenuating circumstances. Compensation. Resit windows. These clauses exist because the people who wrote the rules understood that life interrupts study. But a provision that exists and is not reached is not neutral. It becomes a benefit that flows to whoever already knew to ask for it.</p>
+
+  <p>This is why I hold to three habits that sound like hygiene and are actually infrastructure.</p>
+
+  <p><b>Reconcile before you report.</b> Check the figure against its source before anyone sees it, because the student least able to challenge an error is the one most entitled never to meet it.</p>
+
+  <p><b>Evidence every decision.</b> An outcome that can be traced to the regulation and the data that produced it protects the student as much as it protects the institution.</p>
+
+  <p><b>Build the audit trail as you go.</b> A record that exists because the work was done properly is the only kind that holds when it matters.</p>
+
+  <p>None of this requires heroics. It requires treating assessment data with the seriousness the stakes already have, and writing processes down so plainly that the rules reach the people they were written for, not just the people fluent in rules.</p>
+
+  <p>Fair process is not separate from good process. It is the point of it. <em>The books should balance for everyone.</em></p>
+
+  <div class="sign">
+    <svg viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>
+    Muhammad Hamza &middot; Manchester
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/">Back to the record</a></p>
+    <p class="label"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/">Reply on LinkedIn</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
