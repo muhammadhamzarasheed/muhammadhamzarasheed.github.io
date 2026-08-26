@@ -123,6 +123,7 @@ body::after{
   color:var(--text-3);
 }
 .label b{color:var(--brass);font-weight:400;}
+#ledgerclock{font-variant-numeric:tabular-nums;}
 
 /* ---------- nav ---------- */
 /* Fixed, not sticky. Locking scroll with overflow:hidden on the root
@@ -388,6 +389,19 @@ html.menu-open{overflow:hidden;}
   position:relative;
   min-height:calc(100vh - 4.25rem);
   min-height:calc(100svh - 4.25rem);
+  /* Registration marks, one per corner: the sheet is set for printing. */
+  background-image:
+    linear-gradient(var(--line-2),var(--line-2)),linear-gradient(var(--line-2),var(--line-2)),
+    linear-gradient(var(--line-2),var(--line-2)),linear-gradient(var(--line-2),var(--line-2)),
+    linear-gradient(var(--line-2),var(--line-2)),linear-gradient(var(--line-2),var(--line-2)),
+    linear-gradient(var(--line-2),var(--line-2)),linear-gradient(var(--line-2),var(--line-2));
+  background-repeat:no-repeat;
+  background-size:11px 1px,1px 11px,11px 1px,1px 11px,11px 1px,1px 11px,11px 1px,1px 11px;
+  background-position:
+    23px 28px,28px 23px,
+    calc(100% - 23px) 28px,calc(100% - 28px) 23px,
+    23px calc(100% - 28px),28px calc(100% - 23px),
+    calc(100% - 23px) calc(100% - 28px),calc(100% - 28px) calc(100% - 23px);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -1098,6 +1112,7 @@ footer .label a:hover{color:var(--brass);}
       </ul>
       <p class="creed up d3">Assessment professional and ACCA finalist, working where <b>financial reporting and academic governance</b> borrow from each other. The systems I run decide progression, awards and appeals, so they are built to survive scrutiny.</p>
       <p class="label up d4">Assessment Lead, UK Management College &middot; Manchester</p>
+      <p class="label up d5"><b>As at</b> <span id="ledgerclock">26 Aug 2026, Manchester</span></p>
       <span class="cue up d5"><i></i></span>
     </div>
   </header>
@@ -1850,6 +1865,30 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   } else {
     start();
   }
+})();
+
+/* ---------- the ledger's clock ---------- */
+/* The books are kept in Manchester, so every visitor sees the ledger's
+   own time, dated the way a ledger is dated: as at. */
+(function () {
+  var el = document.getElementById("ledgerclock");
+  if (!el || !window.Intl || !Intl.DateTimeFormat) { return; }
+  var fmt;
+  try {
+    fmt = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/London",
+      day: "2-digit", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+      hour12: false
+    });
+  } catch (e) { return; }
+  function tick() {
+    if (document.hidden) { return; }
+    el.textContent = fmt.format(new Date()) + " in Manchester";
+  }
+  tick();
+  window.setInterval(tick, 1000);
+  document.addEventListener("visibilitychange", tick);
 })();
 
 /* ---------- reconcile this ---------- */
