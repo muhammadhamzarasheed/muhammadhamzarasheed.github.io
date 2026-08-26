@@ -147,18 +147,56 @@ body::after{
 .mark{height:1.1rem;width:auto;color:var(--brass);flex:none;}
 .sig .mark{margin-right:.55rem;}
 .crest{height:2.6rem;width:auto;color:var(--brass);}
+/* The mark draws its own trail on arrival. */
+@media (prefers-reduced-motion:no-preference){
+  .js .crest path{
+    stroke-dasharray:140;
+    stroke-dashoffset:140;
+    animation:draw 1s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .js .crest path:nth-child(2){animation-delay:.25s;}
+  .js .crest path:nth-child(3){animation-delay:.45s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+}
 .lockup{display:inline-flex;align-items:center;gap:.5rem;}
 .lockup .mark{height:.95rem;}
 .nav ul{display:flex;gap:2rem;list-style:none;margin:0;padding:0;}
 .nav ul a{
+  position:relative;
   font-size:.875rem;
   color:var(--text-2);
   padding-bottom:3px;
-  border-bottom:1px solid transparent;
-  transition:color .25s ease,border-color .25s ease;
+  transition:color .25s ease;
+}
+.nav ul a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:var(--brass);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .3s cubic-bezier(.2,.7,.2,1);
 }
 .nav ul a:hover{color:var(--text);}
-.nav ul a.live{color:var(--brass);border-bottom-color:var(--brass);}
+.nav ul a:hover::after,
+.nav ul a.live::after{transform:scaleX(1);}
+.nav ul a.live{color:var(--brass);}
+/* Reading progress: a brass hairline filling along the bar's base. */
+.nav::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-1px;
+  height:2px;
+  width:100%;
+  background:linear-gradient(to right,var(--brass),rgba(201,170,124,.35));
+  transform:scaleX(var(--sp,0));
+  transform-origin:left;
+  pointer-events:none;
+}
 
 /* ---------- mobile menu ---------- */
 .burger{
@@ -295,6 +333,23 @@ html.menu-open{overflow:hidden;}
   background:var(--brass);
   border-color:var(--brass);
   box-shadow:0 0 10px rgba(201,170,124,.5);
+}
+/* One ripple as a section settles brass. */
+.spine .node.done::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:9px;
+  height:9px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  pointer-events:none;
+  animation:ripple .7s ease-out forwards;
+}
+@keyframes ripple{
+  from{box-shadow:0 0 0 0 rgba(201,170,124,.45);}
+  to{box-shadow:0 0 0 14px rgba(201,170,124,0);}
 }
 .spine .node .tip{
   position:absolute;
@@ -589,7 +644,8 @@ button.srow:disabled{cursor:default;}
 }
 .shead{font-size:.6563rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);background:var(--raise-2);}
 .srow.clean{color:var(--text-3);cursor:default;}
-.srow.clean span:last-child::after{content:" \2713";color:var(--line-2);}
+.srow.clean span:last-child::after{content:" \2713";color:var(--line-2);display:inline-block;animation:pop .3s ease;}
+@keyframes pop{from{transform:scale(0);}to{transform:scale(1);}}
 .srow.found{background:var(--brass-soft);color:var(--text);}
 .srow.found span:last-child::after{content:" \2717";color:var(--brass);}
 .averdict{margin:1.1rem 0 0;font-family:var(--mono);font-size:.75rem;line-height:1.7;color:var(--text-3);min-height:2.6em;}
@@ -842,6 +898,18 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   border-radius:2rem;
   transition:transform .25s ease,border-color .25s ease,color .25s ease;
 }
+/* Chips stamp in like visas: a slight rotation settling to rest. */
+.js .grp.up dd span{opacity:0;transform:rotate(-5deg) scale(.92);}
+.js .grp.up.on dd span{
+  opacity:1;
+  transform:none;
+  transition:opacity .45s ease,transform .5s cubic-bezier(.2,.9,.3,1.35),border-color .25s ease,color .25s ease;
+}
+.js .grp.up.on dd span:nth-child(2){transition-delay:.06s;}
+.js .grp.up.on dd span:nth-child(3){transition-delay:.12s;}
+.js .grp.up.on dd span:nth-child(4){transition-delay:.18s;}
+.js .grp.up.on dd span:nth-child(5){transition-delay:.24s;}
+.js .grp.up.on dd span:nth-child(6){transition-delay:.3s;}
 @media (hover:hover){
   .grp dd span:hover{
     transform:rotate(-2.5deg) translateY(-2px);
@@ -965,6 +1033,15 @@ footer .label a:hover{color:var(--brass);}
 .js .tile.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .3s ease,border-color .3s ease;}
 .js .principle.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .35s ease;}
 .js .item.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .35s ease,box-shadow .35s ease;}
+/* The name settles: tracking tightens as it arrives, type locking into
+   the forme. Full transition list restated so nothing is cancelled. */
+@media (prefers-reduced-motion:no-preference){
+  .js .hero h1.up{letter-spacing:.015em;}
+  .js .hero h1.up.on{
+    letter-spacing:-.045em;
+    transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),letter-spacing 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .up{opacity:1;transform:none;}
@@ -1417,6 +1494,8 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       return false;
     });
     nav.classList.toggle("stuck", window.scrollY > 8);
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    nav.style.setProperty("--sp", max > 0 ? Math.min(1, window.scrollY / max).toFixed(4) : 0);
   }
 
   function schedule() {
