@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Something for your mind</title>
+<meta name="description" content="Five small games: judgement by eye, a steady hand, snake in brass, lights out and a stubborn odometer. No prizes. By Muhammad Hamza.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/mind/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="Something for your mind">
+<meta property="og:description" content="Five small games: judgement by eye, a steady hand, snake in brass, lights out and a stubborn odometer. No prizes.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/mind/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Something for your mind">
+<meta name="twitter:description" content="Five small games: judgement by eye, a steady hand, snake in brass, lights out and a stubborn odometer. No prizes.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --line:#22262A;
+  --text:#F2F4F5;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-hi:#E2C79A;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:50rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+article{
+  max-width:50rem;
+  margin:0 auto;
+  padding:clamp(3rem,7vw,5rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
+p.lede{color:var(--text-2);max-width:62ch;margin:0;}
+p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+
+/* ---------- menu ---------- */
+.menu{display:grid;gap:.8rem;margin-top:2.4rem;}
+a.gcard{
+  display:flex;
+  gap:1.2rem;
+  align-items:baseline;
+  padding:1.1rem 1.3rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  transition:border-color .25s ease;
+}
+a.gcard:hover{border-color:var(--brass);}
+.gcard .no{font-family:var(--mono);font-size:.6875rem;letter-spacing:.15em;color:var(--brass);flex:none;}
+.gcard h2{margin:0;font-size:1.05rem;font-weight:600;letter-spacing:-.01em;}
+.gcard p{margin:.1rem 0 0;color:var(--text-3);font-size:.9rem;line-height:1.55;}
+.gcard .best{
+  margin-left:auto;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  color:var(--text-3);
+  white-space:nowrap;
+  flex:none;
+}
+@media (max-width:34rem){ .gcard .best{display:none;} }
+
+/* ---------- game chrome ---------- */
+.ghead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:2.4rem 0 .4rem;}
+.ghead h2{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
+.ghead h2 i{font-family:var(--mono);font-style:normal;font-size:.6875rem;letter-spacing:.15em;color:var(--brass);vertical-align:.45em;margin-right:.6rem;}
+a.gback{font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);transition:color .25s ease;white-space:nowrap;}
+a.gback:hover{color:var(--brass);}
+.gnote{color:var(--text-3);font-size:.9rem;margin:0 0 1.3rem;max-width:60ch;}
+.board{
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  padding:1.2rem;
+  position:relative;
+}
+.hud{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+  margin-top:.9rem;
+}
+.hud b{color:var(--text-2);font-weight:400;}
+.btn{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:1px solid var(--line);
+  color:var(--text-2);
+  padding:.55rem 1.2rem;
+  border-radius:2rem;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.btn:hover{border-color:var(--brass);color:var(--text);}
+.btn.primary{border-color:var(--brass);color:var(--brass);}
+.btn.primary:hover{color:var(--brass-hi);border-color:var(--brass-hi);}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem;}
+
+/* ---------- the eye ---------- */
+.rlab{font-family:var(--mono);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin:0 0 .3rem;}
+.rinst{color:var(--text-2);font-size:.95rem;margin:0 0 1rem;max-width:56ch;}
+.field{
+  position:relative;
+  height:250px;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background:var(--void);
+  cursor:crosshair;
+  overflow:hidden;
+  touch-action:none;
+}
+.field canvas{display:block;}
+.hline{position:absolute;height:2px;background:var(--text-2);transform:translateY(-1px);}
+.vtick{position:absolute;width:2px;height:18px;background:var(--brass);transform:translate(-1px,-9px);}
+.cdot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--text);transform:translate(-4px,-4px);}
+.cring{position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid var(--brass);transform:translate(-8px,-8px);}
+.crect{position:absolute;border:1px solid var(--text-3);border-radius:2px;}
+.result{margin-top:1.1rem;}
+.rscore{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:2rem;
+  color:var(--text);
+  margin:0;
+  line-height:1.2;
+}
+.rmeas{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;color:var(--text-3);margin:.2rem 0 0;}
+.tbig{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:2.6rem;
+  color:var(--text-3);
+  margin:1.2rem 0;
+  letter-spacing:.06em;
+}
+.final{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:3.4rem;
+  margin:.6rem 0 0;
+  line-height:1.1;
+  color:var(--text);
+}
+.fverdict{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.7rem;
+  color:var(--brass);
+  margin:.3rem 0 0;
+}
+.ledger{margin-top:1.4rem;border-top:1px solid var(--line);}
+.lrow{
+  display:grid;
+  grid-template-columns:2.4rem 9rem 1fr auto;
+  gap:.8rem;
+  align-items:baseline;
+  padding:.55rem 0;
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.04em;
+  color:var(--text-3);
+}
+.lrow .nm{color:var(--text-2);}
+.lrow b{color:var(--brass);font-weight:400;}
+@media (max-width:34rem){
+  .lrow{grid-template-columns:2rem 1fr auto;}
+  .lrow .ms{display:none;}
+}
+
+/* ---------- steady hand ---------- */
+.wirewrap svg{display:block;width:100%;height:auto;touch-action:none;-webkit-user-select:none;user-select:none;}
+.wirewrap .corr{fill:none;stroke:#15181A;stroke-linecap:round;stroke-linejoin:round;}
+.wirewrap .wire{fill:none;stroke:var(--brass);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .1s ease;}
+.wirewrap.flash .wire{stroke:#F2F4F5;}
+.wirewrap .pad{fill:var(--brass-soft);stroke:var(--brass);stroke-width:1.5;}
+.wirewrap .padend{fill:none;stroke:var(--text-3);stroke-width:1.5;}
+.wirewrap .padlbl{font-family:var(--mono);font-size:9px;letter-spacing:.15em;fill:var(--text-3);}
+.life{color:var(--brass);transition:opacity .2s ease;}
+.life.out{opacity:.22;}
+
+/* ---------- snake ---------- */
+.snakewrap{padding:0;overflow:hidden;}
+.snakewrap canvas{display:block;margin:0 auto;touch-action:none;}
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.9rem;
+  background:rgba(10,11,12,.72);
+  border-radius:inherit;
+  text-align:center;
+  padding:1.5rem;
+}
+.overlay p{margin:0;font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;color:var(--text-2);}
+.overlay .big{font-size:1.5rem;color:var(--text);letter-spacing:.02em;}
+
+/* ---------- lights out ---------- */
+.lgrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:.5rem;
+  max-width:22rem;
+  margin:0 auto;
+}
+.lgrid button{
+  aspect-ratio:1;
+  border-radius:.5rem;
+  border:1px solid var(--line);
+  background:var(--void);
+  cursor:pointer;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
+  padding:0;
+}
+.lgrid button.lit{
+  background:var(--brass);
+  border-color:var(--brass-hi);
+  box-shadow:0 0 18px rgba(201,170,124,.35);
+}
+.lgrid button:hover{border-color:var(--text-3);}
+.lgrid button.lit:hover{border-color:#fff;}
+.lgrid.done button{cursor:default;}
+
+/* ---------- odometer ---------- */
+.reelrow{display:flex;gap:.7rem;justify-content:center;align-items:center;}
+.reel{
+  width:3.6rem;
+  height:4.6rem;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background:var(--void);
+  transition:border-color .25s ease;
+}
+.reel.locked{border-color:var(--brass);}
+.reel.locked .strip{color:var(--brass);}
+.strip{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:2.3rem;
+  line-height:4.6rem;
+  text-align:center;
+  color:var(--text);
+  will-change:transform;
+}
+.strip div{height:4.6rem;}
+.target{
+  display:flex;
+  gap:.7rem;
+  justify-content:center;
+  margin-bottom:1rem;
+}
+.target span{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:1.15rem;
+  color:var(--brass);
+  width:3.6rem;
+  text-align:center;
+}
+.tlbl{font-family:var(--mono);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);text-align:center;margin:0 0 .4rem;}
+.reelmsg{
+  font-family:var(--mono);
+  font-size:.8rem;
+  letter-spacing:.05em;
+  color:var(--text-2);
+  text-align:center;
+  margin:1.1rem 0 0;
+  min-height:1.4em;
+}
+.reelmsg i{font-family:var(--serif);font-style:italic;font-size:1.15em;color:var(--brass);letter-spacing:0;}
+.reelbtns{display:flex;gap:.6rem;justify-content:center;margin-top:1.1rem;}
+
+footer{border-top:1px solid var(--line);margin-top:3rem;}
+footer .in{
+  max-width:50rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/">The record</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <div id="intro">
+    <p class="label"><b>Off the record</b> &middot; games</p>
+    <h1>Something for your mind</h1>
+    <p class="byline">Five games &middot; no sign up &middot; your bests stay on your device</p>
+    <hr>
+    <p class="lede">The rest of this site is about being exact when it matters. This page is for being exact when it matters <em>not at all</em>. Five small games. The only record kept is your own best, and it never leaves your browser.</p>
+  </div>
+
+  <noscript><p class="gnote" style="margin-top:2rem;">These games need JavaScript. The rest of the site does not.</p></noscript>
+
+  <div class="menu" id="menu">
+    <a class="gcard" href="#eye">
+      <span class="no">01</span>
+      <div><h2>The Eye</h2><p>Five judgements made by eye. The page measures the gap.</p></div>
+      <span class="best" id="best-eye"></span>
+    </a>
+    <a class="gcard" href="#wire">
+      <span class="no">02</span>
+      <div><h2>Steady Hand</h2><p>Trace the wire without touching it. Three lives.</p></div>
+      <span class="best" id="best-wire"></span>
+    </a>
+    <a class="gcard" href="#snake">
+      <span class="no">03</span>
+      <div><h2>Snake</h2><p>The old one, in brass. Arrows or swipe.</p></div>
+      <span class="best" id="best-snake"></span>
+    </a>
+    <a class="gcard" href="#lights">
+      <span class="no">04</span>
+      <div><h2>Lights out</h2><p>Put the board out in the fewest moves. Fresh board daily.</p></div>
+      <span class="best" id="best-lights"></span>
+    </a>
+    <a class="gcard" href="#reels">
+      <span class="no">05</span>
+      <div><h2>Odometer</h2><p>Three rolling reels, one target. Stop them on it.</p></div>
+      <span class="best" id="best-reels"></span>
+    </a>
+  </div>
+
+  <!-- 01 The Eye -->
+  <section id="g-eye" hidden>
+    <div class="ghead"><h2><i>01</i>The Eye</h2><a class="gback" href="#">All games</a></div>
+    <p class="gnote">Five rounds, one attempt each: a midpoint, a centre, three seconds, a circle, ten seconds. You estimate, the page measures, the gap is the score.</p>
+    <div class="board" id="eyestage"></div>
+    <div class="ledger" id="eyeledger" hidden></div>
+  </section>
+
+  <!-- 02 Steady Hand -->
+  <section id="g-wire" hidden>
+    <div class="ghead"><h2><i>02</i>Steady Hand</h2><a class="gback" href="#">All games</a></div>
+    <p class="gnote">Rest your pointer on the brass pad, then follow the wire to the ring without touching the edges of the channel. Three lives. Touches cost three seconds each. On a phone, trace with your finger and the channel is a little kinder.</p>
+    <div class="board wirewrap" id="wirewrap">
+      <svg id="wiresvg" viewBox="0 0 600 320" aria-label="Steady hand wire course">
+        <path class="corr" id="wirecorr" d=""/>
+        <path class="wire" id="wirepath" d="M 45 258 C 100 100 170 78 230 148 C 282 209 300 242 362 221 C 432 197 420 92 481 76 C 522 65 546 96 558 132"/>
+        <circle class="pad" id="wirestart" r="17"/>
+        <circle class="padend" id="wireend" r="14"/>
+        <text class="padlbl" id="wirelbls" x="0" y="0">START</text>
+        <text class="padlbl" id="wirelble" x="0" y="0">END</text>
+      </svg>
+    </div>
+    <div class="hud">
+      <span id="wirelives"><span class="life">&#9679;</span> <span class="life">&#9679;</span> <span class="life">&#9679;</span></span>
+      <span id="wiretime">0.0 s</span>
+      <span id="wiremsg">waiting at the pad</span>
+    </div>
+    <div class="btnrow"><button class="btn" id="wirereset" type="button">Reset</button></div>
+  </section>
+
+  <!-- 03 Snake -->
+  <section id="g-snake" hidden>
+    <div class="ghead"><h2><i>03</i>Snake</h2><a class="gback" href="#">All games</a></div>
+    <p class="gnote">Arrow keys or WASD. On a phone, swipe anywhere on the board. Walls are walls.</p>
+    <div class="board snakewrap" id="snakewrap">
+      <canvas id="snakecv" aria-label="Snake game board"></canvas>
+      <div class="overlay" id="snakeover">
+        <p class="big">Snake</p>
+        <p id="snakeovermsg">Press an arrow key, or swipe, to begin.</p>
+        <button class="btn primary" id="snakego" type="button">Begin</button>
+      </div>
+    </div>
+    <div class="hud">
+      <span>length <b id="snakescore">3</b></span>
+      <span>best <b id="snakebesthud">3</b></span>
+    </div>
+  </section>
+
+  <!-- 04 Lights out -->
+  <section id="g-lights" hidden>
+    <div class="ghead"><h2><i>04</i>Lights out</h2><a class="gback" href="#">All games</a></div>
+    <p class="gnote">Press a cell and it flips with its four neighbours. Put every light out. A new board is set each day, the same board for everyone.</p>
+    <div class="board">
+      <div class="lgrid" id="lgrid" role="group" aria-label="Lights out board"></div>
+    </div>
+    <div class="hud">
+      <span id="lightsdate"></span>
+      <span>moves <b id="lightsmoves">0</b></span>
+      <span id="lightspar"></span>
+    </div>
+    <p class="reelmsg" id="lightsmsg"></p>
+    <div class="btnrow">
+      <button class="btn" id="lightsreset" type="button">Reset board</button>
+      <button class="btn" id="lightsrandom" type="button">Random board</button>
+      <button class="btn" id="lightsdaily" type="button" hidden>Back to today's board</button>
+    </div>
+  </section>
+
+  <!-- 05 Odometer -->
+  <section id="g-reels" hidden>
+    <div class="ghead"><h2><i>05</i>Odometer</h2><a class="gback" href="#">All games</a></div>
+    <p class="gnote">Three reels roll at different speeds. Stop them one at a time, left to right, and land the target reading. Nearest digit counts against you.</p>
+    <div class="board">
+      <p class="tlbl">Target</p>
+      <div class="target" id="reeltarget"><span>0</span><span>0</span><span>0</span></div>
+      <div class="reelrow" id="reelrow">
+        <div class="reel"><div class="strip"></div></div>
+        <div class="reel"><div class="strip"></div></div>
+        <div class="reel"><div class="strip"></div></div>
+      </div>
+      <p class="reelmsg" id="reelmsg"></p>
+      <div class="reelbtns">
+        <button class="btn primary" id="reelstop" type="button">Start</button>
+        <button class="btn" id="reelnew" type="button" hidden>New target</button>
+      </div>
+    </div>
+    <div class="hud">
+      <span>score <b id="reelscore">&middot;</b></span>
+      <span>best <b id="reelbesthud">&middot;</b></span>
+    </div>
+  </section>
+
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/">Back to the record</a></p>
+    <p class="label">No prizes. Bests stay on this device.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+"use strict";
+
+/* ---------- shared ---------- */
+function $(id) { return document.getElementById(id); }
+function readLS(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function writeLS(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function todayKey() {
+  var d = new Date();
+  return d.getUTCFullYear() * 10000 + (d.getUTCMonth() + 1) * 100 + d.getUTCDate();
+}
+function todayLabel() {
+  var d = new Date();
+  return d.getUTCDate() + " " + MONTHS[d.getUTCMonth()] + " " + d.getUTCFullYear();
+}
+
+/* ---------- router ---------- */
+var GAMES = ["eye", "wire", "snake", "lights", "reels"];
+var inits = {};   // one-time builders
+var enters = {};  // called on every open
+var leaves = {};  // called when navigating away
+var built = {};
+var current = null;
+
+function route() {
+  var h = location.hash.replace("#", "");
+  var next = GAMES.indexOf(h) > -1 ? h : null;
+  if (current && current !== next && leaves[current]) { leaves[current](); }
+  $("menu").hidden = !!next;
+  $("intro").hidden = !!next;
+  GAMES.forEach(function (g) { $("g-" + g).hidden = (g !== next); });
+  current = next;
+  if (next) {
+    if (!built[next]) { built[next] = true; inits[next](); }
+    if (enters[next]) { enters[next](); }
+    window.scrollTo(0, 0);
+  } else {
+    menuBests();
+  }
+}
+window.addEventListener("hashchange", route);
+
+function menuBests() {
+  var v;
+  v = readLS("mind-eye-best");
+  $("best-eye").textContent = v ? "best " + v : "no record yet";
+  v = readLS("mind-wire-best");
+  $("best-wire").textContent = v ? "best " + v + " s" : "no record yet";
+  v = readLS("mind-snake-best");
+  $("best-snake").textContent = v ? "best " + v : "no record yet";
+  v = readLS("mind-lights-" + todayKey());
+  $("best-lights").textContent = v ? "today: " + v + " moves" : "today: unsolved";
+  v = readLS("mind-reels-best");
+  $("best-reels").textContent = v ? "best " + v : "no record yet";
+}
+
+/* =============================================================
+   01 THE EYE
+   ============================================================= */
+inits.eye = function () {
+  var stage = $("eyestage");
+  var ledger = $("eyeledger");
+  var scores = [];
+  var NAMES = ["The midpoint", "Dead centre", "Three seconds", "The circle", "Ten seconds"];
+
+  function verdict(s) {
+    if (s >= 97) { return "Unsettling."; }
+    if (s >= 90) { return "Calibrated."; }
+    if (s >= 80) { return "Steady hand, honest eye."; }
+    if (s >= 65) { return "Serviceable."; }
+    if (s >= 45) { return "Rounding errors."; }
+    return "Estimates only.";
+  }
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+  function start() {
+    scores = [];
+    ledger.innerHTML = "";
+    ledger.hidden = true;
+    stage.innerHTML =
+      '<p class="rlab">Five rounds</p>' +
+      '<p class="rinst">One attempt at each. No practice swings, no second go, and the clock face stays blank when it matters. Ready when you are.</p>' +
+      '<div class="btnrow"><button class="btn primary" type="button" id="eyego">Begin</button></div>';
+    $("eyego").addEventListener("click", function () { round(0); });
+  }
+
+  function record(i, score, measure) {
+    scores.push(score);
+    var row = document.createElement("div");
+    row.className = "lrow";
+    row.innerHTML = "<span>" + pad2(i + 1) + "</span><span class='nm'>" + NAMES[i] +
+      "</span><span class='ms'>" + measure + "</span><b>" + score.toFixed(1) + "</b>";
+    ledger.appendChild(row);
+    ledger.hidden = false;
+  }
+
+  function interlude(i, score, measure) {
+    record(i, score, measure);
+    var res = document.createElement("div");
+    res.className = "result";
+    res.innerHTML = '<p class="rscore">' + score.toFixed(1) + '</p>' +
+      '<p class="rmeas">' + measure + '</p>' +
+      '<div class="btnrow"><button class="btn primary" type="button" id="eyenext">' +
+      (i === 4 ? "The verdict" : "Next round") + '</button></div>';
+    stage.appendChild(res);
+    $("eyenext").addEventListener("click", function () {
+      if (i === 4) { finish(); } else { round(i + 1); }
+    });
+  }
+
+  function finish() {
+    var total = scores.reduce(function (a, b) { return a + b; }, 0) / scores.length;
+    var prev = parseFloat(readLS("mind-eye-best") || "0");
+    var isBest = total > prev;
+    if (isBest) { writeLS("mind-eye-best", total.toFixed(1)); }
+    stage.innerHTML =
+      '<p class="rlab">The verdict</p>' +
+      '<p class="final">' + total.toFixed(1) + '</p>' +
+      '<p class="fverdict">' + verdict(total) + '</p>' +
+      '<p class="rmeas">' + (isBest ? "a new best for this device" :
+        "best on this device: " + Math.max(prev, total).toFixed(1)) + '</p>' +
+      '<div class="btnrow"><button class="btn primary" type="button" id="eyeagain">Run it again</button></div>';
+    $("eyeagain").addEventListener("click", start);
+  }
+
+  function head(i, inst) {
+    stage.innerHTML =
+      '<p class="rlab">Round ' + pad2(i + 1) + ' of 05 &middot; ' + NAMES[i] + '</p>' +
+      '<p class="rinst">' + inst + '</p>';
+  }
+
+  /* round 1: bisect a line */
+  function r1(i) {
+    head(i, "One line. Mark the exact middle of it. Only the horizontal counts.");
+    var f = document.createElement("div");
+    f.className = "field";
+    stage.appendChild(f);
+    var fw = f.clientWidth, fh = f.clientHeight;
+    var w = Math.min(fw - 70, 280 + Math.random() * 200);
+    var x = 25 + Math.random() * (fw - w - 50);
+    var y = fh / 2;
+    var line = document.createElement("div");
+    line.className = "hline";
+    line.style.left = x + "px";
+    line.style.top = y + "px";
+    line.style.width = w + "px";
+    f.appendChild(line);
+    f.addEventListener("pointerdown", function h(e) {
+      f.removeEventListener("pointerdown", h);
+      var r = f.getBoundingClientRect();
+      var cx = e.clientX - r.left;
+      var mid = x + w / 2;
+      var err = Math.abs(cx - mid);
+      var tick = document.createElement("div");
+      tick.className = "vtick";
+      tick.style.left = cx + "px";
+      tick.style.top = y + "px";
+      f.appendChild(tick);
+      var dot = document.createElement("div");
+      dot.className = "cdot";
+      dot.style.left = mid + "px";
+      dot.style.top = y + "px";
+      f.appendChild(dot);
+      var score = clamp(100 * (1 - (err / (w / 2)) * 2.5), 0, 100);
+      interlude(i, score, "off by " + Math.round(err) + " px on a " + Math.round(w) + " px line");
+    });
+  }
+
+  /* round 2: centre of a rectangle */
+  function r2(i) {
+    head(i, "One rectangle. Mark its exact centre.");
+    var f = document.createElement("div");
+    f.className = "field";
+    stage.appendChild(f);
+    var fw = f.clientWidth, fh = f.clientHeight;
+    var w = Math.min(fw - 60, 150 + Math.random() * 170);
+    var h = Math.min(fh - 50, 100 + Math.random() * 100);
+    var x = 22 + Math.random() * (fw - w - 44);
+    var y = 18 + Math.random() * (fh - h - 36);
+    var rect = document.createElement("div");
+    rect.className = "crect";
+    rect.style.left = x + "px";
+    rect.style.top = y + "px";
+    rect.style.width = w + "px";
+    rect.style.height = h + "px";
+    f.appendChild(rect);
+    f.addEventListener("pointerdown", function hnd(e) {
+      f.removeEventListener("pointerdown", hnd);
+      var r = f.getBoundingClientRect();
+      var cx = e.clientX - r.left, cy = e.clientY - r.top;
+      var tx = x + w / 2, ty = y + h / 2;
+      var dist = Math.sqrt((cx - tx) * (cx - tx) + (cy - ty) * (cy - ty));
+      var ring = document.createElement("div");
+      ring.className = "cring";
+      ring.style.left = cx + "px";
+      ring.style.top = cy + "px";
+      f.appendChild(ring);
+      var dot = document.createElement("div");
+      dot.className = "cdot";
+      dot.style.left = tx + "px";
+      dot.style.top = ty + "px";
+      f.appendChild(dot);
+      var halfDiag = Math.sqrt(w * w + h * h) / 2;
+      var score = clamp(100 * (1 - (dist / halfDiag) * 2.5), 0, 100);
+      interlude(i, score, "off by " + dist.toFixed(1) + " px from true centre");
+    });
+  }
+
+  /* rounds 3 and 5: blind timing */
+  function timing(i, targetMs, inst) {
+    head(i, inst);
+    var res = document.createElement("div");
+    res.innerHTML = '<p class="tbig" id="eyeclock">' + (targetMs / 1000).toFixed(3) + '</p>' +
+      '<div class="btnrow"><button class="btn primary" type="button" id="eyetimer">Start</button></div>';
+    stage.appendChild(res);
+    var btn = $("eyetimer");
+    var clock = $("eyeclock");
+    var t0 = null;
+    btn.addEventListener("click", function () {
+      if (t0 === null) {
+        t0 = performance.now();
+        clock.textContent = "· · ·";
+        btn.textContent = "Stop";
+        return;
+      }
+      var el = performance.now() - t0;
+      if (el < 300) { return; }  // swallow an accidental double press
+      var d = Math.abs(el - targetMs);
+      clock.textContent = (el / 1000).toFixed(3);
+      btn.disabled = true;
+      var score = targetMs === 3000
+        ? clamp(100 - d / 12, 0, 100)
+        : clamp(100 - d / 40, 0, 100);
+      interlude(i, score, "stopped at " + (el / 1000).toFixed(3) + " s, off by " + Math.round(d) + " ms");
+    });
+  }
+
+  /* round 4: freehand circle */
+  function r4(i) {
+    head(i, "Draw a circle: one stroke, all the way round, then let go. Scored on how round it is.");
+    var f = document.createElement("div");
+    f.className = "field";
+    stage.appendChild(f);
+    var fw = f.clientWidth, fh = f.clientHeight;
+    var cv = document.createElement("canvas");
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = fw * dpr;
+    cv.height = fh * dpr;
+    cv.style.width = fw + "px";
+    cv.style.height = fh + "px";
+    f.appendChild(cv);
+    var ctx = cv.getContext("2d");
+    ctx.scale(dpr, dpr);
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#C9AA7C";
+    var pts = [], drawing = false, settled = false;
+
+    function pos(e) {
+      var r = cv.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+    cv.addEventListener("pointerdown", function (e) {
+      if (settled) { return; }
+      drawing = true;
+      pts = [pos(e)];
+      ctx.clearRect(0, 0, fw, fh);
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      cv.setPointerCapture(e.pointerId);
+    });
+    cv.addEventListener("pointermove", function (e) {
+      if (!drawing) { return; }
+      var p = pos(e);
+      pts.push(p);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+    cv.addEventListener("pointerup", function () {
+      if (!drawing || settled) { return; }
+      drawing = false;
+      judge();
+    });
+
+    function judge() {
+      var n = pts.length, k;
+      if (n >= 24) {
+        var cx = 0, cy = 0;
+        for (k = 0; k < n; k++) { cx += pts[k].x; cy += pts[k].y; }
+        cx /= n; cy /= n;
+        var mean = 0, rs = [];
+        for (k = 0; k < n; k++) {
+          var rr = Math.sqrt((pts[k].x - cx) * (pts[k].x - cx) + (pts[k].y - cy) * (pts[k].y - cy));
+          rs.push(rr);
+          mean += rr;
+        }
+        mean /= n;
+        var bins = [], b;
+        for (b = 0; b < 36; b++) { bins[b] = 0; }
+        for (k = 0; k < n; k++) {
+          b = Math.floor((Math.atan2(pts[k].y - cy, pts[k].x - cx) + Math.PI) / (2 * Math.PI) * 36);
+          bins[Math.min(35, b)] = 1;
+        }
+        var cov = bins.reduce(function (a, c) { return a + c; }, 0);
+        if (mean >= 32 && cov >= 30) {
+          var sd = 0;
+          for (k = 0; k < n; k++) { sd += (rs[k] - mean) * (rs[k] - mean); }
+          sd = Math.sqrt(sd / n);
+          var cvr = sd / mean;
+          var gap = Math.sqrt(
+            (pts[0].x - pts[n - 1].x) * (pts[0].x - pts[n - 1].x) +
+            (pts[0].y - pts[n - 1].y) * (pts[0].y - pts[n - 1].y)) / mean;
+          settled = true;
+          ctx.setLineDash([4, 6]);
+          ctx.strokeStyle = "#7B858C";
+          ctx.beginPath();
+          ctx.arc(cx, cy, mean, 0, 2 * Math.PI);
+          ctx.stroke();
+          var score = clamp(100 - cvr * 250 - Math.max(0, gap - 0.25) * 40, 0, 100);
+          interlude(i, score, "radius wandered " + (cvr * 100).toFixed(1) + "%");
+          return;
+        }
+      }
+      stage.querySelector(".rinst").textContent =
+        "That is not a circle yet. One stroke, all the way round, a decent size, then let go.";
+      ctx.clearRect(0, 0, fw, fh);
+    }
+  }
+
+  function round(i) {
+    if (i === 0) { r1(i); }
+    else if (i === 1) { r2(i); }
+    else if (i === 2) { timing(i, 3000, "Start the clock, then stop it on 3.000 exactly. The face stays blank while it runs."); }
+    else if (i === 3) { r4(i); }
+    else { timing(i, 10000, "Start, close your eyes, count ten seconds, stop. No peeking: the face is blank anyway."); }
+  }
+
+  start();
+};
+
+/* =============================================================
+   02 STEADY HAND
+   ============================================================= */
+inits.wire = function () {
+  var svg = $("wiresvg");
+  var path = $("wirepath");
+  var wrap = $("wirewrap");
+  var msg = $("wiremsg");
+  var timeEl = $("wiretime");
+  var livesEl = $("wirelives");
+  var CORR = 20;         // channel radius in viewBox units, mouse
+  var CORR_TOUCH = 27;   // a little kinder for fingers
+  var samples = [];
+  var state = "idle";    // idle, run, done, dead
+  var prog = 0, lives = 3, t0 = 0, lastStrike = 0, raf = null;
+
+  // sample the wire once; geometry is resolution independent
+  var len = path.getTotalLength();
+  var i;
+  for (i = 0; i <= len; i += 3) { samples.push(path.getPointAtLength(i)); }
+  samples.push(path.getPointAtLength(len));
+  var N = samples.length;
+
+  $("wirecorr").setAttribute("d", path.getAttribute("d"));
+  $("wirecorr").setAttribute("stroke-width", String(CORR * 2));
+  var sp = samples[0], ep = samples[N - 1];
+  $("wirestart").setAttribute("cx", sp.x); $("wirestart").setAttribute("cy", sp.y);
+  $("wireend").setAttribute("cx", ep.x); $("wireend").setAttribute("cy", ep.y);
+  $("wirelbls").setAttribute("x", sp.x - 18); $("wirelbls").setAttribute("y", sp.y + 34);
+  $("wirelble").setAttribute("x", ep.x - 12); $("wirelble").setAttribute("y", ep.y - 26);
+
+  function toBox(e) {
+    var r = svg.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * 600 / r.width, y: (e.clientY - r.top) * 320 / r.height };
+  }
+  function dist(a, b) {
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+  }
+  function setLives() {
+    var dots = livesEl.querySelectorAll(".life");
+    for (var k = 0; k < 3; k++) { dots[k].classList.toggle("out", k >= lives); }
+  }
+  function tick() {
+    if (state === "run") {
+      timeEl.textContent = ((performance.now() - t0) / 1000).toFixed(1) + " s";
+      raf = requestAnimationFrame(tick);
+    }
+  }
+  function reset() {
+    state = "idle"; prog = 0; lives = 3;
+    setLives();
+    timeEl.textContent = "0.0 s";
+    msg.textContent = "waiting at the pad";
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+  function strike() {
+    var now = performance.now();
+    if (now - lastStrike < 700) { return; }  // brief grace after a touch
+    lastStrike = now;
+    lives -= 1;
+    setLives();
+    wrap.classList.add("flash");
+    setTimeout(function () { wrap.classList.remove("flash"); }, 130);
+    if (lives <= 0) {
+      state = "dead";
+      msg.textContent = "the wire wins. reset to try again";
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+    } else {
+      msg.textContent = "touched. " + lives + (lives === 1 ? " life" : " lives") + " left";
+    }
+  }
+  function finish() {
+    state = "done";
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    var secs = (performance.now() - t0) / 1000;
+    var touches = 3 - lives;
+    var scored = secs + touches * 3;
+    timeEl.textContent = secs.toFixed(1) + " s";
+    msg.textContent = touches === 0
+      ? "clean run: " + secs.toFixed(1) + " s"
+      : secs.toFixed(1) + " s and " + touches + (touches === 1 ? " touch" : " touches") + ", scored " + scored.toFixed(1) + " s";
+    var prev = parseFloat(readLS("mind-wire-best") || "1e9");
+    if (scored < prev) {
+      writeLS("mind-wire-best", scored.toFixed(1));
+      msg.textContent += ". a new best";
+    }
+  }
+
+  svg.addEventListener("pointermove", function (e) {
+    var p = toBox(e);
+    var R = e.pointerType === "touch" ? CORR_TOUCH : CORR;
+    if (state === "idle") {
+      if (dist(p, samples[0]) < 17) {
+        state = "run"; prog = 0; t0 = performance.now(); lastStrike = 0;
+        msg.textContent = "steady";
+        raf = requestAnimationFrame(tick);
+      }
+      return;
+    }
+    if (state !== "run") { return; }
+    // search near current progress only; no teleporting up the wire
+    var lo = Math.max(0, prog - 12), hi = Math.min(N - 1, prog + 45);
+    var bi = -1, bd = 1e9, k;
+    for (k = lo; k <= hi; k++) {
+      var d = dist(p, samples[k]);
+      if (d < bd) { bd = d; bi = k; }
+    }
+    if (bd <= R) {
+      if (bi > prog) { prog = bi; }
+      if (prog >= N - 4) { finish(); }
+    } else {
+      strike();
+    }
+  });
+  svg.addEventListener("pointerdown", function (e) {
+    // a touch has no hover: let a press on the pad start the run too
+    var p = toBox(e);
+    if (state === "idle" && dist(p, samples[0]) < 17) {
+      state = "run"; prog = 0; t0 = performance.now(); lastStrike = 0;
+      msg.textContent = "steady";
+      raf = requestAnimationFrame(tick);
+    }
+  });
+  $("wirereset").addEventListener("click", reset);
+  leaves.wire = reset;
+  reset();
+};
+
+/* =============================================================
+   03 SNAKE
+   ============================================================= */
+inits.snake = function () {
+  var COLS = 22, ROWS = 14;
+  var wrapEl = $("snakewrap");
+  var cv = $("snakecv");
+  var ctx = cv.getContext("2d");
+  var over = $("snakeover");
+  var overMsg = $("snakeovermsg");
+  var goBtn = $("snakego");
+  var scoreEl = $("snakescore");
+  var bestEl = $("snakebesthud");
+  var cell = 20, dpr = 1;
+  var snake, dir, pend, food, alive = false, timer = null, speed = 140;
+
+  function size() {
+    dpr = window.devicePixelRatio || 1;
+    var w = wrapEl.clientWidth - 2;  // inside the border
+    cell = Math.max(10, Math.floor(w / COLS));
+    cv.width = cell * COLS * dpr;
+    cv.height = cell * ROWS * dpr;
+    cv.style.width = (cell * COLS) + "px";
+    cv.style.height = (cell * ROWS) + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  function best() { return parseInt(readLS("mind-snake-best") || "3", 10); }
+
+  function reset() {
+    snake = [{ x: 8, y: 7 }, { x: 7, y: 7 }, { x: 6, y: 7 }];
+    dir = { x: 1, y: 0 };
+    pend = [];
+    speed = 140;
+    placeFood();
+    scoreEl.textContent = "3";
+    bestEl.textContent = String(best());
+  }
+  function placeFood() {
+    do {
+      food = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+    } while (snake.some(function (s) { return s.x === food.x && s.y === food.y; }));
+  }
+  function begin() {
+    reset();
+    alive = true;
+    over.style.display = "none";
+    schedule();
+  }
+  function schedule() {
+    if (timer) { clearTimeout(timer); }
+    timer = setTimeout(step, speed);
+  }
+  function die() {
+    alive = false;
+    if (timer) { clearTimeout(timer); timer = null; }
+    var n = snake.length;
+    var b = best();
+    if (n > b) { writeLS("mind-snake-best", String(n)); }
+    overMsg.textContent = "Length " + n + "." + (n > b ? " A new best." : " Best is " + b + ".");
+    over.querySelector(".big").textContent = "The wall wins";
+    goBtn.textContent = "Again";
+    over.style.display = "flex";
+  }
+  function step() {
+    if (!alive) { return; }
+    if (pend.length) { dir = pend.shift(); }
+    var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS ||
+        snake.some(function (s) { return s.x === head.x && s.y === head.y; })) {
+      draw();
+      die();
+      return;
+    }
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      scoreEl.textContent = String(snake.length);
+      speed = Math.max(72, speed - 2.5);
+      placeFood();
+    } else {
+      snake.pop();
+    }
+    draw();
+    schedule();
+  }
+  function draw() {
+    ctx.fillStyle = "#0A0B0C";
+    ctx.fillRect(0, 0, cell * COLS, cell * ROWS);
+    ctx.fillStyle = "rgba(242,244,245,.045)";
+    for (var gx = 1; gx < COLS; gx++) {
+      for (var gy = 1; gy < ROWS; gy++) {
+        ctx.fillRect(gx * cell - 1, gy * cell - 1, 1, 1);
+      }
+    }
+    if (food) {
+      ctx.strokeStyle = "#C9AA7C";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(food.x * cell + cell / 2, food.y * cell + cell / 2, cell * 0.3, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
+    if (snake) {
+      for (var k = snake.length - 1; k >= 0; k--) {
+        var a = 1 - (k / snake.length) * 0.55;
+        ctx.fillStyle = k === 0 ? "#E2C79A" : "rgba(201,170,124," + a.toFixed(3) + ")";
+        ctx.fillRect(snake[k].x * cell + 1, snake[k].y * cell + 1, cell - 2, cell - 2);
+      }
+    }
+  }
+  function turn(nx, ny) {
+    var last = pend.length ? pend[pend.length - 1] : dir;
+    if (nx === -last.x && ny === -last.y) { return; }  // no reversing into yourself
+    if (nx === last.x && ny === last.y) { return; }
+    if (pend.length < 2) { pend.push({ x: nx, y: ny }); }
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if ($("g-snake").hidden) { return; }
+    var k = e.key;
+    var map = {
+      ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0],
+      w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0],
+      W: [0, -1], S: [0, 1], A: [-1, 0], D: [1, 0]
+    };
+    if (map[k]) {
+      e.preventDefault();
+      if (!alive) { begin(); }
+      turn(map[k][0], map[k][1]);
+    } else if ((k === " " || k === "Enter") && !alive && over.style.display !== "none" &&
+               document.activeElement !== goBtn) {
+      e.preventDefault();
+      begin();
+    }
+  });
+
+  var swipe = null;
+  cv.addEventListener("pointerdown", function (e) { swipe = { x: e.clientX, y: e.clientY }; });
+  cv.addEventListener("pointermove", function (e) {
+    if (!swipe || !alive) { return; }
+    var dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+    if (Math.abs(dx) < 24 && Math.abs(dy) < 24) { return; }
+    if (Math.abs(dx) > Math.abs(dy)) { turn(dx > 0 ? 1 : -1, 0); }
+    else { turn(0, dy > 0 ? 1 : -1); }
+    swipe = { x: e.clientX, y: e.clientY };
+  });
+  cv.addEventListener("pointerup", function () { swipe = null; });
+
+  goBtn.addEventListener("click", begin);
+  window.addEventListener("resize", function () { if (!$("g-snake").hidden) { size(); } });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden && alive) { die(); }
+  });
+  leaves.snake = function () { if (alive) { die(); } };
+  enters.snake = function () { size(); bestEl.textContent = String(best()); };
+  reset();
+};
+
+/* =============================================================
+   04 LIGHTS OUT
+   ============================================================= */
+inits.lights = function () {
+  var grid = $("lgrid");
+  var movesEl = $("lightsmoves");
+  var parEl = $("lightspar");
+  var dateEl = $("lightsdate");
+  var msgEl = $("lightsmsg");
+  var dailyBtn = $("lightsdaily");
+  var board = [], startBoard = [], moves = 0, par = 0, solved = false, isDaily = true;
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function pressInto(b, i) {
+    var x = i % 5, y = Math.floor(i / 5);
+    [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (d) {
+      var nx = x + d[0], ny = y + d[1];
+      if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5) { b[ny * 5 + nx] = !b[ny * 5 + nx]; }
+    });
+  }
+  function build(seed) {
+    var rng = seed === null ? Math.random : mulberry32(seed);
+    var parity = [], k;
+    for (k = 0; k < 25; k++) { parity[k] = 0; }
+    board = [];
+    for (k = 0; k < 25; k++) { board[k] = false; }
+    var presses = 0;
+    while (presses < 12 || board.every(function (c) { return !c; })) {
+      var i = Math.floor(rng() * 25);
+      pressInto(board, i);
+      parity[i] ^= 1;
+      presses += 1;
+      if (presses > 60) { break; }  // cannot happen; a hard stop all the same
+    }
+    par = parity.reduce(function (a, c) { return a + c; }, 0);
+    startBoard = board.slice();
+    moves = 0;
+    solved = false;
+    render();
+  }
+  function render() {
+    movesEl.textContent = String(moves);
+    parEl.textContent = "setter used " + par;
+    dateEl.textContent = isDaily ? "board for " + todayLabel() : "random board";
+    msgEl.textContent = solved
+      ? "Out in " + moves + " moves. The setter used " + par + "."
+      : "";
+    grid.classList.toggle("done", solved);
+    if (!grid.children.length) {
+      for (var k = 0; k < 25; k++) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("data-i", String(k));
+        b.setAttribute("aria-label", "cell " + (k + 1));
+        grid.appendChild(b);
+      }
+      grid.addEventListener("click", function (e) {
+        var t = e.target.closest("button");
+        if (!t || solved) { return; }
+        pressInto(board, parseInt(t.getAttribute("data-i"), 10));
+        moves += 1;
+        if (board.every(function (c) { return !c; })) {
+          solved = true;
+          if (isDaily) {
+            var key = "mind-lights-" + todayKey();
+            var prev = parseInt(readLS(key) || "9999", 10);
+            if (moves < prev) { writeLS(key, String(moves)); }
+          }
+        }
+        render();
+      });
+    }
+    var cells = grid.querySelectorAll("button");
+    for (var j = 0; j < 25; j++) {
+      cells[j].classList.toggle("lit", board[j]);
+      cells[j].setAttribute("aria-pressed", board[j] ? "true" : "false");
+    }
+  }
+  $("lightsreset").addEventListener("click", function () {
+    board = startBoard.slice();
+    moves = 0;
+    solved = false;
+    render();
+  });
+  $("lightsrandom").addEventListener("click", function () {
+    isDaily = false;
+    dailyBtn.hidden = false;
+    build(null);
+  });
+  dailyBtn.addEventListener("click", function () {
+    isDaily = true;
+    dailyBtn.hidden = true;
+    build(todayKey());
+  });
+  build(todayKey());
+};
+
+/* =============================================================
+   05 ODOMETER
+   ============================================================= */
+inits.reels = function () {
+  var row = $("reelrow");
+  var strips = row.querySelectorAll(".strip");
+  var reels = row.querySelectorAll(".reel");
+  var targetEl = $("reeltarget");
+  var stopBtn = $("reelstop");
+  var newBtn = $("reelnew");
+  var msgEl = $("reelmsg");
+  var scoreEl = $("reelscore");
+  var bestEl = $("reelbesthud");
+  var SPEEDS = [6.5, 8.4, 10.6];  // digits per second
+  var H = 0;
+  var pos = [0, 0, 0], stopAt = [null, null, null], landed = [null, null, null];
+  var target = [0, 0, 0], nextStop = 0, running = false, raf = null, lastT = 0;
+
+  strips.forEach(function (s) {
+    var html = "";
+    for (var d = 0; d <= 10; d++) { html += "<div>" + (d % 10) + "</div>"; }
+    s.innerHTML = html;
+  });
+
+  function measure() { H = strips[0].firstChild.offsetHeight || 73; }
+  function render() {
+    for (var k = 0; k < 3; k++) {
+      strips[k].style.transform = "translateY(" + (-(pos[k] % 10) * H) + "px)";
+    }
+  }
+  function newTarget() {
+    for (var k = 0; k < 3; k++) {
+      target[k] = Math.floor(Math.random() * 10);
+      targetEl.children[k].textContent = String(target[k]);
+      reels[k].classList.remove("locked");
+      pos[k] = Math.floor(Math.random() * 10);
+      stopAt[k] = null;
+      landed[k] = null;
+    }
+    nextStop = 0;
+    running = false;
+    msgEl.textContent = "";
+    scoreEl.innerHTML = "&middot;";
+    stopBtn.textContent = "Start";
+    stopBtn.disabled = false;
+    newBtn.hidden = true;
+    bestEl.textContent = readLS("mind-reels-best") || "·";
+    measure();
+    render();
+  }
+  function frame(t) {
+    var dt = Math.min(0.05, (t - lastT) / 1000);
+    lastT = t;
+    var busy = false;
+    for (var k = 0; k < 3; k++) {
+      if (landed[k] !== null) { continue; }
+      if (stopAt[k] === null) {
+        pos[k] += SPEEDS[k] * dt;
+        busy = true;
+      } else {
+        // roll forward to the chosen digit, then lock
+        var d = stopAt[k] - pos[k];
+        if (d <= 0.01) {
+          pos[k] = stopAt[k];
+          landed[k] = stopAt[k] % 10;
+          reels[k].classList.add("locked");
+          if (nextStop === 3 && landed.every(function (v) { return v !== null; })) { settle(); }
+        } else {
+          pos[k] += Math.min(d, Math.max(2.5, SPEEDS[k]) * dt);
+          busy = true;
+        }
+      }
+    }
+    render();
+    if (busy || landed.some(function (v) { return v === null; })) {
+      raf = requestAnimationFrame(frame);
+    } else {
+      raf = null;
+    }
+  }
+  function settle() {
+    running = false;
+    stopBtn.disabled = true;
+    var D = 0, hits = 0, readout = [];
+    for (var k = 0; k < 3; k++) {
+      var a = Math.abs(landed[k] - target[k]);
+      var d = Math.min(a, 10 - a);
+      D += d;
+      if (d === 0) { hits += 1; }
+      readout.push(String(landed[k]));
+    }
+    var score = Math.round(100 * (1 - D / 15));
+    scoreEl.textContent = String(score);
+    var line;
+    if (hits === 3) { line = "All three. <i>Go and buy a lottery ticket.</i>"; }
+    else if (hits === 2) { line = "Two of three. <i>Nearly a reading.</i>"; }
+    else if (hits === 1) { line = "One of three. <i>The reels regret.</i>"; }
+    else { line = "None of three. <i>The odometer stands by its figure.</i>"; }
+    msgEl.innerHTML = "Landed " + readout.join(" ") + " against " +
+      target.join(" ") + ". " + line;
+    var prev = parseInt(readLS("mind-reels-best") || "-1", 10);
+    if (score > prev) { writeLS("mind-reels-best", String(score)); }
+    bestEl.textContent = readLS("mind-reels-best");
+    newBtn.hidden = false;
+  }
+  stopBtn.addEventListener("click", function () {
+    if (!running) {
+      running = true;
+      stopBtn.textContent = "Stop";
+      lastT = performance.now();
+      raf = requestAnimationFrame(frame);
+      return;
+    }
+    if (nextStop < 3) {
+      stopAt[nextStop] = Math.ceil(pos[nextStop] + 0.0001);
+      nextStop += 1;
+      if (nextStop === 3) { stopBtn.textContent = "· · ·"; }
+    }
+  });
+  newBtn.addEventListener("click", newTarget);
+  leaves.reels = function () { if (raf) { cancelAnimationFrame(raf); raf = null; } newTarget(); };
+  enters.reels = function () { measure(); render(); };
+  newTarget();
+};
+
+menuBests();
+route();
+})();
+</script>
+
+</body>
+</html>
