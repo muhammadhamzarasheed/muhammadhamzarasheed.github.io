@@ -553,6 +553,20 @@ h1{
   margin-inline:auto;
 }
 
+/* The employer's own ledger row: scope figures scoped to the Now
+   chapter, never the personal hero band. */
+.now-figs{
+  width:100%;
+  margin-top:clamp(2.25rem,4vw,3rem);
+  display:grid;
+  grid-template-columns:1fr;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+@media (min-width:48rem){
+  .now-figs{grid-template-columns:repeat(4,1fr);}
+}
+
 /* ---------- sections ---------- */
 section{padding:clamp(5rem,11vw,9rem) 0;}
 .mid{text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
@@ -1190,7 +1204,14 @@ footer .label a:hover{color:var(--brass);}
     <div class="shell mid">
       <p class="label up"><b>02</b> &middot; Now</p>
       <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
-      <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance for 12,000+ students across six campuses, on programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
+      <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
+
+      <dl class="now-figs up d3">
+        <div class="fig"><dt><span class="odo" data-final="12000" data-comma="1">12,000</span>+</dt><dd>Students in scope</dd></div>
+        <div class="fig"><dt>07</dt><dd>Programmes</dd></div>
+        <div class="fig"><dt>06</dt><dd>Campuses</dd></div>
+        <div class="fig"><dt>04</dt><dd>Partner universities</dd></div>
+      </dl>
 
       <div class="tiles" id="tiles">
         <article class="tile up"><div class="tin">
@@ -1680,23 +1701,26 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 (function () {
   var odos = [].slice.call(document.querySelectorAll(".odo"));
   if (!odos.length) { return; }
+  function show(el, v) {
+    el.textContent = el.dataset.comma ? v.toLocaleString("en-GB") : String(v);
+  }
   function run(el) {
     var final = parseInt(el.getAttribute("data-final"), 10);
     var from = parseInt(el.getAttribute("data-from") || "0", 10);
-    if (RM) { el.textContent = final; return; }
+    if (RM) { show(el, final); return; }
     var t0 = null;
     var dur = 1100;
     function tick(t) {
       if (!t0) { t0 = t; }
       var p = Math.min(1, (t - t0) / dur);
       var e = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(from + (final - from) * e);
+      show(el, Math.round(from + (final - from) * e));
       if (p < 1) { window.requestAnimationFrame(tick); }
     }
     window.requestAnimationFrame(tick);
   }
   if (!("IntersectionObserver" in window)) {
-    odos.forEach(function (el) { el.textContent = el.getAttribute("data-final"); });
+    odos.forEach(function (el) { show(el, parseInt(el.getAttribute("data-final"), 10)); });
     return;
   }
   var io = new IntersectionObserver(function (entries) {
