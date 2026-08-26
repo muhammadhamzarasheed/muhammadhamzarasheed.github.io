@@ -946,6 +946,87 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 
+/* ---------- office hours ---------- */
+.hours{
+  width:100%;
+  max-width:36rem;
+  margin:clamp(2.25rem,4vw,3rem) auto 0;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:1.9rem 1.75rem 1.75rem;
+  text-align:left;
+}
+.hours h3{margin:.45rem 0 0;font-size:1.35rem;font-weight:600;letter-spacing:-.02em;}
+.hours .brief{margin:.8rem 0 1.2rem;font-size:.9375rem;line-height:1.6;color:var(--text-2);}
+.hours form{display:flex;gap:.6rem;}
+.hours input{
+  flex:1;
+  min-width:0;
+  padding:.85rem 1rem;
+  background:var(--void);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.875rem;
+  outline:none;
+  transition:border-color .25s ease;
+}
+.hours input:focus{border-color:var(--brass);}
+.hours input::placeholder{color:var(--text-3);}
+.hours button[type="submit"]{
+  padding:.85rem 1.2rem;
+  background:var(--brass);
+  border:0;
+  border-radius:.7rem;
+  color:var(--void);
+  font-family:var(--mono);
+  font-size:.8125rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .25s ease;
+}
+.hours button[type="submit"]:hover{opacity:.85;}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.9rem;}
+.chips button{
+  padding:.35rem .75rem;
+  background:none;
+  border:1px solid var(--line);
+  border-radius:2rem;
+  color:var(--text-2);
+  font-family:var(--mono);
+  font-size:.7rem;
+  letter-spacing:.05em;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.chips button:hover{border-color:var(--brass);color:var(--text);}
+.ans{
+  margin-top:1.1rem;
+  padding:1.1rem 1.2rem;
+  background:var(--raise-2);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  font-size:.9375rem;
+  line-height:1.65;
+  color:var(--text-2);
+}
+.ans b{color:var(--text);font-weight:600;}
+.ans a{color:var(--brass);border-bottom:1px solid transparent;transition:border-color .25s ease;}
+.ans a:hover{border-bottom-color:var(--brass);}
+.ans .src{
+  display:block;
+  margin-top:.8rem;
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.ans .src a{color:var(--brass);}
+
 /* ---------- contact ---------- */
 .reach{margin-top:2.75rem;display:grid;gap:.75rem;width:100%;max-width:34rem;}
 .reach a{
@@ -1466,7 +1547,26 @@ footer .label a:hover{color:var(--brass);}
       <p class="label up"><b>07</b> &middot; Contact</p>
       <h2 class="up d1">Open to connecting.</h2>
       <p class="prose up d2">I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
-      <div class="reach up d3">
+
+      <div class="hours up d3" id="officehours">
+        <p class="label">Office hours</p>
+        <h3>Ask about the work.</h3>
+        <p class="brief">Type a question, or start with one below. Every answer comes straight from the record and names its source, so nothing here is a guess.</p>
+        <form id="hoursform">
+          <input id="hoursq" type="text" placeholder="e.g. what do you actually do?" autocomplete="off" spellcheck="false" aria-label="Ask a question about Muhammad Hamza">
+          <button type="submit">Ask</button>
+        </form>
+        <div class="chips" id="hourschips">
+          <button type="button">What do you actually do?</button>
+          <button type="button">Are you ACCA qualified?</button>
+          <button type="button">What is your method?</button>
+          <button type="button">Can I see your CV?</button>
+          <button type="button">How do I reach you?</button>
+        </div>
+        <div class="ans" id="hoursans" aria-live="polite">Office hours are open. Ask anything that is on the record, or start with one of the questions above.</div>
+      </div>
+
+      <div class="reach up d4">
         <a href="https://www.linkedin.com/in/muhammadhamzarasheed/">LinkedIn <i>in/muhammadhamzarasheed</i></a>
         <a href="mailto:hamzarasheedd@gmail.com">Email <i>hamzarasheedd@gmail.com</i></a>
         <a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener">Curriculum Vitae <i>pdf, two pages</i></a>
@@ -1506,6 +1606,7 @@ footer .label a:hover{color:var(--brass);}
       <li role="option" id="palopt-7" aria-selected="false"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" tabindex="-1">LinkedIn <i>profile</i></a></li>
       <li role="option" id="palopt-8" aria-selected="false"><a href="mailto:hamzarasheedd@gmail.com" tabindex="-1">Email <i>write</i></a></li>
       <li role="option" id="palopt-19" aria-selected="false"><a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener" tabindex="-1">Curriculum Vitae <i>pdf</i></a></li>
+      <li role="option" id="palopt-20" aria-selected="false"><a href="#officehours" tabindex="-1">Office hours <i>ask</i></a></li>
     </ul>
   </div>
 </div>
@@ -1953,6 +2054,139 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         verdict.innerHTML = "<b>Reconciled in " + tries + (tries === 1 ? " attempt" : " attempts") + ".</b> " + ref + " records " + rec + ", but " + a + " + " + b + " = " + (a + b) + ". One mark under. On a pass boundary, one mark is a capped resit, a lower award, or an appeal that never gets made. Fair process is accurate process.";
       }
     });
+  });
+})();
+
+/* ---------- office hours ---------- */
+/* A curated register of answers. Nothing is generated on the fly:
+   every reply was written in advance and names its source, and a
+   question outside the record gets an honest referral, not a guess. */
+(function () {
+  var form = document.getElementById("hoursform");
+  var input = document.getElementById("hoursq");
+  var ans = document.getElementById("hoursans");
+  var chips = document.getElementById("hourschips");
+  if (!form || !input || !ans) { return; }
+
+  var QA = [
+    { k: ["what do you do", "actually do", "your job", "your role", "day to day", "assessment lead", "work"],
+      a: "I lead the Assessment Office at UK Management College: results processing, progression and award decisions, and regulatory compliance for <b>12,000+ students</b> on seven programmes across six campuses, delivered with four validating partner universities.",
+      s: "Now", h: "#now" },
+    { k: ["who are you", "about you", "introduce", "who is muhammad", "yourself"],
+      a: "Assessment professional and ACCA finalist, working where financial reporting and academic governance borrow from each other. The systems I run decide progression, awards and appeals, so they are built to survive scrutiny.",
+      s: "The record", h: "#top" },
+    { k: ["acca", "qualified", "accountant", "chartered", "papers", "exams"],
+      a: "ACCA finalist: <b>10 of 13 papers</b> completed, including Strategic Business Leader. Not yet a member, and I say finalist rather than qualified for exactly that reason. Alongside it: an MSc in Accounting and Finance with Merit.",
+      s: "Education", h: "#education" },
+    { k: ["education", "degree", "msc", "studied", "qualifications", "diploma", "university of cumbria", "icap"],
+      a: "MSc Accounting and Finance (Merit) and an Advanced Diploma (Merit), both at BPP University. A PgC in Teaching and Learning in Professional and Higher Education is in progress at the University of Cumbria, and the foundations were laid at ICAP in Pakistan.",
+      s: "Education", h: "#education" },
+    { k: ["experience", "career", "history", "worked", "previous roles", "bpp", "atom"],
+      a: "Assessment Lead and before that Assessment Support Coordinator at UK Management College; Student Ambassador and Student Voice Representative at BPP; and three years as an Accounting Associate with Atom Services across their US and Pakistan operations.",
+      s: "Experience", h: "#experience" },
+    { k: ["method", "how do you work", "principles", "approach", "reconcile before"],
+      a: "Three rules, borrowed from audit. <b>Reconcile before you report</b>: check the figure against source before anyone sees it. <b>Evidence every decision</b>: every outcome traceable to the regulation that produced it. <b>Build the audit trail as you go</b>: the record exists because the work was done properly.",
+      s: "Method", h: "#method" },
+    { k: ["equity", "fairness", "fair process", "why accuracy", "students least"],
+      a: "A marking error does not land evenly. It lands hardest on the students with the least capacity to challenge it. Fair process is not separate from good process: it is the point of it. The full argument is <a href=\"/notes/accuracy-is-an-equity-issue/\" target=\"_blank\" rel=\"noopener\">Entry 01</a>.",
+      s: "Journal", h: "#journal" },
+    { k: ["game", "marksheet", "reconcile this", "puzzle", "play"],
+      a: "Five marksheet entries, one recorded a single mark under its components. Find it, and you will see what one mark means on a pass boundary. It is at the end of the <a href=\"#reconcile\">Method section</a>.",
+      s: "Method", h: "#reconcile" },
+    { k: ["contact", "reach", "email", "get in touch", "hire", "message", "talk"],
+      a: "Email <a href=\"mailto:hamzarasheedd@gmail.com\">hamzarasheedd@gmail.com</a> or find me on <a href=\"https://www.linkedin.com/in/muhammadhamzarasheed/\" target=\"_blank\" rel=\"noopener\">LinkedIn</a>. I answer both.",
+      s: "Contact", h: "#contact" },
+    { k: ["phone", "number", "call", "mobile"],
+      a: "Email is the route from here: <a href=\"mailto:hamzarasheedd@gmail.com\">hamzarasheedd@gmail.com</a>. If a call is needed, we can arrange one from there.",
+      s: "Contact", h: "#contact" },
+    { k: ["cv", "resume", "curriculum vitae", "download"],
+      a: "Yes: <a href=\"/Muhammad-Hamza-CV.pdf\" target=\"_blank\" rel=\"noopener\">two pages, PDF</a>, on the same letterhead as this site. It reads cleanly for both people and applicant tracking systems.",
+      s: "Contact", h: "#contact" },
+    { k: ["partner universities", "regulations", "rulebook", "four partners", "compliance", "validating"],
+      a: "Four validating partner universities means four regulation sets, four assessment calendars and four sets of reporting requirements running at once. The quickest way to get a decision wrong is to be confident about the wrong rulebook, so nothing here is answered from memory. There is an essay on this: <a href=\"/notes/the-wrong-rulebook/\" target=\"_blank\" rel=\"noopener\">The wrong rulebook</a>.",
+      s: "Now", h: "#now" },
+    { k: ["students", "campuses", "programmes", "scale", "how many", "12000", "12,000"],
+      a: "The current scope: <b>12,000+ students</b>, seven programmes, six campuses, four validating partner universities. The per-cycle workload runs past 3,000 student records.",
+      s: "Now", h: "#now" },
+    { k: ["writing", "write", "written", "wrote", "essays", "essay", "articles", "journal", "entries", "blog", "read"],
+      a: "Seven entries so far, from why accuracy is an equity issue to what starting over actually costs. They live in the <a href=\"#journal\">Journal</a>, and each opens in its own tab.",
+      s: "Journal", h: "#journal" },
+    { k: ["travel", "travelled", "travelling", "traveled", "trips", "visited", "elsewhere", "countries", "places", "been"],
+      a: "Italy twice over, Germany, Austria, Albania, Turkiye, Gibraltar, Pakistan whenever I can get back, and all four nations of the country I live in. At work I remove uncertainty. Away from the desk, none of it has to tie out.",
+      s: "Field notes", h: "#elsewhere" },
+    { k: ["manchester", "based", "location", "where are you", "live"],
+      a: "Manchester. The clock at the top of this page keeps Manchester time for every visitor, because that is where the books are kept.",
+      s: "The record", h: "#top" },
+    { k: ["why education", "accounting to education", "move to education", "moved to education", "into education", "left accounting", "career change", "moved", "restart", "started over", "ca to acca"],
+      a: "I began with CA in Pakistan, moved to the UK in 2022 and started again with ACCA. It felt like a setback and turned out to be a balance brought forward. The full story is <a href=\"/notes/starting-over-is-not-going-backwards/\" target=\"_blank\" rel=\"noopener\">Entry 02</a>.",
+      s: "Journal", h: "#journal" },
+    { k: ["excel", "skills", "tools", "spreadsheet", "data"],
+      a: "Advanced Excel used the way an auditor uses it: reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record. Alongside it, marks processing, operational reporting and data integrity across multiple systems.",
+      s: "Now", h: "#now" },
+    { k: ["pgc", "teaching", "pedagogy", "why study teaching"],
+      a: "The PgC in Teaching and Learning is deliberate. Assessment administration works better when the person running it understands assessment design, not just assessment processing. Knowing why a rubric is built a certain way changes how you handle the edge cases it produces.",
+      s: "Education", h: "#education" },
+    { k: ["monogram", "logo", "mh", "mark", "favicon"],
+      a: "The MH mark is drawn, not typed: three brass strokes where the M and the H share a stem. It is the favicon, the letterhead on the CV, and the crest at the top of this page.",
+      s: "The record", h: "#top" },
+    { k: ["site", "website", "built", "made", "how was this"],
+      a: "Hand built: one page, no framework, no cookies, no tracking. The design performs the method, which is why the sections reconcile as you read them.",
+      s: "The record", h: "#top" },
+    { k: ["rest", "burnout", "break", "holiday"],
+      a: "Three years of deadlines taught me that rest is not a reward you earn at the finish line. You need it to keep going. The longer version is <a href=\"/notes/rest-is-not-a-reward/\" target=\"_blank\" rel=\"noopener\">Entry 04</a>.",
+      s: "Journal", h: "#journal" },
+    { k: ["hello", "hi", "hey", "salaam", "assalam"],
+      a: "Walaikum assalam, and welcome. Ask anything on the record: the role, the method, the qualifications, the writing, or how to get in touch.",
+      s: "Office hours", h: "#officehours" }
+  ];
+
+  var FALLBACK = "That one is not in the record yet, and I would rather say so than guess. The direct route works: <a href=\"mailto:hamzarasheedd@gmail.com\">hamzarasheedd@gmail.com</a>.<span class=\"src\">From the record: <a href=\"#contact\">Contact</a></span>";
+
+  function answer(q) {
+    q = (q || "").toLowerCase().replace(/[^a-z0-9\s,+]/g, " ").replace(/\s+/g, " ").trim();
+    if (!q) {
+      ans.innerHTML = "Office hours are open. Ask anything that is on the record, or start with one of the questions above.";
+      return;
+    }
+    // Filler words score nothing; phrases still match exactly at any
+    // length, so short keys like cv or game are caught by indexOf above.
+    var STOP = { about: 1, where: 1, which: 1, there: 1, their: 1, would: 1, could: 1, should: 1, doing: 1, really: 1, actually: 1 };
+    var words = q.split(" ").filter(function (w) { return w.length > 4 && !STOP[w]; });
+    var best = null, bestScore = 0;
+    // Word-boundary phrase matching: "about you" must not fire inside
+    // "about your". Both sides are padded so edges count as boundaries.
+    var Q = " " + q + " ";
+    QA.forEach(function (item) {
+      var pscore = 0, wscore = 0;
+      item.k.forEach(function (phrase) {
+        if (Q.indexOf(" " + phrase + " ") !== -1) { pscore += 3; }
+        else {
+          words.forEach(function (w) {
+            if ((" " + phrase + " ").indexOf(" " + w + " ") !== -1) { wscore += 1; }
+          });
+        }
+      });
+      // Loose word overlap is capped so one word appearing in many key
+      // phrases cannot outvote an exact phrase match elsewhere.
+      var score = pscore + Math.min(wscore, 2);
+      if (score > bestScore) { bestScore = score; best = item; }
+    });
+    if (best && bestScore >= 2) {
+      ans.innerHTML = best.a + "<span class=\"src\">From the record: <a href=\"" + best.h + "\">" + best.s + "</a></span>";
+    } else {
+      ans.innerHTML = FALLBACK;
+    }
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    answer(input.value);
+  });
+  chips.addEventListener("click", function (e) {
+    if (e.target.tagName === "BUTTON") {
+      input.value = e.target.textContent;
+      answer(input.value);
+    }
   });
 })();
 
