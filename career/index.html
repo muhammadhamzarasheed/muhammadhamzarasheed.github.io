@@ -1,0 +1,1564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Something for your career</title>
+<meta name="description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device. By Muhammad Hamza.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/career/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="Something for your career">
+<meta property="og:description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/career/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Something for your career">
+<meta name="twitter:description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --raise-2:#171A1C;
+  --line:#22262A;
+  --text:#F2F4F5;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-hi:#E2C79A;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:64rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+article{
+  max-width:64rem;
+  margin:0 auto;
+  padding:clamp(3rem,7vw,5rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.narrow{max-width:50rem;margin:0 auto;}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
+p.lede{color:var(--text-2);max-width:64ch;margin:0;}
+p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+
+/* ---------- menu ---------- */
+.menu{display:grid;gap:.8rem;margin-top:2.4rem;}
+a.gcard{
+  display:flex;
+  gap:1.2rem;
+  align-items:baseline;
+  padding:1.1rem 1.3rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  transition:border-color .25s ease;
+}
+a.gcard:hover{border-color:var(--brass);}
+.gcard .no{font-family:var(--mono);font-size:.6875rem;letter-spacing:.15em;color:var(--brass);flex:none;}
+.gcard h2{margin:0;font-size:1.05rem;font-weight:600;letter-spacing:-.01em;}
+.gcard p{margin:.1rem 0 0;color:var(--text-3);font-size:.9rem;line-height:1.55;}
+.gcard .best{
+  margin-left:auto;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  color:var(--text-3);
+  white-space:nowrap;
+  flex:none;
+}
+@media (max-width:34rem){ .gcard .best{display:none;} }
+
+/* ---------- tool chrome ---------- */
+.ghead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:2.4rem 0 .4rem;}
+.ghead h2{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
+.ghead h2 i{font-family:var(--mono);font-style:normal;font-size:.6875rem;letter-spacing:.15em;color:var(--brass);vertical-align:.45em;margin-right:.6rem;}
+a.gback{font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);transition:color .25s ease;white-space:nowrap;}
+a.gback:hover{color:var(--brass);}
+.gnote{color:var(--text-3);font-size:.9rem;margin:0 0 1.3rem;max-width:64ch;}
+.board{
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  padding:1.4rem;
+}
+.btn{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:1px solid var(--line);
+  color:var(--text-2);
+  padding:.55rem 1.2rem;
+  border-radius:2rem;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.btn:hover{border-color:var(--brass);color:var(--text);}
+.btn.primary{border-color:var(--brass);color:var(--brass);}
+.btn.primary:hover{color:var(--brass-hi);border-color:var(--brass-hi);}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem;}
+.hudline{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+  margin-top:.9rem;
+}
+.hudline b{color:var(--text-2);font-weight:400;}
+.hudline i{font-family:var(--serif);font-style:italic;font-size:1.2em;color:var(--brass);letter-spacing:0;}
+
+/* ---------- cv builder ---------- */
+.cvwrap{display:grid;gap:1.2rem;align-items:start;}
+@media (min-width:62rem){
+  .cvwrap{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);}
+  .cvpreview{position:sticky;top:5.25rem;max-height:calc(100vh - 6.5rem);overflow-y:auto;}
+}
+.cvform{display:flex;flex-direction:column;gap:1.4rem;}
+.fgroup{background:var(--raise);border:1px solid var(--line);border-radius:.7rem;padding:1.2rem;}
+.fgroup h3{
+  margin:0 0 .9rem;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--brass);
+  font-weight:400;
+}
+.frow{display:grid;gap:.7rem;}
+@media (min-width:34rem){ .frow.two{grid-template-columns:1fr 1fr;} }
+.frow + .frow{margin-top:.7rem;}
+.cvform label{display:block;}
+.cvform label span{
+  display:block;
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-bottom:.3rem;
+}
+.cvform input,.cvform textarea{
+  width:100%;
+  padding:.6rem .75rem;
+  background:var(--void);
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:1rem;
+  line-height:1.5;
+  outline:none;
+  transition:border-color .25s ease;
+}
+.cvform input:focus,.cvform textarea:focus{border-color:var(--brass);}
+.cvform textarea{resize:vertical;min-height:4.6rem;}
+.cvform ::placeholder{color:#5A646B;}
+.entrycard{
+  border:1px solid var(--line);
+  border-radius:.6rem;
+  padding:.9rem;
+  background:var(--raise-2);
+}
+.entrycard + .entrycard{margin-top:.8rem;}
+.entrytools{display:flex;justify-content:flex-end;gap:.4rem;margin-bottom:.6rem;}
+.entrytools button{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  background:none;
+  border:1px solid var(--line);
+  border-radius:.4rem;
+  color:var(--text-3);
+  padding:.15rem .55rem;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.entrytools button:hover{border-color:var(--brass);color:var(--text);}
+.addrow{margin-top:.8rem;}
+
+/* the sheet: white, single column, machine readable by construction */
+/* only very narrow screens need the sideways scroll; wider ones keep
+   the shadow unclipped */
+@media (max-width:26rem){ .cvpreview .sheetwrap{overflow-x:auto;} }
+.sheet{
+  background:#FFFFFF;
+  color:#1A1D1F;
+  border-radius:.4rem;
+  padding:clamp(1.6rem,4vw,2.7rem);
+  min-width:19rem;
+  box-shadow:0 18px 60px rgba(0,0,0,.5);
+  font-size:.9rem;
+  line-height:1.55;
+}
+.sheet .cvname{
+  margin:0;
+  font-size:1.75rem;
+  font-weight:600;
+  letter-spacing:-.02em;
+  color:#101214;
+  line-height:1.15;
+}
+.sheet .cvrole{margin:.2rem 0 0;color:#4A5258;font-size:.95rem;}
+.sheet .cvcontact{
+  margin:.7rem 0 0;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.03em;
+  color:#5A646B;
+}
+.sheet .cvsection{margin-top:1.5rem;}
+.sheet .cvsection > h3{
+  margin:0 0 .7rem;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:#8A6D3F;
+  font-weight:400;
+  border-bottom:1px solid #E4E0D8;
+  padding-bottom:.35rem;
+}
+.sheet .cvprofile{margin:0;color:#33393D;}
+.sheet .entry{margin-top:.9rem;}
+.sheet .entry:first-of-type{margin-top:0;}
+.sheet .ehead{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;}
+.sheet .ehead b{font-weight:600;color:#101214;}
+.sheet .ehead .org{color:#4A5258;}
+.sheet .ehead .dates{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  color:#5A646B;
+  white-space:nowrap;
+  margin-left:auto;
+}
+.sheet ul{margin:.4rem 0 0;padding-left:1.1rem;color:#33393D;}
+.sheet ul li{margin:.2rem 0;}
+.sheet .cvskills{margin:0;color:#33393D;}
+.sheet .ghost{color:#6B747B;font-style:italic;}
+.sheetnote{
+  margin:.8rem 0 0;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+
+/* ---------- cv check ---------- */
+.checkgroups{display:flex;flex-direction:column;gap:1.4rem;}
+.cgroup h3{
+  margin:0 0 .7rem;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--brass);
+  font-weight:400;
+}
+.citem{
+  display:flex;
+  gap:.85rem;
+  align-items:flex-start;
+  padding:.65rem .4rem;
+  border-radius:.5rem;
+  cursor:pointer;
+  transition:background .2s ease;
+}
+.citem:hover{background:var(--raise-2);}
+.citem input{
+  appearance:none;
+  -webkit-appearance:none;
+  flex:none;
+  margin-top:.35rem;
+  width:16px;
+  height:16px;
+  border:1px solid #444C52;
+  border-radius:4px;
+  background:var(--void);
+  cursor:pointer;
+  position:relative;
+  transition:background .2s ease,border-color .2s ease;
+}
+.citem input:checked{background:var(--brass);border-color:var(--brass);}
+.citem input:checked::after{
+  content:"";
+  position:absolute;
+  left:4px;top:1px;
+  width:5px;height:9px;
+  border:solid var(--void);
+  border-width:0 2px 2px 0;
+  transform:rotate(42deg);
+}
+.citem .ct{font-size:.95rem;color:var(--text-2);line-height:1.5;}
+.citem input:checked ~ .ct{color:var(--text);}
+.citem .ct small{display:block;font-size:.8rem;color:var(--text-3);}
+.scoreline{
+  margin-top:1.3rem;
+  padding-top:1.1rem;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:baseline;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+.scoreline .n{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:2rem;
+  color:var(--text);
+}
+.scoreline .v{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.25rem;
+  color:var(--brass);
+}
+
+/* ---------- interview drill ---------- */
+.drillstage{text-align:center;padding:1.4rem .6rem;}
+.drillq{
+  font-size:clamp(1.2rem,1rem + 1.4vw,1.7rem);
+  font-weight:600;
+  letter-spacing:-.02em;
+  line-height:1.35;
+  max-width:34ch;
+  margin:0 auto;
+  min-height:3.6em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-wrap:balance;
+}
+.drillcat{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin:0 0 .8rem;
+}
+.drillclock{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:2.6rem;
+  margin:1rem 0 .2rem;
+  color:var(--text);
+}
+.drillphase{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  min-height:1.4em;
+}
+.drillstar{
+  margin:.9rem auto 0;
+  max-width:44ch;
+  font-size:.85rem;
+  color:var(--text-3);
+  line-height:1.6;
+}
+.drillstar b{color:var(--text-2);font-weight:600;}
+.drillbtns{display:flex;gap:.6rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap;}
+
+/* ---------- application ledger ---------- */
+.ledgerform{display:grid;gap:.7rem;margin-bottom:1.1rem;}
+@media (min-width:48rem){
+  .ledgerform{grid-template-columns:1.2fr 1.2fr .9fr auto;align-items:end;}
+}
+.ledgerform label span{
+  display:block;
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-bottom:.3rem;
+}
+.ledgerform input{
+  width:100%;
+  padding:.6rem .75rem;
+  background:var(--void);
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:1rem;
+  outline:none;
+  transition:border-color .25s ease;
+}
+.ledgerform input:focus{border-color:var(--brass);}
+.ledgerform input::placeholder{color:#5A646B;}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:.6rem;}
+table.apps{
+  width:100%;
+  min-width:38rem;
+  border-collapse:collapse;
+  font-size:.875rem;
+}
+table.apps th{
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  font-weight:400;
+  text-align:left;
+  padding:.7rem .8rem;
+  background:var(--raise-2);
+  border-bottom:1px solid var(--line);
+}
+table.apps td{
+  padding:.6rem .8rem;
+  border-bottom:1px solid var(--line);
+  color:var(--text-2);
+  vertical-align:middle;
+}
+table.apps tr:last-child td{border-bottom:0;}
+table.apps td.role{color:var(--text);font-weight:600;}
+table.apps td.date{font-family:var(--mono);font-size:.75rem;color:var(--text-3);white-space:nowrap;}
+table.apps select{
+  background:var(--void);
+  border:1px solid var(--line);
+  border-radius:2rem;
+  color:var(--text-2);
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  padding:.25rem .6rem;
+  cursor:pointer;
+}
+table.apps select.s-offer{border-color:var(--brass);color:var(--brass);}
+table.apps select.s-interview{color:var(--text);}
+table.apps select.s-rejected,table.apps select.s-noreply{color:var(--text-3);}
+@media (max-width:40rem){ table.apps select{font-size:1rem;} }
+table.apps button.del{
+  background:none;
+  border:0;
+  color:var(--text-3);
+  font-family:var(--mono);
+  font-size:.8rem;
+  cursor:pointer;
+  padding:.2rem .4rem;
+  border-radius:.3rem;
+  transition:color .2s ease;
+}
+table.apps button.del:hover{color:var(--text);}
+.emptyledger{
+  padding:1.6rem .8rem;
+  text-align:center;
+  font-family:var(--mono);
+  font-size:.8rem;
+  color:var(--text-3);
+}
+
+footer{border-top:1px solid var(--line);margin-top:3rem;}
+footer .in{
+  max-width:64rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+
+/* ---------- print ---------- */
+/* Any view: flip the tokens to a light theme so paper is never
+   white text on white. CV view (html.printcv): the sheet alone. */
+@media print{
+  :root{
+    --void:#FFFFFF;
+    --raise:#FFFFFF;
+    --raise-2:#F2F2F0;
+    --line:#D9D9D5;
+    --text:#16181A;
+    --text-2:#3C4348;
+    --text-3:#5A646B;
+    --brass:#8A6D3F;
+    --brass-hi:#8A6D3F;
+    --brass-soft:rgba(138,109,63,.12);
+  }
+  body{background:#fff;}
+  .bar,footer{display:none !important;}
+  .sheet{box-shadow:none;}
+  @page{margin:16mm;}
+}
+@media print{
+  html.printcv body{padding:0;}
+  html.printcv #intro,html.printcv #menu,html.printcv .ghead,html.printcv .gnote,
+  html.printcv .cvform,html.printcv .btnrow,html.printcv .sheetnote,html.printcv .hudline{display:none !important;}
+  html.printcv article{padding:0;max-width:none;}
+  html.printcv .cvwrap{display:block;}
+  html.printcv .cvpreview{position:static;max-height:none;overflow:visible;}
+  html.printcv .cvpreview .sheetwrap{overflow:visible;}
+  html.printcv .sheet{
+    border-radius:0;
+    padding:0;
+    min-width:0;
+    font-size:10.5pt;
+    line-height:1.5;
+  }
+  html.printcv .sheet .cvname{font-size:20pt;}
+  html.printcv .sheet .entry{break-inside:avoid;}
+  html.printcv .sheet .cvsection > h3{break-after:avoid;}
+  html.printcv .sheet{orphans:3;widows:3;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/">The record</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <div id="intro">
+    <div class="narrow">
+      <p class="label"><b>For the record</b> &middot; career tools</p>
+      <h1>Something for your career</h1>
+      <p class="byline">Four tools &middot; no sign up &middot; your words stay on your device</p>
+      <hr>
+      <p class="lede">The rest of this site argues that accuracy is a discipline. This page points the discipline at the job search: a CV built clean, a checklist that catches the usual failures, practice for the questions you already know are coming, and a ledger so the search itself <em>reconciles</em>. Everything runs here in your browser. What you type is never uploaded, sent or seen by anyone but you.</p>
+    </div>
+  </div>
+
+  <noscript><p class="gnote" style="margin-top:2rem;">These tools need JavaScript. The rest of the site does not.</p></noscript>
+
+  <div class="menu narrow" id="menu">
+    <a class="gcard" href="#cv">
+      <span class="no">01</span>
+      <div><h2>CV builder</h2><p>Type on the left, watch it set itself on the right. Print it, or take it to Word. Machine readable by construction.</p></div>
+      <span class="best" id="best-cv"></span>
+    </a>
+    <a class="gcard" href="#check">
+      <span class="no">02</span>
+      <div><h2>CV check</h2><p>Sixteen checks before you send it. Tick what is true, fix what is not.</p></div>
+      <span class="best" id="best-check"></span>
+    </a>
+    <a class="gcard" href="#drill">
+      <span class="no">03</span>
+      <div><h2>Interview drill</h2><p>A random question, one minute to think, two to answer. Out loud.</p></div>
+      <span class="best" id="best-drill"></span>
+    </a>
+    <a class="gcard" href="#ledger">
+      <span class="no">04</span>
+      <div><h2>Application ledger</h2><p>Every application recorded, statused and counted. The search, reconciled.</p></div>
+      <span class="best" id="best-ledger"></span>
+    </a>
+  </div>
+
+  <!-- 01 CV builder -->
+  <section id="g-cv" hidden>
+    <div class="ghead"><h2><i>01</i>CV builder</h2><a class="gback" href="#">All tools</a></div>
+    <p class="gnote">Single column, standard headings, no tables and no graphics, which is exactly what applicant tracking systems parse cleanly and what a tired human skims fastest. Dates read "Feb 2025 to Jul 2026". Your draft saves itself in this browser as you type.</p>
+    <div class="cvwrap">
+      <div class="cvform" id="cvform">
+        <div class="fgroup">
+          <h3>Who you are</h3>
+          <div class="frow two">
+            <label><span>Full name</span><input id="f-name" type="text" autocomplete="off" placeholder="Sam Whitfield"></label>
+            <label><span>Professional title</span><input id="f-headline" type="text" autocomplete="off" placeholder="Programme Coordinator"></label>
+          </div>
+          <div class="frow two">
+            <label><span>Email</span><input id="f-email" type="text" autocomplete="off" placeholder="sam.whitfield@example.com"></label>
+            <label><span>Phone</span><input id="f-phone" type="text" autocomplete="off" placeholder="07000 000000"></label>
+          </div>
+          <div class="frow two">
+            <label><span>Town or city</span><input id="f-location" type="text" autocomplete="off" placeholder="Manchester"></label>
+            <label><span>LinkedIn</span><input id="f-linkedin" type="text" autocomplete="off" placeholder="linkedin.com/in/samwhitfield"></label>
+          </div>
+        </div>
+        <div class="fgroup">
+          <h3>Profile</h3>
+          <label><span>Three lines, not an objective</span><textarea id="f-profile" placeholder="What you do, the scale you do it at, and the one thing you want the reader to remember."></textarea></label>
+        </div>
+        <div class="fgroup">
+          <h3>Experience</h3>
+          <div id="jobs"></div>
+          <div class="addrow"><button class="btn" type="button" id="addjob">Add a role</button></div>
+        </div>
+        <div class="fgroup">
+          <h3>Education</h3>
+          <div id="edus"></div>
+          <div class="addrow"><button class="btn" type="button" id="addedu">Add a qualification</button></div>
+        </div>
+        <div class="fgroup">
+          <h3>Skills and extras</h3>
+          <label><span>Skills, comma separated</span><input id="f-skills" type="text" autocomplete="off" placeholder="Excel, reconciliation, stakeholder reporting"></label>
+          <div class="frow" style="margin-top:.7rem;">
+            <label><span>Extras, one per line (certifications, languages, volunteering)</span><textarea id="f-extras" placeholder="First Aid at Work, 2025"></textarea></label>
+          </div>
+        </div>
+        <div class="btnrow">
+          <button class="btn" type="button" id="cvexample">Load an example</button>
+          <button class="btn" type="button" id="cvclear">Clear all</button>
+        </div>
+      </div>
+      <div class="cvpreview">
+        <div class="btnrow" style="margin:0 0 1.1rem;">
+          <button class="btn primary" type="button" id="cvprint">Print or save as PDF</button>
+          <button class="btn" type="button" id="cvword">Download for Word</button>
+          <button class="btn" type="button" id="cvtxt">Download plain text</button>
+        </div>
+        <div class="sheetwrap" tabindex="0" role="group" aria-label="CV preview"><div class="sheet" id="sheet"></div></div>
+        <p class="sheetnote">Saved in this browser only. Clear your browser data and it goes with it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CV check -->
+  <section id="g-check" hidden>
+    <div class="ghead"><h2><i>02</i>CV check</h2><a class="gback" href="#">All tools</a></div>
+    <p class="gnote">Sixteen checks, in the order a reader meets them. Tick only what is actually true of the document you are about to send. The score is not the point. The unticked boxes are the point.</p>
+    <div class="board">
+      <div class="checkgroups" id="checkgroups"></div>
+      <div class="scoreline" role="status">
+        <span class="n" id="checkscore">00/16</span>
+        <span class="v" id="checkverdict"></span>
+      </div>
+      <div class="btnrow"><button class="btn" type="button" id="checkreset">Untick everything</button></div>
+    </div>
+  </section>
+
+  <!-- 03 Interview drill -->
+  <section id="g-drill" hidden>
+    <div class="ghead"><h2><i>03</i>Interview drill</h2><a class="gback" href="#">All tools</a></div>
+    <p class="gnote">Draw a question. You get one minute to think in silence, then two minutes to answer out loud, timed. For the behavioural ones, answer in STAR order. No question repeats until the bank runs dry.</p>
+    <div class="board drillstage">
+      <p class="drillcat" id="drillcat">The bank holds 30 questions</p>
+      <p class="drillq" id="drillq">Ready when you are.</p>
+      <p class="drillclock" id="drillclock">&middot; &middot; &middot;</p>
+      <p class="drillphase" id="drillphase" role="status"></p>
+      <p class="drillstar" id="drillstar" hidden><b>S</b>ituation, briefly. <b>T</b>ask, what was yours. <b>A</b>ction, what you actually did. <b>R</b>esult, with a number if one exists.</p>
+      <div class="drillbtns">
+        <button class="btn primary" type="button" id="drilldraw">Draw a question</button>
+        <button class="btn" type="button" id="drillskip" hidden>Skip it</button>
+        <button class="btn" type="button" id="drillstop" hidden>Stop the clock</button>
+      </div>
+    </div>
+    <p class="hudline"><span id="drillcount">0 answered this visit</span></p>
+  </section>
+
+  <!-- 04 Application ledger -->
+  <section id="g-ledger" hidden>
+    <div class="ghead"><h2><i>04</i>Application ledger</h2><a class="gback" href="#">All tools</a></div>
+    <p class="gnote">Record every application the day you send it. Update the status when anything moves. A search you can count is a search you can steer, and a ledger beats a memory.</p>
+    <div class="board">
+      <div class="ledgerform">
+        <label><span>Role</span><input id="l-role" type="text" autocomplete="off" placeholder="Assessment Officer"></label>
+        <label><span>Organisation</span><input id="l-org" type="text" autocomplete="off" placeholder="Northgate College"></label>
+        <label><span>Applied on</span><input id="l-date" type="date"></label>
+        <button class="btn primary" type="button" id="l-add">Record it</button>
+      </div>
+      <div class="tablewrap">
+        <table class="apps" id="appstable">
+          <thead><tr><th>Role</th><th>Organisation</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+          <tbody id="appsbody"></tbody>
+        </table>
+      </div>
+      <p class="hudline" id="ledgertotals"></p>
+      <div class="btnrow"><button class="btn" type="button" id="l-csv">Download as CSV</button></div>
+    </div>
+  </section>
+
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/">Back to the record</a></p>
+    <p class="label">What you type never leaves your browser.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+"use strict";
+
+/* ---------- shared ---------- */
+function $(id) { return document.getElementById(id); }
+function readLS(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function writeLS(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function niceDate(iso) {
+  // iso yyyy-mm-dd from a date input; anything else passes through
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  if (!m) { return iso || ""; }
+  return parseInt(m[3], 10) + " " + MONTHS[parseInt(m[2], 10) - 1] + " " + m[1];
+}
+function download(filename, text, mime) {
+  var blob = new Blob([text], { type: mime });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+}
+
+/* ---------- router ---------- */
+var TOOLS = ["cv", "check", "drill", "ledger"];
+var inits = {}, enters = {}, leaves = {}, built = {}, current = null;
+
+function route() {
+  var h = location.hash.replace("#", "");
+  var next = TOOLS.indexOf(h) > -1 ? h : null;
+  if (current && current !== next && leaves[current]) { leaves[current](); }
+  $("menu").hidden = !!next;
+  $("intro").hidden = !!next;
+  TOOLS.forEach(function (t) { $("g-" + t).hidden = (t !== next); });
+  // printing the CV view means the sheet alone; every other view prints
+  // in the light paper theme
+  document.documentElement.classList.toggle("printcv", next === "cv");
+  current = next;
+  if (next) {
+    if (!built[next]) { built[next] = true; inits[next](); }
+    if (enters[next]) { enters[next](); }
+    window.scrollTo(0, 0);
+  } else {
+    menuNotes();
+  }
+}
+window.addEventListener("hashchange", route);
+
+function menuNotes() {
+  var cv = null;
+  try { cv = JSON.parse(readLS("career-cv") || "null"); } catch (e) {}
+  var hasDraft = false;
+  if (cv && typeof cv === "object") {
+    ["name", "headline", "email", "phone", "location", "linkedin", "profile", "skills", "extras"]
+      .forEach(function (f) { if ((cv[f] || "").trim()) { hasDraft = true; } });
+    (cv.jobs || []).concat(cv.edu || []).forEach(function (e) {
+      Object.keys(e || {}).forEach(function (k) {
+        if (typeof e[k] === "string" && e[k].trim()) { hasDraft = true; }
+      });
+    });
+  }
+  $("best-cv").textContent = hasDraft ? "draft saved" : "no draft yet";
+  var ticks = [];
+  try { ticks = JSON.parse(readLS("career-check") || "[]"); } catch (e) {}
+  var done = ticks.filter(Boolean).length;
+  $("best-check").textContent = done ? done + "/16 ticked" : "not started";
+  $("best-drill").textContent = "30 questions";
+  var apps = [];
+  try { apps = JSON.parse(readLS("career-ledger") || "[]"); } catch (e) {}
+  $("best-ledger").textContent = apps.length
+    ? apps.length + " recorded" : "empty ledger";
+}
+
+/* =============================================================
+   01 CV BUILDER
+   ============================================================= */
+inits.cv = function () {
+  var FIELDS = ["name", "headline", "email", "phone", "location", "linkedin", "profile", "skills", "extras"];
+  var data = { jobs: [], edu: [] };
+  FIELDS.forEach(function (f) { data[f] = ""; });
+  try {
+    var saved = JSON.parse(readLS("career-cv") || "null");
+    if (saved && typeof saved === "object") {
+      FIELDS.forEach(function (f) { if (typeof saved[f] === "string") { data[f] = saved[f]; } });
+      if (Array.isArray(saved.jobs)) { data.jobs = saved.jobs; }
+      if (Array.isArray(saved.edu)) { data.edu = saved.edu; }
+    }
+  } catch (e) {}
+  if (!data.jobs.length) { data.jobs = [blankJob()]; }
+  if (!data.edu.length) { data.edu = [blankEdu()]; }
+
+  function blankJob() { return { role: "", org: "", from: "", to: "", bullets: "" }; }
+  function blankEdu() { return { qual: "", inst: "", from: "", to: "", note: "" }; }
+
+  var saveTimer = null;
+  function saveNow() {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    writeLS("career-cv", JSON.stringify(data));
+  }
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNow, 300);
+  }
+  // a debounce must not eat the last edits when the tab closes
+  window.addEventListener("pagehide", function () {
+    if (saveTimer) { saveNow(); }
+  });
+
+  /* ---- form ---- */
+  FIELDS.forEach(function (f) {
+    var el = $("f-" + f);
+    el.value = data[f];
+    el.addEventListener("input", function () {
+      data[f] = el.value;
+      save();
+      render();
+    });
+  });
+
+  function entryField(labelText, key, entry, textarea, placeholder) {
+    var lab = document.createElement("label");
+    var sp = document.createElement("span");
+    sp.textContent = labelText;
+    lab.appendChild(sp);
+    var el = document.createElement(textarea ? "textarea" : "input");
+    if (!textarea) { el.type = "text"; el.autocomplete = "off"; }
+    el.placeholder = placeholder || "";
+    el.value = entry[key];
+    el.addEventListener("input", function () {
+      entry[key] = el.value;
+      save();
+      render();
+    });
+    lab.appendChild(el);
+    return lab;
+  }
+  function entryTools(list, i, rebuild) {
+    var tools = document.createElement("div");
+    tools.className = "entrytools";
+    if (i > 0) {
+      var up = document.createElement("button");
+      up.type = "button";
+      up.textContent = "move up";
+      up.addEventListener("click", function () {
+        var e = list.splice(i, 1)[0];
+        list.splice(i - 1, 0, e);
+        save(); rebuild(); render();
+      });
+      tools.appendChild(up);
+    }
+    var del = document.createElement("button");
+    del.type = "button";
+    del.textContent = "remove";
+    del.addEventListener("click", function () {
+      list.splice(i, 1);
+      save(); rebuild(); render();
+    });
+    tools.appendChild(del);
+    return tools;
+  }
+  function buildJobs() {
+    var host = $("jobs");
+    host.innerHTML = "";
+    data.jobs.forEach(function (j, i) {
+      var card = document.createElement("div");
+      card.className = "entrycard";
+      card.appendChild(entryTools(data.jobs, i, buildJobs));
+      var r1 = document.createElement("div");
+      r1.className = "frow two";
+      r1.appendChild(entryField("Role", "role", j, false, "Assessment Officer"));
+      r1.appendChild(entryField("Organisation", "org", j, false, "Northgate College"));
+      card.appendChild(r1);
+      var r2 = document.createElement("div");
+      r2.className = "frow two";
+      r2.appendChild(entryField("From", "from", j, false, "Feb 2025"));
+      r2.appendChild(entryField("To", "to", j, false, "Present"));
+      card.appendChild(r2);
+      var r3 = document.createElement("div");
+      r3.className = "frow";
+      r3.appendChild(entryField("What you did, one bullet per line, verbs first, numbers in", "bullets", j, true, "Reconciled results for 2,400 students across 3 campuses each term"));
+      card.appendChild(r3);
+      host.appendChild(card);
+    });
+  }
+  function buildEdus() {
+    var host = $("edus");
+    host.innerHTML = "";
+    data.edu.forEach(function (e, i) {
+      var card = document.createElement("div");
+      card.className = "entrycard";
+      card.appendChild(entryTools(data.edu, i, buildEdus));
+      var r1 = document.createElement("div");
+      r1.className = "frow two";
+      r1.appendChild(entryField("Qualification", "qual", e, false, "MSc Accounting and Finance"));
+      r1.appendChild(entryField("Institution", "inst", e, false, "BPP University"));
+      card.appendChild(r1);
+      var r2 = document.createElement("div");
+      r2.className = "frow two";
+      r2.appendChild(entryField("From", "from", e, false, "2021"));
+      r2.appendChild(entryField("To", "to", e, false, "2023"));
+      card.appendChild(r2);
+      var r3 = document.createElement("div");
+      r3.className = "frow";
+      r3.appendChild(entryField("Note, optional (grade, dissertation, standing)", "note", e, false, "Merit"));
+      card.appendChild(r3);
+      host.appendChild(card);
+    });
+  }
+  $("addjob").addEventListener("click", function () {
+    data.jobs.push(blankJob());
+    save(); buildJobs(); render();
+  });
+  $("addedu").addEventListener("click", function () {
+    data.edu.push(blankEdu());
+    save(); buildEdus(); render();
+  });
+
+  /* ---- preview ---- */
+  function dates(from, to) {
+    var f = (from || "").trim(), t = (to || "").trim();
+    if (f && t) { return f + " to " + t; }
+    return f || t || "";
+  }
+  function bulletLines(text) {
+    // strip a leading list marker only when a space follows it, so a
+    // genuine leading minus ("-2% variance") survives
+    return (text || "").split("\n")
+      .map(function (l) { return l.replace(/^\s*[-*•]\s+/, "").trim(); })
+      .filter(Boolean);
+  }
+  function render() {
+    var h = "";
+    h += "<p class='cvname'>" + (data.name ? esc(data.name) : "<span class='ghost'>Your name</span>") + "</p>";
+    if (data.headline) { h += "<p class='cvrole'>" + esc(data.headline) + "</p>"; }
+    var contact = [data.location, data.email, data.phone, data.linkedin]
+      .map(function (v) { return (v || "").trim(); }).filter(Boolean).map(esc);
+    if (contact.length) { h += "<p class='cvcontact'>" + contact.join(" &middot; ") + "</p>"; }
+    if (data.profile.trim()) {
+      h += "<div class='cvsection'><h3>Profile</h3><p class='cvprofile'>" + esc(data.profile.trim()) + "</p></div>";
+    }
+    var jobs = data.jobs.filter(function (j) { return (j.role + j.org + j.bullets).trim(); });
+    if (jobs.length) {
+      h += "<div class='cvsection'><h3>Experience</h3>";
+      jobs.forEach(function (j) {
+        h += "<div class='entry'><div class='ehead'>";
+        if (j.role) { h += "<b>" + esc(j.role) + "</b>"; }
+        if (j.org) { h += "<span class='org'>" + esc(j.org) + "</span>"; }
+        var d = dates(j.from, j.to);
+        if (d) { h += "<span class='dates'>" + esc(d) + "</span>"; }
+        h += "</div>";
+        var bl = bulletLines(j.bullets);
+        if (bl.length) {
+          h += "<ul>" + bl.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") + "</ul>";
+        }
+        h += "</div>";
+      });
+      h += "</div>";
+    }
+    var edus = data.edu.filter(function (e) { return (e.qual + e.inst).trim(); });
+    if (edus.length) {
+      h += "<div class='cvsection'><h3>Education</h3>";
+      edus.forEach(function (e) {
+        h += "<div class='entry'><div class='ehead'>";
+        if (e.qual) { h += "<b>" + esc(e.qual) + "</b>"; }
+        if (e.inst) { h += "<span class='org'>" + esc(e.inst) + "</span>"; }
+        var d = dates(e.from, e.to);
+        if (d) { h += "<span class='dates'>" + esc(d) + "</span>"; }
+        h += "</div>";
+        if ((e.note || "").trim()) { h += "<ul><li>" + esc(e.note.trim()) + "</li></ul>"; }
+        h += "</div>";
+      });
+      h += "</div>";
+    }
+    if (data.skills.trim()) {
+      h += "<div class='cvsection'><h3>Skills</h3><p class='cvskills'>" + esc(data.skills.trim()) + "</p></div>";
+    }
+    var extras = bulletLines(data.extras);
+    if (extras.length) {
+      h += "<div class='cvsection'><h3>Additional</h3><ul>" +
+        extras.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
+    }
+    var empty = !data.name && !data.headline && !contact.length && !data.profile.trim() &&
+      !jobs.length && !edus.length && !data.skills.trim() && !extras.length;
+    if (empty) {
+      h += "<div class='cvsection'><p class='ghost'>Start typing on the left, or load the example. The sheet keeps itself set as you go.</p></div>";
+    }
+    $("sheet").innerHTML = h;
+  }
+
+  /* ---- exports ---- */
+  function plainText() {
+    var L = [];
+    if (data.name) { L.push(data.name.toUpperCase()); }
+    if (data.headline) { L.push(data.headline); }
+    var contact = [data.location, data.email, data.phone, data.linkedin]
+      .map(function (v) { return (v || "").trim(); }).filter(Boolean);
+    if (contact.length) { L.push(contact.join(" | ")); }
+    if (data.profile.trim()) { L.push("", "PROFILE", data.profile.trim()); }
+    var jobs = data.jobs.filter(function (j) { return (j.role + j.org + j.bullets).trim(); });
+    if (jobs.length) {
+      L.push("", "EXPERIENCE");
+      jobs.forEach(function (j) {
+        var head = [j.role, j.org].filter(Boolean).join(", ");
+        var d = dates(j.from, j.to);
+        L.push(head + (d ? " (" + d + ")" : ""));
+        bulletLines(j.bullets).forEach(function (b) { L.push("- " + b); });
+        L.push("");
+      });
+      L.pop();
+    }
+    var edus = data.edu.filter(function (e) { return (e.qual + e.inst).trim(); });
+    if (edus.length) {
+      L.push("", "EDUCATION");
+      edus.forEach(function (e) {
+        var head = [e.qual, e.inst].filter(Boolean).join(", ");
+        var d = dates(e.from, e.to);
+        L.push(head + (d ? " (" + d + ")" : "") + ((e.note || "").trim() ? ". " + e.note.trim() : ""));
+      });
+    }
+    if (data.skills.trim()) { L.push("", "SKILLS", data.skills.trim()); }
+    var extras = bulletLines(data.extras);
+    if (extras.length) {
+      L.push("", "ADDITIONAL");
+      extras.forEach(function (x) { L.push("- " + x); });
+    }
+    // fields may carry bare newlines of their own; normalise the lot
+    return L.join("\n").split(/\r?\n/).join("\r\n");
+  }
+  function wordHtml() {
+    // Word opens styled HTML saved as .doc; keep it plain and inline.
+    var css = "body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1A1D1F;line-height:1.45;}" +
+      "h1{font-size:20pt;margin:0;}" +
+      "p.role{color:#4A5258;margin:2pt 0 0;}" +
+      "p.contact{font-size:9pt;color:#5A646B;margin:6pt 0 0;}" +
+      "h2{font-size:10pt;letter-spacing:2pt;text-transform:uppercase;color:#8A6D3F;" +
+      "border-bottom:1pt solid #E4E0D8;padding-bottom:3pt;margin:16pt 0 6pt;}" +
+      "table.h{width:100%;border-collapse:collapse;margin-top:8pt;}" +
+      "td.l{font-weight:bold;}td.r{text-align:right;color:#5A646B;font-size:9pt;white-space:nowrap;}" +
+      "span.org{font-weight:normal;color:#4A5258;}ul{margin:4pt 0 0 18pt;padding:0;}li{margin:2pt 0;}";
+    var b = "";
+    b += "<h1>" + esc(data.name || "Curriculum Vitae") + "</h1>";
+    if (data.headline) { b += "<p class='role'>" + esc(data.headline) + "</p>"; }
+    var contact = [data.location, data.email, data.phone, data.linkedin]
+      .map(function (v) { return (v || "").trim(); }).filter(Boolean).map(esc);
+    if (contact.length) { b += "<p class='contact'>" + contact.join(" &middot; ") + "</p>"; }
+    if (data.profile.trim()) { b += "<h2>Profile</h2><p>" + esc(data.profile.trim()) + "</p>"; }
+    var jobs = data.jobs.filter(function (j) { return (j.role + j.org + j.bullets).trim(); });
+    if (jobs.length) {
+      b += "<h2>Experience</h2>";
+      jobs.forEach(function (j) {
+        b += "<table class='h'><tr><td class='l'>" + esc(j.role || "") +
+          (j.org ? " <span class='org'>" + (j.role ? "&middot; " : "") + esc(j.org) + "</span>" : "") +
+          "</td><td class='r'>" + esc(dates(j.from, j.to)) + "</td></tr></table>";
+        var bl = bulletLines(j.bullets);
+        if (bl.length) { b += "<ul>" + bl.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
+      });
+    }
+    var edus = data.edu.filter(function (e) { return (e.qual + e.inst).trim(); });
+    if (edus.length) {
+      b += "<h2>Education</h2>";
+      edus.forEach(function (e) {
+        b += "<table class='h'><tr><td class='l'>" + esc(e.qual || "") +
+          (e.inst ? " <span class='org'>" + (e.qual ? "&middot; " : "") + esc(e.inst) + "</span>" : "") +
+          "</td><td class='r'>" + esc(dates(e.from, e.to)) + "</td></tr></table>";
+        if ((e.note || "").trim()) { b += "<ul><li>" + esc(e.note.trim()) + "</li></ul>"; }
+      });
+    }
+    if (data.skills.trim()) { b += "<h2>Skills</h2><p>" + esc(data.skills.trim()) + "</p>"; }
+    var extras = bulletLines(data.extras);
+    if (extras.length) {
+      b += "<h2>Additional</h2><ul>" + extras.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>";
+    }
+    return "<html><head><meta charset='utf-8'><title>" + esc(data.name || "CV") +
+      "</title><style>" + css + "</style></head><body>" + b + "</body></html>";
+  }
+  function fileStem() {
+    // drop only characters filenames cannot carry; every alphabet survives
+    var s = (data.name || "CV").replace(/[\\\/:*?"<>|.]/g, "").trim().replace(/\s+/g, "-");
+    return (s || "CV") + "-CV";
+  }
+  $("cvprint").addEventListener("click", function () { window.print(); });
+  $("cvword").addEventListener("click", function () {
+    download(fileStem() + ".doc", wordHtml(), "application/msword");
+  });
+  $("cvtxt").addEventListener("click", function () {
+    download(fileStem() + ".txt", plainText(), "text/plain;charset=utf-8");
+  });
+
+  /* ---- example and clear ---- */
+  var EXAMPLE = {
+    name: "Sam Whitfield",
+    headline: "Programme Coordinator",
+    email: "sam.whitfield@example.com",
+    phone: "07000 000000",
+    location: "Manchester",
+    linkedin: "linkedin.com/in/samwhitfield",
+    profile: "Programme coordinator with four years across further and higher education. Runs scheduling, records and reporting for 2,400 learners a year. Known for clean data and calendars that hold.",
+    skills: "Excel to pivot and lookup level, records management, timetabling, minute taking, UCAS administration",
+    extras: "First Aid at Work, 2025\nFull clean driving licence",
+    jobs: [
+      { role: "Programme Coordinator", org: "Northgate College", from: "Sep 2023", to: "Present",
+        bullets: "Coordinate assessment schedules for 2,400 learners across 3 sites\nCut result publication errors to zero across 4 consecutive terms by double keying checks\nPrepare board papers and minute 14 exam boards a year" },
+      { role: "Administration Assistant", org: "Bright and Mason", from: "Jun 2021", to: "Aug 2023",
+        bullets: "Processed 300 client files a month with a 24 hour turnaround\nBuilt the shared tracker that replaced 5 separate spreadsheets" }
+    ],
+    edu: [
+      { qual: "BA Business and Management", inst: "Northgate University", from: "2018", to: "2021", note: "2:1" }
+    ]
+  };
+  $("cvexample").addEventListener("click", function () {
+    var keep = FIELDS.some(function (f) { return (data[f] || "").trim(); }) ||
+      data.jobs.some(function (j) { return (j.role + j.org + j.from + j.to + j.bullets).trim(); }) ||
+      data.edu.some(function (e) { return (e.qual + e.inst + e.from + e.to + e.note).trim(); });
+    if (keep && !window.confirm("Replace your current draft with the example?")) { return; }
+    Object.keys(EXAMPLE).forEach(function (k) {
+      data[k] = k === "jobs" || k === "edu"
+        ? JSON.parse(JSON.stringify(EXAMPLE[k]))
+        : EXAMPLE[k];
+    });
+    FIELDS.forEach(function (f) { $("f-" + f).value = data[f]; });
+    saveNow(); buildJobs(); buildEdus(); render();
+  });
+  $("cvclear").addEventListener("click", function () {
+    if (!window.confirm("Clear the whole draft? This cannot be undone.")) { return; }
+    FIELDS.forEach(function (f) { data[f] = ""; $("f-" + f).value = ""; });
+    data.jobs = [blankJob()];
+    data.edu = [blankEdu()];
+    saveNow(); buildJobs(); buildEdus(); render();
+  });
+
+  buildJobs();
+  buildEdus();
+  render();
+};
+
+/* =============================================================
+   02 CV CHECK
+   ============================================================= */
+inits.check = function () {
+  var GROUPS = [
+    { name: "Format", items: [
+      ["Two pages at most", "One page is plenty under ten years of experience."],
+      ["Sent as a PDF", "Unless the posting asks for Word. PDFs hold their layout."],
+      ["File named properly", "Firstname-Lastname-CV.pdf, not final_v7_REAL.pdf."],
+      ["Single column, no tables, no graphics", "Tracking systems read top to bottom. Decoration becomes noise or vanishes."],
+      ["One font, consistent dates", "Every date range in the same format throughout."]
+    ]},
+    { name: "Content", items: [
+      ["No photo, no age, no marital status", "UK convention, and it protects you."],
+      ["Contact block complete", "Phone, a sensible email, LinkedIn, town or city. No full address needed."],
+      ["Opens with a profile, not an objective", "Three lines on what you do and at what scale. Not what you seek."],
+      ["Every bullet starts with a verb", "Coordinated, reconciled, cut, built. Not 'responsible for'."],
+      ["Numbers wherever numbers exist", "Team size, volume, budget, frequency. Counting beats describing."],
+      ["Tenses hold", "Past roles in past tense, the current one in present."],
+      ["Skills are specific", "Excel to pivot level, not 'IT skills'. Nothing that cannot be tested."]
+    ]},
+    { name: "Evidence", items: [
+      ["Every claim survives a 'prove it'", "If an interviewer asks for the story behind a line, there is one."],
+      ["Gaps addressed, not hidden", "A one line explanation reads better than a suspicious silence."],
+      ["Checked in UK English, read aloud once", "Reading aloud catches what the eye forgives."],
+      ["No 'references available on request'", "They know. The line spends space saying nothing."]
+    ]}
+  ];
+  var TOTAL = 16;
+  var ticks = [];
+  try { ticks = JSON.parse(readLS("career-check") || "[]"); } catch (e) {}
+  if (!Array.isArray(ticks) || ticks.length !== TOTAL) {
+    ticks = [];
+    for (var z = 0; z < TOTAL; z++) { ticks.push(false); }
+  }
+  function verdict(n) {
+    if (n === TOTAL) { return "Send it."; }
+    if (n >= 13) { return "Close. Finish the list."; }
+    if (n >= 9) { return "Half reconciled is not reconciled."; }
+    if (n > 0) { return "The list is the work."; }
+    return "Start at the top.";
+  }
+  function score() {
+    var n = ticks.filter(Boolean).length;
+    $("checkscore").textContent = (n < 10 ? "0" + n : String(n)) + "/" + TOTAL;
+    $("checkverdict").textContent = verdict(n);
+    writeLS("career-check", JSON.stringify(ticks));
+  }
+  var host = $("checkgroups");
+  var idx = 0;
+  GROUPS.forEach(function (g) {
+    var div = document.createElement("div");
+    div.className = "cgroup";
+    var h3 = document.createElement("h3");
+    h3.textContent = g.name;
+    div.appendChild(h3);
+    g.items.forEach(function (item) {
+      var i = idx++;
+      var lab = document.createElement("label");
+      lab.className = "citem";
+      var box = document.createElement("input");
+      box.type = "checkbox";
+      box.checked = !!ticks[i];
+      box.addEventListener("change", function () {
+        ticks[i] = box.checked;
+        score();
+      });
+      lab.appendChild(box);
+      var ct = document.createElement("span");
+      ct.className = "ct";
+      ct.textContent = item[0];
+      var small = document.createElement("small");
+      small.textContent = item[1];
+      ct.appendChild(small);
+      lab.appendChild(ct);
+      div.appendChild(lab);
+    });
+    host.appendChild(div);
+  });
+  $("checkreset").addEventListener("click", function () {
+    ticks = ticks.map(function () { return false; });
+    host.querySelectorAll("input").forEach(function (b) { b.checked = false; });
+    score();
+  });
+  score();
+};
+
+/* =============================================================
+   03 INTERVIEW DRILL
+   ============================================================= */
+inits.drill = function () {
+  var BANK = [
+    ["Motivation", "Why do you want this role?"],
+    ["Motivation", "Why this organisation and not one of its competitors?"],
+    ["Motivation", "What do you know about us that is not on our homepage?"],
+    ["Motivation", "Why are you leaving your current role?"],
+    ["Motivation", "Where do you want to be in five years?"],
+    ["Motivation", "What would make you turn this job down?"],
+    ["Behavioural", "Tell me about a time you worked to a deadline you thought was impossible."],
+    ["Behavioural", "Tell me about a disagreement with a colleague and how it ended."],
+    ["Behavioural", "Tell me about a mistake you made and what you did next."],
+    ["Behavioural", "Tell me about a time you led without being the manager."],
+    ["Behavioural", "Tell me about a difficult stakeholder and how you handled them."],
+    ["Behavioural", "Tell me about a time the data changed your mind."],
+    ["Behavioural", "Tell me about juggling competing priorities in the same week."],
+    ["Behavioural", "Tell me about a process you improved. What was it like before?"],
+    ["Behavioural", "Tell me about delivering bad news to someone senior."],
+    ["Behavioural", "Tell me about learning something difficult at speed."],
+    ["Behavioural", "Tell me about a time you had to say no."],
+    ["Behavioural", "Tell me about a detail everyone else missed."],
+    ["Self", "What are you best at, and how do you know?"],
+    ["Self", "What is a genuine weakness, and what are you doing about it?"],
+    ["Self", "What is the most useful feedback you have ever received?"],
+    ["Self", "What would your current manager say about you?"],
+    ["Self", "Which piece of work are you proudest of?"],
+    ["Self", "What do you do when you do not know the answer?"],
+    ["Pressure", "Why should we hire you over the other shortlisted candidates?"],
+    ["Pressure", "What in this job description worries you?"],
+    ["Pressure", "Convince me this career change makes sense."],
+    ["Pressure", "What would you do in your first ninety days?"],
+    ["Closing", "What questions do you have for us?"],
+    ["Closing", "Is there anything we should have asked you and did not?"]
+  ];
+  var THINK = 60, ANSWER = 120;
+  var used = [], answered = 0, timer = null, phase = null, endAt = 0, currentQ = null;
+
+  function mmss(s) {
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + ":" + (r < 10 ? "0" : "") + r;
+  }
+  function stopTimer() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+  function setPhase(p) {
+    phase = p;
+    if (p === "think") {
+      $("drillphase").textContent = "thinking time, in silence";
+    } else if (p === "answer") {
+      $("drillphase").textContent = "answering time, out loud";
+    } else {
+      $("drillphase").textContent = "";
+    }
+  }
+  function runPhase(name, seconds, next) {
+    setPhase(name);
+    endAt = Date.now() + seconds * 1000;
+    $("drillclock").textContent = mmss(seconds);
+    stopTimer();
+    timer = setInterval(function () {
+      var left = Math.round((endAt - Date.now()) / 1000);
+      if (left <= 0) {
+        $("drillclock").textContent = "0:00";
+        stopTimer();
+        next();
+        return;
+      }
+      $("drillclock").textContent = mmss(left);
+    }, 200);
+  }
+  function finishQuestion() {
+    answered += 1;
+    $("drillcount").textContent = answered + " answered this visit";
+    setPhase(null);
+    $("drillclock").innerHTML = "&middot; &middot; &middot;";
+    $("drillphase").textContent = "time. draw the next one";
+    $("drillstop").hidden = true;
+    $("drillskip").hidden = true;
+    $("drilldraw").hidden = false;
+    $("drilldraw").textContent = "Draw the next question";
+    $("drilldraw").focus();
+  }
+  function resetStage() {
+    stopTimer();
+    setPhase(null);
+    currentQ = null;
+    $("drillq").textContent = "Ready when you are.";
+    $("drillclock").innerHTML = "&middot; &middot; &middot;";
+    $("drillcat").textContent = "The bank holds " + BANK.length + " questions";
+    $("drillstar").hidden = true;
+    $("drillstop").hidden = true;
+    $("drillskip").hidden = true;
+    $("drilldraw").hidden = false;
+  }
+  function draw() {
+    var refilled = false;
+    if (used.length === BANK.length) {
+      used = [];
+      refilled = true;
+    }
+    var pool = [];
+    for (var i = 0; i < BANK.length; i++) {
+      if (used.indexOf(i) === -1) { pool.push(i); }
+    }
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    used.push(pick);
+    currentQ = BANK[pick];
+    $("drillcat").textContent = (refilled ? "The bank refills · " : "") +
+      currentQ[0] + " · " + (BANK.length - used.length) + " left in the bank";
+    $("drillq").textContent = currentQ[1];
+    $("drillstar").hidden = currentQ[0] !== "Behavioural";
+    $("drilldraw").hidden = true;
+    $("drillskip").hidden = false;
+    $("drillstop").hidden = false;
+    $("drillstop").focus();
+    runPhase("think", THINK, function () {
+      runPhase("answer", ANSWER, finishQuestion);
+    });
+  }
+  $("drilldraw").addEventListener("click", draw);
+  $("drillskip").addEventListener("click", function () {
+    stopTimer();
+    draw();
+  });
+  $("drillstop").addEventListener("click", function () {
+    stopTimer();
+    if (phase === "think") {
+      runPhase("answer", ANSWER, finishQuestion);
+    } else if (phase === "answer") {
+      finishQuestion();
+    }
+  });
+  leaves.drill = resetStage;
+};
+
+/* =============================================================
+   04 APPLICATION LEDGER
+   ============================================================= */
+inits.ledger = function () {
+  var STATUSES = ["Applied", "Interview", "Offer", "Rejected", "No reply"];
+  var apps = [];
+  try { apps = JSON.parse(readLS("career-ledger") || "[]"); } catch (e) {}
+  if (!Array.isArray(apps)) { apps = []; }
+
+  function save() { writeLS("career-ledger", JSON.stringify(apps)); }
+  function totals() {
+    if (!apps.length) {
+      $("ledgertotals").textContent = "Nothing recorded yet. The first row is the hardest.";
+      return;
+    }
+    var c = {};
+    STATUSES.forEach(function (s) { c[s] = 0; });
+    apps.forEach(function (a) { c[a.status] = (c[a.status] || 0) + 1; });
+    var inPlay = c["Applied"] + c["Interview"];
+    var parts = [apps.length + " recorded", inPlay + " in play"];
+    if (c["Offer"]) { parts.push(c["Offer"] + (c["Offer"] === 1 ? " offer" : " offers")); }
+    if (c["Rejected"]) { parts.push(c["Rejected"] + " rejected"); }
+    if (c["No reply"]) { parts.push(c["No reply"] + " no reply"); }
+    $("ledgertotals").innerHTML = "<b>" + parts.join(" &middot; ") + ".</b> <i>The ledger does not lie.</i>";
+  }
+  function render() {
+    var body = $("appsbody");
+    body.innerHTML = "";
+    if (!apps.length) {
+      var tr0 = document.createElement("tr");
+      var td0 = document.createElement("td");
+      td0.colSpan = 5;
+      td0.className = "emptyledger";
+      td0.textContent = "An empty ledger. Record the first one above.";
+      tr0.appendChild(td0);
+      body.appendChild(tr0);
+      totals();
+      return;
+    }
+    apps.forEach(function (a, i) {
+      var tr = document.createElement("tr");
+      var tdr = document.createElement("td");
+      tdr.className = "role";
+      tdr.textContent = a.role;
+      tr.appendChild(tdr);
+      var tdo = document.createElement("td");
+      tdo.textContent = a.org;
+      tr.appendChild(tdo);
+      var tdd = document.createElement("td");
+      tdd.className = "date";
+      tdd.textContent = niceDate(a.date) || "";
+      tr.appendChild(tdd);
+      var tds = document.createElement("td");
+      var sel = document.createElement("select");
+      STATUSES.forEach(function (s) {
+        var op = document.createElement("option");
+        op.value = s;
+        op.textContent = s;
+        if (a.status === s) { op.selected = true; }
+        sel.appendChild(op);
+      });
+      sel.className = "s-" + a.status.toLowerCase().replace(" ", "");
+      sel.setAttribute("aria-label", "Status for " + a.role + " at " + a.org);
+      sel.addEventListener("change", function () {
+        a.status = sel.value;
+        sel.className = "s-" + a.status.toLowerCase().replace(" ", "");
+        save();
+        totals();
+      });
+      tds.appendChild(sel);
+      tr.appendChild(tds);
+      var tdx = document.createElement("td");
+      var del = document.createElement("button");
+      del.className = "del";
+      del.type = "button";
+      del.textContent = "remove";
+      del.setAttribute("aria-label", "Remove " + a.role + " at " + a.org);
+      del.addEventListener("click", function () {
+        if (!window.confirm("Remove " + a.role + " at " + a.org + " from the ledger?")) { return; }
+        apps.splice(i, 1);
+        save();
+        render();
+      });
+      tdx.appendChild(del);
+      tr.appendChild(tdx);
+      body.appendChild(tr);
+    });
+    totals();
+  }
+  function todayISO() {
+    var d = new Date();
+    var m = d.getMonth() + 1, day = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day;
+  }
+  $("l-date").value = todayISO();
+  $("l-add").addEventListener("click", function () {
+    var role = $("l-role").value.trim();
+    var org = $("l-org").value.trim();
+    var date = $("l-date").value;
+    if (!role) { $("l-role").focus(); return; }
+    if (!org) { $("l-org").focus(); return; }
+    apps.unshift({ role: role, org: org, date: date, status: "Applied" });
+    $("l-role").value = "";
+    $("l-org").value = "";
+    $("l-date").value = todayISO();
+    save();
+    render();
+    $("l-role").focus();
+  });
+  ["l-role", "l-org", "l-date"].forEach(function (id) {
+    $(id).addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { $("l-add").click(); }
+    });
+  });
+  function csvCell(v) {
+    v = String(v == null ? "" : v);
+    // a leading =, +, minus or @ would execute as a formula in a
+    // spreadsheet; a quote prefix keeps it as text
+    if (/^[=+@-]/.test(v)) { v = "'" + v; }
+    return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+  $("l-csv").addEventListener("click", function () {
+    var rows = [["Role", "Organisation", "Applied", "Status"]];
+    apps.forEach(function (a) {
+      rows.push([a.role, a.org, niceDate(a.date), a.status]);
+    });
+    var csv = rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
+    // the byte-order mark keeps accented text intact in Excel
+    download("application-ledger.csv", "﻿" + csv, "text/csv;charset=utf-8");
+  });
+  render();
+};
+
+menuNotes();
+route();
+})();
+</script>
+
+</body>
+</html>
