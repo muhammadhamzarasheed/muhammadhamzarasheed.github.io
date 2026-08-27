@@ -272,7 +272,7 @@ body::after{
 .menu a:last-child{border-bottom:0;}
 html.menu-open{overflow:hidden;}
 
-@media (max-width:52rem){
+@media (max-width:62rem){
   .nav ul{display:none;}
   .burger{display:flex;}
 }
@@ -1171,6 +1171,7 @@ footer .label a:hover{color:var(--brass);}
       <li><a href="#journal">Journal</a></li>
       <li><a href="#elsewhere">Elsewhere</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="/mind/" target="_blank" rel="noopener">Play</a></li>
     </ul>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
   </div>
@@ -1184,6 +1185,7 @@ footer .label a:hover{color:var(--brass);}
   <a href="#journal">Journal</a>
   <a href="#elsewhere">Elsewhere</a>
   <a href="#contact">Contact</a>
+  <a href="/mind/" target="_blank" rel="noopener">Play</a>
 </div>
 
 <aside class="spine" id="spine" aria-label="Reading progress">
@@ -1702,7 +1704,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Rotating to landscape can cross the breakpoint and hide the button
   // while the panel is still open, stranding the page under it. Match
   // the CSS query itself so user font scaling cannot desync the two.
-  var wide = window.matchMedia("(min-width: 52.0625rem)");
+  var wide = window.matchMedia("(min-width: 62.0625rem)");
   window.addEventListener("resize", function () {
     if (wide.matches) { set(false); }
   });
