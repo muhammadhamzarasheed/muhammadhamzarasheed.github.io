@@ -221,6 +221,72 @@ a.door:hover .side{color:var(--brass);}
   .js .brow .fill{width:var(--w);transition:none;}
 }
 
+/* ---------- the tiebreaker ---------- */
+.cointable{
+  display:flex;
+  gap:1.6rem;
+  align-items:center;
+  padding:1.4rem 1.5rem;
+  flex-wrap:wrap;
+}
+.coin{
+  width:84px;
+  height:84px;
+  flex:none;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 1.25s cubic-bezier(.2,.75,.25,1);
+}
+.coin .face{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  background:radial-gradient(circle at 34% 30%,#E2C79A,#C9AA7C 45%,#8A6D3F 100%);
+  box-shadow:0 8px 24px rgba(201,170,124,.22),inset 0 2px 5px rgba(255,255,255,.35);
+  color:#0A0B0C;
+}
+.coin .face svg{height:1.9rem;width:auto;}
+.coin .face.back{transform:rotateY(180deg);}
+.coin .face.back span{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:1.5rem;
+  letter-spacing:.04em;
+}
+.coinside{flex:1;min-width:14rem;}
+.btn{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:1px solid var(--line);
+  color:var(--text-2);
+  padding:.55rem 1.2rem;
+  border-radius:2rem;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.btn:hover{border-color:var(--brass);color:var(--text);}
+.ruling{
+  margin:.9rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.05em;
+  line-height:1.7;
+  color:var(--text-3);
+  min-height:2.4em;
+}
+.ruling b{color:var(--brass);font-weight:400;}
+@media (prefers-reduced-motion:reduce){
+  .coin{transition:none;}
+}
+
 footer{border-top:1px solid var(--line);margin-top:3.5rem;}
 footer .in{
   max-width:44rem;
@@ -234,7 +300,8 @@ footer .in{
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;transform:none !important;}
+  *{transition-duration:.001ms !important;}
+  a.door:hover{transform:none;}
 }
 </style>
 </head>
@@ -251,16 +318,16 @@ footer a:hover{color:var(--brass);}
 <article>
   <p class="label"><b>Appendix</b> &middot; after the record</p>
   <h1>Something for you</h1>
-  <p class="byline">Two pages and a set of accounts &middot; no sign up &middot; free</p>
+  <p class="byline">Seven doors, a coin and a set of accounts &middot; no sign up &middot; free</p>
   <hr>
-  <p class="lede">The record ends at Contact. These live after it: one page for <em>play</em>, one for the <em>job search</em>. Both run entirely in your browser, and neither asks who you are.</p>
+  <p class="lede">The record ends at Contact. Everything after it lives here: a page for <em>play</em>, one for the <em>job search</em>, and a shelf of smaller instruments. All of it runs in your browser, and none of it asks who you are.</p>
 
   <div class="doors">
     <a class="door" href="/mind/">
       <span class="no">A</span>
       <div>
         <h2>Something for your mind</h2>
-        <p>Five small games in brass on black: judgement by eye, a steady hand, snake, lights out, a stubborn odometer. No prizes.</p>
+        <p>Six small games in brass on black: judgement by eye, a steady hand, snake, lights out, a stubborn odometer, a data entry test. No prizes.</p>
       </div>
       <span class="side">Off the record</span>
     </a>
@@ -272,10 +339,65 @@ footer a:hover{color:var(--brass);}
       </div>
       <span class="side">For the record</span>
     </a>
+    <a class="door" href="/almanac/">
+      <span class="no">C</span>
+      <div>
+        <h2>The almanac</h2>
+        <p>Today, reconciled: day and week counts, the working days that remain, and the sun and moon over Manchester, computed on the page.</p>
+      </div>
+      <span class="side">As at now</span>
+    </a>
+    <a class="door" href="/reconcile/">
+      <span class="no">D</span>
+      <div>
+        <h2>The daily reconciliation</h2>
+        <p>One marksheet a day, one entry recorded wrong, the same sheet for everyone. Find it, time it, keep the streak.</p>
+      </div>
+      <span class="side">Fresh at midnight</span>
+    </a>
+    <a class="door" href="/study/">
+      <span class="no">E</span>
+      <div>
+        <h2>The study hall</h2>
+        <p>Brown noise or rain, synthesised in your browser, and an invigilated focus timer. For marking season and revision week.</p>
+      </div>
+      <span class="side">Quiet, please</span>
+    </a>
+    <a class="door" href="/glossary/">
+      <span class="no">F</span>
+      <div>
+        <h2>The glossary</h2>
+        <p>Assessment and accounting jargon in plain English. Accurate first, dry second.</p>
+      </div>
+      <span class="side">Plain English</span>
+    </a>
+    <a class="door" href="/postdated/">
+      <span class="no">G</span>
+      <div>
+        <h2>A post-dated note</h2>
+        <p>Write to the person you will be. It seals in your browser, unread, until the date you choose.</p>
+      </div>
+      <span class="side">Deferred income</span>
+    </a>
   </div>
 
   <section class="accounts">
-    <p class="label"><b>C</b> &middot; The unaudited accounts</p>
+    <p class="label"><b>H</b> &middot; The tiebreaker</p>
+    <p class="brief">For decisions that do not deserve a meeting. State the two options, flip, obey.</p>
+    <div class="statement cointable">
+      <div class="coin" id="coin" aria-hidden="true">
+        <div class="face front"><svg viewBox="8 15 48 34" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg></div>
+        <div class="face back"><span>77</span></div>
+      </div>
+      <div class="coinside">
+        <button class="btn" type="button" id="flip">Flip the coin</button>
+        <p class="ruling" id="ruling" role="status">Heads is the monogram. Tails is the number. Assign them before you flip; the coin dislikes retrospective rules.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="accounts">
+    <p class="label"><b>I</b> &middot; The unaudited accounts</p>
     <p class="brief">Every figure elsewhere on this site is checked twice before it is published. These are the ones that got away: presented without evidence, contrary to stated policy, and certified by absolutely nobody.</p>
     <div class="statement">
       <dl class="bars">
@@ -319,6 +441,35 @@ footer a:hover{color:var(--brass);}
 
 <script>
 document.documentElement.classList.add("js");
+(function () {
+  var coin = document.getElementById("coin");
+  var flip = document.getElementById("flip");
+  var ruling = document.getElementById("ruling");
+  if (coin && flip) {
+    var turns = 0;
+    var LINES = [
+      "The coin has ruled. Minute it.",
+      "No appeals; the coin lacks an appeals process.",
+      "Best of three is how meetings start.",
+      "Decided in under a second, documented forever.",
+      "The coin accepts no further submissions."
+    ];
+    var spinning = false;
+    flip.addEventListener("click", function () {
+      if (spinning) { return; }
+      spinning = true;
+      var heads = Math.random() < 0.5;
+      turns += 3 + Math.floor(Math.random() * 2);
+      coin.style.transform = "rotateY(" + (turns * 360 + (heads ? 0 : 180)) + "deg)";
+      ruling.innerHTML = "&middot; &middot; &middot;";
+      window.setTimeout(function () {
+        ruling.innerHTML = "<b>" + (heads ? "Heads, the monogram." : "Tails, the number.") + "</b> " +
+          LINES[Math.floor(Math.random() * LINES.length)];
+        spinning = false;
+      }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 60 : 1300);
+    });
+  }
+})();
 (function () {
   var rows = [].slice.call(document.querySelectorAll(".brow"));
   if (!rows.length) { return; }

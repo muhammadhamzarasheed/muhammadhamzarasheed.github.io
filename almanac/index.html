@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The almanac</title>
+<meta name="description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester, all computed on the page. By Muhammad Hamza.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/almanac/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="The almanac">
+<meta property="og:description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/almanac/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The almanac">
+<meta name="twitter:description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --line:#22262A;
+  --text:#F2F4F5;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+article{
+  max-width:44rem;
+  margin:0 auto;
+  padding:clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
+p.lede{color:var(--text-2);max-width:58ch;margin:0;}
+p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+
+.panel{
+  margin-top:2.4rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  padding:.4rem 1.5rem 1.4rem;
+}
+.inst{padding:1.15rem 0 1.1rem;border-top:1px solid var(--line);}
+.inst:first-child{border-top:0;}
+.inst .head{
+  display:flex;
+  align-items:baseline;
+  gap:.8rem;
+}
+.inst .head span{font-size:.9375rem;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+.inst .head .leader{flex:1;min-width:1.5rem;border-bottom:1px dotted #3B434A;transform:translateY(-4px);}
+.inst .head b{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-weight:400;
+  font-size:.875rem;
+  color:var(--brass);
+  white-space:nowrap;
+}
+.inst .track{
+  display:block;
+  height:5px;
+  border-radius:3px;
+  background:var(--void);
+  overflow:hidden;
+  margin-top:.7rem;
+}
+.inst .fill{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(to right,rgba(201,170,124,.35),var(--brass));
+  box-shadow:0 0 10px rgba(201,170,124,.25);
+  width:var(--w,0%);
+  transition:width 1.2s cubic-bezier(.2,.7,.2,1);
+}
+.inst small{
+  display:block;
+  margin-top:.55rem;
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.skyrow{display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap;}
+/* narrow screens: let the figures drop under their labels rather than
+   squeezing the label into a vertical sliver */
+@media (max-width:30rem){
+  .inst .head{flex-wrap:wrap;}
+  .inst .head .leader{display:none;}
+  .inst .head b{white-space:normal;width:100%;}
+}
+.skyrow .facts{flex:1;min-width:14rem;}
+#moondisc{flex:none;display:block;}
+.today{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:1rem;
+  color:var(--text);
+  letter-spacing:.02em;
+}
+footer{border-top:1px solid var(--line);margin-top:3.5rem;}
+footer .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+@media print{
+  :root{--void:#fff;--raise:#fff;--line:#D9D9D5;--text:#16181A;--text-2:#3C4348;--text-3:#5A646B;--brass:#8A6D3F;--brass-soft:rgba(138,109,63,.12);}
+  body{background:#fff;}
+  .bar,footer{display:none !important;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/appendix/">The appendix</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <p class="label"><b>Appendix C</b> &middot; the almanac</p>
+  <h1>Today, reconciled</h1>
+  <p class="byline">Computed on this page &middot; no forecast service &middot; Manchester's sky</p>
+  <hr>
+  <p class="lede">A day is also a set of figures. Here is today's position: how much of the year is spent, what remains, and what the sun and moon are doing over Manchester, worked out <em>on this page</em> from nothing but arithmetic and your clock.</p>
+
+  <div class="panel">
+    <div class="inst">
+      <div class="head"><span id="todayline" class="today">Loading the date</span></div>
+    </div>
+    <div class="inst">
+      <div class="head"><span>The year, elapsed</span><i class="leader" aria-hidden="true"></i><b id="doy">&middot;</b></div>
+      <span class="track"><span class="fill" id="doybar"></span></span>
+      <small id="doynote">day of the year</small>
+    </div>
+    <div class="inst">
+      <div class="head"><span>ISO week</span><i class="leader" aria-hidden="true"></i><b id="week">&middot;</b></div>
+      <small>the week number on the planning sheets</small>
+    </div>
+    <div class="inst">
+      <div class="head"><span>Weekdays left this year</span><i class="leader" aria-hidden="true"></i><b id="workdays">&middot;</b></div>
+      <small>mondays to fridays remaining; bank holidays not deducted</small>
+    </div>
+    <div class="inst">
+      <div class="head"><span>The academic year, elapsed</span><i class="leader" aria-hidden="true"></i><b id="acad">&middot;</b></div>
+      <span class="track"><span class="fill" id="acadbar"></span></span>
+      <small>reckoned 1 september to 31 august</small>
+    </div>
+    <div class="inst">
+      <div class="head"><span>Days to 31 January</span><i class="leader" aria-hidden="true"></i><b id="sa">&middot;</b></div>
+      <small>self assessment deadline; the other results day</small>
+    </div>
+    <div class="inst">
+      <div class="skyrow">
+        <div class="facts">
+          <div class="head"><span>The sun</span><i class="leader" aria-hidden="true"></i><b id="sun">&middot;</b></div>
+          <small id="sunnote">rise and set over manchester, to the minute or so</small>
+          <div class="head" style="margin-top:1rem;"><span>The moon</span><i class="leader" aria-hidden="true"></i><b id="moon">&middot;</b></div>
+          <small id="moonnote">phase and illumination, computed</small>
+        </div>
+        <canvas id="moondisc" width="180" height="180" style="width:90px;height:90px;" aria-hidden="true"></canvas>
+      </div>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/appendix/">The appendix</a></p>
+    <p class="label">Checked against the sky, nightly</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+"use strict";
+var LAT = 53.4808, LW = 2.2426; // Manchester; LW is longitude west
+var RAD = Math.PI / 180;
+
+function $(id) { return document.getElementById(id); }
+
+/* London calendar date, wherever the visitor is */
+function londonParts() {
+  var p = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    year: "numeric", month: "2-digit", day: "2-digit", weekday: "long"
+  }).formatToParts(new Date());
+  var o = {};
+  p.forEach(function (x) { o[x.type] = x.value; });
+  return { y: +o.year, m: +o.month, d: +o.day, wd: o.weekday };
+}
+function fmtLondon(ms, withDate) {
+  var opt = withDate
+    ? { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hour12: false }
+    : { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hour12: false };
+  return new Intl.DateTimeFormat("en-GB", opt).format(new Date(ms));
+}
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+var L = londonParts();
+var todayUTC = Date.UTC(L.y, L.m - 1, L.d); // midnight of the London date, as a UTC day marker
+
+/* ---- the date line ---- */
+$("todayline").textContent = L.wd + " " + L.d + " " + MONTHS[L.m - 1] + " " + L.y + ", in Manchester";
+
+/* ---- day of year ---- */
+var jan1 = Date.UTC(L.y, 0, 1);
+var doy = Math.round((todayUTC - jan1) / 86400000) + 1;
+var daysInYear = Math.round((Date.UTC(L.y + 1, 0, 1) - jan1) / 86400000);
+var pct = doy / daysInYear * 100;
+$("doy").textContent = "day " + doy + " of " + daysInYear;
+$("doynote").textContent = pct.toFixed(1) + "% of the year is in the books";
+window.setTimeout(function () { $("doybar").style.width = pct.toFixed(2) + "%"; }, 150);
+
+/* ---- ISO week ---- */
+(function () {
+  var t = new Date(todayUTC);
+  var dayNum = (t.getUTCDay() + 6) % 7;
+  t.setUTCDate(t.getUTCDate() - dayNum + 3);
+  var firstThursday = new Date(Date.UTC(t.getUTCFullYear(), 0, 4));
+  var fdn = (firstThursday.getUTCDay() + 6) % 7;
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - fdn + 3);
+  var wk = 1 + Math.round((t - firstThursday) / 604800000);
+  $("week").textContent = "week " + wk;
+})();
+
+/* ---- weekdays remaining this calendar year ---- */
+(function () {
+  var count = 0;
+  var t = new Date(todayUTC);
+  t.setUTCDate(t.getUTCDate() + 1);
+  while (t.getUTCFullYear() === L.y) {
+    var wd = t.getUTCDay();
+    if (wd !== 0 && wd !== 6) { count += 1; }
+    t.setUTCDate(t.getUTCDate() + 1);
+  }
+  $("workdays").textContent = String(count);
+})();
+
+/* ---- academic year ---- */
+(function () {
+  var startY = (L.m >= 9) ? L.y : L.y - 1;
+  var s = Date.UTC(startY, 8, 1);
+  var e = Date.UTC(startY + 1, 8, 1);
+  var p = (todayUTC - s) / (e - s) * 100;
+  $("acad").textContent = p.toFixed(1) + "%";
+  window.setTimeout(function () { $("acadbar").style.width = p.toFixed(2) + "%"; }, 150);
+})();
+
+/* ---- days to 31 January ---- */
+(function () {
+  var target = Date.UTC(L.m === 1 && L.d <= 31 ? L.y : L.y + (L.m > 1 ? 1 : 0), 0, 31);
+  if (target < todayUTC) { target = Date.UTC(L.y + 1, 0, 31); }
+  var days = Math.round((target - todayUTC) / 86400000);
+  $("sa").textContent = days === 0 ? "today. good luck" : days + (days === 1 ? " day" : " days");
+})();
+
+/* ---- the sun (standard sunrise equation, Manchester) ---- */
+(function () {
+  var JD = Date.UTC(L.y, L.m - 1, L.d, 12) / 86400000 + 2440587.5;
+  var n = Math.ceil(JD - 2451545.0 + 0.0008 - LW / 360 - 0.5);
+  var Jstar = n + LW / 360;
+  var M = (357.5291 + 0.98560028 * Jstar) % 360;
+  var C = 1.9148 * Math.sin(M * RAD) + 0.02 * Math.sin(2 * M * RAD) + 0.0003 * Math.sin(3 * M * RAD);
+  var lam = (M + C + 180 + 102.9372) % 360;
+  var Jtransit = 2451545.0 + Jstar + 0.0053 * Math.sin(M * RAD) - 0.0069 * Math.sin(2 * lam * RAD);
+  var sinDec = Math.sin(lam * RAD) * Math.sin(23.4397 * RAD);
+  var dec = Math.asin(sinDec);
+  var cosH = (Math.sin(-0.833 * RAD) - Math.sin(LAT * RAD) * sinDec) /
+             (Math.cos(LAT * RAD) * Math.cos(dec));
+  if (cosH < -1 || cosH > 1) {
+    $("sun").textContent = "unusual";
+    return;
+  }
+  var H = Math.acos(cosH) / RAD;
+  var toMs = function (J) { return (J - 2440587.5) * 86400000; };
+  var rise = toMs(Jtransit - H / 360);
+  var set = toMs(Jtransit + H / 360);
+  var mins = Math.round((set - rise) / 60000);
+  var now = Date.now();
+  var riseWord = now < rise ? "rises " : "rose ";
+  var setWord = now < set ? "sets " : "set ";
+  $("sun").textContent = riseWord + fmtLondon(rise) + ", " + setWord + fmtLondon(set);
+  $("sunnote").textContent = "daylight " + Math.floor(mins / 60) + "h " + (mins % 60) + "m; accurate to a minute or two";
+})();
+
+/* ---- the moon ---- */
+(function () {
+  var SYNODIC = 29.530588853;
+  var JDnow = Date.now() / 86400000 + 2440587.5;
+  var age = (JDnow - 2451550.1) % SYNODIC;
+  if (age < 0) { age += SYNODIC; }
+  var frac = (1 - Math.cos(2 * Math.PI * age / SYNODIC)) / 2;
+  var waxing = age < SYNODIC / 2;
+  var names = [
+    [1.85, "a new moon"], [5.54, "a waxing crescent"], [9.23, "the first quarter"],
+    [12.92, "waxing gibbous"], [16.61, "a full moon"], [20.30, "waning gibbous"],
+    [23.99, "the last quarter"], [27.68, "a waning crescent"], [99, "a new moon"]
+  ];
+  var name = "the moon";
+  for (var i = 0; i < names.length; i++) {
+    if (age < names[i][0]) { name = names[i][1]; break; }
+  }
+  $("moon").textContent = name;
+  $("moonnote").textContent = Math.round(frac * 100) + "% illuminated, " +
+    (age < 1 ? "under a day" : Math.round(age) + " days") + " old";
+
+  var cv = $("moondisc");
+  if (!cv || !cv.getContext) { return; }
+  var ctx = cv.getContext("2d");
+  var cx = 90, cy = 90, r = 74;
+  ctx.clearRect(0, 0, 180, 180);
+  // the dark disc
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+  ctx.fillStyle = "#15181A";
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#333A3F";
+  ctx.stroke();
+  // the lit portion: a half disc plus or minus a half ellipse
+  var k = 2 * frac - 1; // -1 new, 0 quarter, +1 full
+  ctx.beginPath();
+  if (waxing) {
+    ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, false);
+    ctx.ellipse(cx, cy, Math.abs(k) * r, r, 0, Math.PI / 2, -Math.PI / 2, k < 0);
+  } else {
+    ctx.arc(cx, cy, r, Math.PI / 2, -Math.PI / 2, false);
+    ctx.ellipse(cx, cy, Math.abs(k) * r, r, 0, -Math.PI / 2, Math.PI / 2, k < 0);
+  }
+  ctx.closePath();
+  ctx.fillStyle = "#C9AA7C";
+  ctx.fill();
+})();
+})();
+</script>
+
+</body>
+</html>
