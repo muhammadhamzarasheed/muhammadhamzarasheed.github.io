@@ -143,54 +143,72 @@ a.door:hover .side{color:var(--brass);}
 @media (max-width:34rem){ .door .side{display:none;} }
 
 /* ---------- the unaudited accounts ---------- */
-.accounts{margin-top:3.2rem;}
+/* Set like a statement: one card, hairline rows, dotted leaders
+   running from each item to its figure, the opinion as the footer. */
+.accounts{margin-top:3.4rem;}
 .accounts .brief{color:var(--text-2);font-size:.95rem;margin:.9rem 0 0;max-width:56ch;}
-.bars{margin:1.8rem 0 0;display:grid;gap:1.35rem;}
+.statement{
+  margin-top:1.7rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  padding:.35rem 1.5rem 1.35rem;
+}
+.bars{margin:0;}
+.brow{padding:1.15rem 0 1.05rem;border-top:1px solid var(--line);}
+.brow:first-child{border-top:0;}
 .brow dt{
   display:flex;
-  justify-content:space-between;
   align-items:baseline;
-  gap:1rem;
-  font-size:.95rem;
+  gap:.8rem;
+  font-size:.9375rem;
   color:var(--text);
   font-weight:600;
   letter-spacing:-.01em;
+}
+.brow dt .leader{
+  flex:1;
+  min-width:1.5rem;
+  border-bottom:1px dotted #3B434A;
+  transform:translateY(-4px);
 }
 .brow dt b{
   font-family:var(--mono);
   font-variant-numeric:tabular-nums;
   font-weight:400;
-  font-size:.8125rem;
+  font-size:.875rem;
   color:var(--brass);
   white-space:nowrap;
 }
-.brow dd{margin:.45rem 0 0;}
+.brow dd{margin:.7rem 0 0;}
 .brow .track{
-  height:8px;
-  border-radius:4px;
-  background:var(--raise);
-  border:1px solid var(--line);
+  display:block;
+  height:5px;
+  border-radius:3px;
+  background:var(--void);
   overflow:hidden;
 }
 .brow .fill{
   display:block;
   height:100%;
   border-radius:inherit;
-  background:linear-gradient(to right,rgba(201,170,124,.45),var(--brass));
+  background:linear-gradient(to right,rgba(201,170,124,.35),var(--brass));
+  box-shadow:0 0 10px rgba(201,170,124,.25);
   width:var(--w);
 }
-.js .brow .fill{width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1);}
+.js .brow .fill{width:0;transition:width 1.2s cubic-bezier(.2,.7,.2,1);}
 .js .brow.on .fill{width:var(--w);}
 .brow small{
   display:block;
-  margin-top:.4rem;
+  margin-top:.55rem;
   font-family:var(--mono);
-  font-size:.6875rem;
-  letter-spacing:.06em;
+  font-size:.6563rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
   color:var(--text-3);
 }
 .opinion{
-  margin:2rem 0 0;
+  margin:0;
   padding-top:1.2rem;
   border-top:1px solid var(--line);
   font-family:var(--mono);
@@ -198,7 +216,7 @@ a.door:hover .side{color:var(--brass);}
   letter-spacing:.06em;
   color:var(--text-3);
 }
-.opinion em{font-family:var(--serif);font-style:italic;font-size:1.25em;color:var(--brass);letter-spacing:0;}
+.opinion em{font-family:var(--serif);font-style:italic;font-size:1.3em;color:var(--brass);letter-spacing:0;}
 @media (prefers-reduced-motion:reduce){
   .js .brow .fill{width:var(--w);transition:none;}
 }
@@ -259,33 +277,35 @@ footer a:hover{color:var(--brass);}
   <section class="accounts">
     <p class="label"><b>C</b> &middot; The unaudited accounts</p>
     <p class="brief">Every figure elsewhere on this site is checked twice before it is published. These are the ones that got away: presented without evidence, contrary to stated policy, and certified by absolutely nobody.</p>
-    <dl class="bars">
-      <div class="brow" style="--w:84%">
-        <dt>Coffees consumed, year to date <b>612</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>figure supplied by the subject and not agreed to receipts</small></dd>
-      </div>
-      <div class="brow" style="--w:46%">
-        <dt>Spreadsheet tabs open right now <b>23</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>of which four are the same file</small></dd>
-      </div>
-      <div class="brow" style="--w:100%">
-        <dt>Figures checked twice before publishing <b>100%</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>the only certified number on this page</small></dd>
-      </div>
-      <div class="brow" style="--w:62%">
-        <dt>Socks lost in the laundry, lifetime <b>31</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>a material discrepancy, under investigation since 2014</small></dd>
-      </div>
-      <div class="brow" style="--w:30%">
-        <dt>Alarm snoozes, average weekday morning <b>3</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>each one fully evidenced</small></dd>
-      </div>
-      <div class="brow" style="--w:70%">
-        <dt>Times "reconcile" was said in one meeting <b>14</b></dt>
-        <dd><span class="track"><span class="fill"></span></span><small>witnesses declined to comment</small></dd>
-      </div>
-    </dl>
-    <p class="opinion">Auditor's opinion: <em>adverse</em>. The subject nevertheless appears to function.</p>
+    <div class="statement">
+      <dl class="bars">
+        <div class="brow" style="--w:84%">
+          <dt><span>Coffees consumed, year to date</span><i class="leader" aria-hidden="true"></i><b>612</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>figure supplied by the subject and not agreed to receipts</small></dd>
+        </div>
+        <div class="brow" style="--w:46%">
+          <dt><span>Spreadsheet tabs open right now</span><i class="leader" aria-hidden="true"></i><b>23</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>of which four are the same file</small></dd>
+        </div>
+        <div class="brow" style="--w:100%">
+          <dt><span>Figures checked twice before publishing</span><i class="leader" aria-hidden="true"></i><b>100%</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>the only certified number on this page</small></dd>
+        </div>
+        <div class="brow" style="--w:62%">
+          <dt><span>Socks lost in the laundry, lifetime</span><i class="leader" aria-hidden="true"></i><b>31</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>a material discrepancy, under investigation since 2014</small></dd>
+        </div>
+        <div class="brow" style="--w:30%">
+          <dt><span>Alarm snoozes, average weekday morning</span><i class="leader" aria-hidden="true"></i><b>3</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>each one fully evidenced</small></dd>
+        </div>
+        <div class="brow" style="--w:70%">
+          <dt><span>Times "reconcile" was said in one meeting</span><i class="leader" aria-hidden="true"></i><b>14</b></dt>
+          <dd><span class="track"><span class="fill"></span></span><small>witnesses declined to comment</small></dd>
+        </div>
+      </dl>
+      <p class="opinion">Auditor's opinion: <em>adverse</em>. The subject nevertheless appears to function.</p>
+    </div>
   </section>
 </article>
 </main>

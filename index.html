@@ -176,7 +176,35 @@ body::after{
 }
 .lockup{display:inline-flex;align-items:center;gap:.5rem;}
 .lockup .mark{height:.95rem;}
-.nav ul{display:flex;gap:2rem;list-style:none;margin:0;padding:0;}
+.nav ul{display:flex;gap:2rem;list-style:none;margin:0;padding:0;position:relative;}
+/* The glass bubble: a translucent brass pill that glides behind
+   whichever destination the pointer or keyboard is on. It sits under
+   the link text (links are positioned and come later in the DOM). */
+.navorb{
+  position:absolute;
+  top:0;
+  left:0;
+  border-radius:2rem;
+  background:linear-gradient(to bottom,rgba(201,170,124,.17),rgba(201,170,124,.06));
+  border:1px solid rgba(201,170,124,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 4px 16px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:
+    transform .38s cubic-bezier(.3,1.35,.35,1),
+    width .38s cubic-bezier(.3,1.35,.35,1),
+    height .38s cubic-bezier(.3,1.35,.35,1),
+    opacity .22s ease;
+}
+.navorb.on{opacity:1;}
+.navorb.instant{transition:opacity .22s ease;}
+/* With the bubble doing the work, the hover underline retires on
+   fine pointers; the brass underline stays for the live section. */
+@media (hover:hover) and (pointer:fine){
+  .nav ul a:hover::after{transform:scaleX(0);}
+  .nav ul a.live::after,
+  .nav ul a.live:hover::after{transform:scaleX(1);}
+}
 .nav ul a{
   position:relative;
   font-size:.875rem;
@@ -2081,6 +2109,54 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       put(j.current);
     })
     .catch(function () {});
+})();
+
+/* ---------- the nav bubble ---------- */
+/* A brass glass pill that glides behind the destination under the
+   pointer, and follows keyboard focus the same way. */
+(function () {
+  var ul = document.getElementById("navlinks");
+  if (!ul || !window.matchMedia("(hover:hover) and (pointer:fine)").matches) { return; }
+  var orb = document.createElement("span");
+  orb.className = "navorb";
+  orb.setAttribute("aria-hidden", "true");
+  ul.insertBefore(orb, ul.firstChild);
+  var showing = false;
+  var PX = 13, PY = 8;
+
+  function moveTo(a) {
+    var ur = ul.getBoundingClientRect();
+    var r = a.getBoundingClientRect();
+    if (!showing) {
+      // first appearance fades in place rather than sliding in from afar
+      orb.classList.add("instant");
+    }
+    orb.style.width = (r.width + PX * 2) + "px";
+    orb.style.height = (r.height + PY * 2) + "px";
+    orb.style.transform = "translate(" + (r.left - ur.left - PX) + "px," + (r.top - ur.top - PY) + "px)";
+    if (!showing) {
+      void orb.offsetWidth;
+      orb.classList.remove("instant");
+      orb.classList.add("on");
+      showing = true;
+    }
+  }
+  function hide() {
+    orb.classList.remove("on");
+    showing = false;
+  }
+  ul.addEventListener("pointerover", function (e) {
+    var a = e.target.closest("a");
+    if (a) { moveTo(a); }
+  });
+  ul.addEventListener("pointerleave", hide);
+  ul.addEventListener("focusin", function (e) {
+    var a = e.target.closest("a");
+    if (a) { moveTo(a); }
+  });
+  ul.addEventListener("focusout", function (e) {
+    if (!ul.contains(e.relatedTarget)) { hide(); }
+  });
 })();
 
 /* ---------- glass sheen on the nav ---------- */
