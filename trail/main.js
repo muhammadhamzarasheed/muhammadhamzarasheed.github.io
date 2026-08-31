@@ -501,6 +501,23 @@ if (new URLSearchParams(window.location.search).has("dev")) {
     step(frames, forced) {
       for (let i = 0; i < frames; i += 1) tick(1 / 60, forced || null);
     },
+    goto(i) {
+      const s = LAYOUT[i - 1];
+      if (!s) return "no station " + i;
+      car.reset(new THREE.Vector3(s.x, 1.2, s.z), s.angle);
+      for (let k = 0; k < 40; k += 1) tick(1 / 60, { steer: 0, throttle: 0, brake: true });
+      return this.pos();
+    },
+    plot(i, out) {
+      const s = LAYOUT[i - 1];
+      if (!s) return "no station " + i;
+      const d = out || 14;
+      const x = s.x + Math.cos(s.angle) * d;
+      const z = s.z - Math.sin(s.angle) * d;
+      car.reset(new THREE.Vector3(x, 1.2, z), s.angle);
+      for (let k = 0; k < 40; k += 1) tick(1 / 60, { steer: 0, throttle: 0, brake: true });
+      return this.pos();
+    },
     pos() {
       const p = car.chassisBody.position;
       const v = car.chassisBody.velocity;
