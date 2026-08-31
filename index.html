@@ -1559,7 +1559,7 @@ footer .label a:hover{color:var(--brass);}
 
 <footer>
   <div class="shell">
-    <p class="label lockup"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza</p>
+    <p class="label lockup"><svg class="mark" id="countersign" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza</p>
     <p class="label hint">Press <kbd>/</kbd> to navigate</p>
     <p class="label"><a href="/appendix/" target="_blank" rel="noopener">Something for you</a></p>
     <p class="label">Reconcile before you report</p>
@@ -1600,6 +1600,8 @@ footer .label a:hover{color:var(--brass);}
   </div>
 </div>
 
+<script src="/vendor/gsap/gsap.min.js"></script>
+<script src="/vendor/gsap/DrawSVGPlugin.min.js"></script>
 <script>
 document.documentElement.classList.add("js");
 var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2334,6 +2336,40 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (e.target === pal) { shut(); }
     if (e.target.closest("a")) { shut(); }
   });
+})();
+
+/* ---------- footer countersign ---------- */
+/* The monogram signs the page off: three strokes drawn in order once
+   the reader reaches the footer, once per load. */
+(function () {
+  if (!window.gsap) { return; }
+  var mark = document.getElementById("countersign");
+  if (!mark || !window.DrawSVGPlugin || !("IntersectionObserver" in window)) { return; }
+  // Reduced motion, or anything missing above: the mark simply stays
+  // complete, exactly as it renders without JS.
+  if (RM) { return; }
+  gsap.registerPlugin(window.DrawSVGPlugin);
+  var paths = mark.querySelectorAll("path");
+  // Start states from JS only, never CSS, so no-JS visitors keep the
+  // finished monogram. Each path also drops to alpha 0: round linecaps
+  // render a stray dot at zero draw length in some browsers.
+  gsap.set(paths, { drawSVG: "0%", autoAlpha: 0 });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) { return; }
+      io.unobserve(e.target);
+      var tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+      // Stroke order as the pen would take it: the M, the far stem,
+      // then the crossbar, each starting as the previous nears its end.
+      tl.set(paths[0], { autoAlpha: 1 }, 0)
+        .to(paths[0], { drawSVG: "100%", duration: 0.5 }, 0)
+        .set(paths[1], { autoAlpha: 1 }, 0.4)
+        .to(paths[1], { drawSVG: "100%", duration: 0.3 }, 0.4)
+        .set(paths[2], { autoAlpha: 1 }, 0.65)
+        .to(paths[2], { drawSVG: "100%", duration: 0.25 }, 0.65);
+    });
+  }, { threshold: 0.6 });
+  io.observe(mark);
 })();
 </script>
 
