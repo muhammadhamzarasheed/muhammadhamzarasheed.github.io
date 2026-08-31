@@ -49,8 +49,10 @@
 
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { buildWorld, LAYOUT, SPAWN, helpers } from "./world.js";
-import { buildCar } from "./vehicle.js";
+import { buildWorld, LAYOUT, SPAWN, ROAD_RADIUS, helpers } from "./world.js";
+import { buildCar, TOP_SPEED } from "./vehicle.js";
+import { initEffects } from "./effects.js";
+import { initReceipts } from "./receipts.js";
 import * as hud from "./hud.js";
 import * as d01 from "./districts/d01-method.js";
 import * as d02 from "./districts/d02-now.js";
@@ -75,8 +77,12 @@ let scene = null;
 let camera = null;
 let physics = null;
 let car = null;
+let keyLight = null;
+let effects = null;
+let receipts = null;
 let booted = false;
 let veiled = false;
+let reduceMotion = false;
 let lastTime = performance.now();
 let lastInputAt = performance.now();
 let lastStation = SPAWN;
@@ -91,9 +97,25 @@ const dialInput = { steer: 0, throttle: 0, active: false };
 const input = { steer: 0, throttle: 0, brake: false };
 
 const camOffset = new THREE.Vector3(20, 26, 20);
+const keyOffset = new THREE.Vector3(38, 60, -26);
 const camPos = new THREE.Vector3();
 const camTarget = new THREE.Vector3();
 const camDesired = new THREE.Vector3();
+const camAim = new THREE.Vector3();
+const camRight = new THREE.Vector3();
+const mapForward = new THREE.Vector3();
+const mapState = { x: 0, z: 0, heading: 0, reconciledSet: null };
+
+/* Camera dynamics: the frame breathes with speed, leads into a drift,
+   and takes one brief soft knock on a hard landing. */
+const CAM_FOV = 30;
+const SHAKE_SPAN = 0.4;
+let camZoom = 0;
+let camLead = 0;
+let shakeTime = 0;
+let shakeAmp = 0;
+let shakeClock = 0;
+let dustTimer = 0;
 
 /* ---------- boot ---------- */
 
@@ -110,17 +132,24 @@ function start() {
 
 function boot() {
   hud.initHud();
+  hud.initMap(LAYOUT, ROAD_RADIUS);
 
   scene = new THREE.Scene();
   renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.setAttribute("aria-hidden", "true");
   document.getElementById("trailstage").appendChild(renderer.domElement);
 
-  camera = new THREE.PerspectiveCamera(30, 1, 0.5, 400);
+  /* The far plane reaches past the sky dome; fog closes the world in
+     long before it. */
+  camera = new THREE.PerspectiveCamera(30, 1, 0.5, 900);
 
-  buildWorld(THREE, scene);
+  keyLight = buildWorld(THREE, scene).keyLight;
 
   physics = new CANNON.World();
   physics.gravity.set(0, -9.82, 0);
@@ -137,8 +166,19 @@ function boot() {
   car = buildCar(THREE, CANNON, scene, physics);
   car.reset(new THREE.Vector3(SPAWN.x, 0, SPAWN.z), SPAWN.angle);
 
+  try {
+    reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch (err) {
+    reduceMotion = false;
+  }
+
+  effects = initEffects(THREE, scene);
+  receipts = initReceipts(THREE, scene, onReceipt);
+
   /* Lay the districts out on their stations and wire the tally: the
-     first entry into each reconciles it; all seven countersign. */
+     first entry into each reconciles it; all seven countersign. A
+     first reconciliation fountains brass figures from the station and
+     pulses the tally; the seventh bursts around the centre monogram. */
   for (const mod of DISTRICTS) {
     const station = LAYOUT[mod.index - 1];
     const ctx = makeCtx(station);
@@ -146,7 +186,16 @@ function boot() {
     districtRuntime.push({ mod, ctx });
     addTriggerInternal(station.x, station.z, 9, () => {
       lastStation = station;
-      if (hud.reconcile(mod.index, mod.title) === 7) hud.countersign();
+      const first = !hud.reconciledSet().has(mod.index);
+      const total = hud.reconcile(mod.index, mod.title);
+      if (first) {
+        effects.glyphBurst(station.x, station.z, 24, false);
+        hud.pulseTally();
+      }
+      if (total === 7) {
+        if (first) effects.glyphBurst(0, 0, 40, true);
+        hud.countersign();
+      }
     }, null);
   }
 
@@ -158,6 +207,8 @@ function boot() {
     /* Returning to the tab earns a fresh idle grace period, so the
        world visibly resumes rather than waiting for a keypress. */
     lastInputAt = performance.now();
+    /* And a fresh measurement: a resize fired while hidden reads 0. */
+    onResize();
   });
 
   camPos.set(SPAWN.x + camOffset.x, camOffset.y, SPAWN.z + camOffset.z);
@@ -259,6 +310,14 @@ function onUpdate(fn) {
   updateFns.push(fn);
 }
 
+/* A receipt gathered: a flick of paper, and the counter ticks over.
+   The full set earns its line on the countersign. */
+function onReceipt(x, y, z, count) {
+  effects.paperFlick(x, y, z);
+  hud.setReceipts(count);
+  if (count === receipts.total) hud.receiptsComplete();
+}
+
 /* Plaques only ever open on an explicit key press or tap, and always
    in a new tab. */
 function openActiveLink() {
@@ -311,6 +370,9 @@ function onKey(event, down) {
       break;
     case "KeyE":
       if (down) openActiveLink();
+      break;
+    case "KeyM":
+      if (down) hud.cycleMap();
       break;
     case "Escape":
       if (down) onEscape();
@@ -404,6 +466,9 @@ function readInput() {
 function onResize() {
   const w = window.innerWidth;
   const h = window.innerHeight;
+  /* A hidden or collapsing tab can measure 0, which would fold the
+     draw buffer to a single pixel; keep the last real size instead. */
+  if (w < 2 || h < 2) return;
   renderer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
@@ -425,13 +490,99 @@ function checkTriggers() {
   }
 }
 
+/* The lamplight walks with the car, so its tight shadow camera always
+   frames the action without ever growing soft. */
+function updateKeyLight() {
+  if (!keyLight) return;
+  const p = car.group.position;
+  keyLight.position.set(p.x + keyOffset.x, keyOffset.y, p.z + keyOffset.z);
+  keyLight.target.position.set(p.x, 0, p.z);
+}
+
+/* One brief soft knock, hard landings only, never continuous. */
+function knockCamera(impact) {
+  if (reduceMotion) return;
+  shakeAmp = Math.min(0.45, impact * 0.05);
+  shakeTime = SHAKE_SPAN;
+  shakeClock = 0;
+}
+
 function updateCamera(dt) {
   const p = car.group.position;
-  camDesired.set(p.x + camOffset.x, p.y + camOffset.y, p.z + camOffset.z);
+  const st = car.status;
+
+  /* The frame breathes with pace: it pulls back and opens a touch at
+     full tilt, and settles close and calm around the stations. */
+  const pace = Math.min(1, st.speed / TOP_SPEED);
+  camZoom += (pace - camZoom) * (1 - Math.exp(-dt * 2.2));
+  const reach = 1 + camZoom * 0.24;
+
+  /* A touch of lateral lead into the drift, so the slide reads. */
+  const leadTarget = st.drifting ? Math.max(-2.6, Math.min(2.6, st.slip * 0.4)) : 0;
+  camLead += (leadTarget - camLead) * (1 - Math.exp(-dt * 3));
+  camRight.set(1, 0, 0).applyQuaternion(car.group.quaternion);
+
+  camDesired.set(
+    p.x + camOffset.x * reach,
+    p.y + camOffset.y * reach,
+    p.z + camOffset.z * reach,
+  );
   camPos.lerp(camDesired, 1 - Math.exp(-dt * 4.5));
-  camTarget.lerp(p, 1 - Math.exp(-dt * 6));
+  camAim.set(p.x + camRight.x * camLead, p.y, p.z + camRight.z * camLead);
+  camTarget.lerp(camAim, 1 - Math.exp(-dt * 6));
   camera.position.copy(camPos);
+
+  if (shakeTime > 0) {
+    shakeTime = Math.max(0, shakeTime - dt);
+    shakeClock += dt;
+    const ease = shakeTime / SHAKE_SPAN;
+    camera.position.y += Math.sin(shakeClock * 34) * shakeAmp * ease;
+    camera.position.x += Math.sin(shakeClock * 27 + 1.3) * shakeAmp * 0.5 * ease;
+  }
+
   camera.lookAt(camTarget);
+
+  const fovTarget = CAM_FOV + camZoom * 5;
+  if (Math.abs(camera.fov - fovTarget) > 0.01) {
+    camera.fov += (fovTarget - camera.fov) * (1 - Math.exp(-dt * 2.2));
+    camera.updateProjectionMatrix();
+  }
+}
+
+/* Dust, skid marks and landing puffs, fed from the car's own state. */
+function updateCarEffects(dt) {
+  const st = car.status;
+  const cp = car.chassisBody.position;
+
+  /* Skid marks only where the handbrake writes on the road itself. */
+  const offRing = Math.abs(Math.hypot(cp.x, cp.z) - ROAD_RADIUS);
+  if (st.drifting && offRing < 4.4) {
+    const wl = car.vehicle.wheelInfos[2].worldTransform.position;
+    const wr = car.vehicle.wheelInfos[3].worldTransform.position;
+    effects.skidAt(0, wl.x, wl.z);
+    effects.skidAt(1, wr.x, wr.z);
+  } else {
+    effects.skidBreak();
+  }
+
+  /* Dust off the rear wheels under a hard pull away or through a
+     drift; a short steady tick, not a stream. */
+  dustTimer -= dt;
+  const hardPull = st.grounded && input.throttle > 0.85 &&
+    st.forwardSpeed > 0.4 && st.forwardSpeed < TOP_SPEED * 0.55;
+  if ((st.drifting || hardPull) && dustTimer <= 0) {
+    dustTimer = 0.055;
+    const wl = car.vehicle.wheelInfos[2].worldTransform.position;
+    const wr = car.vehicle.wheelInfos[3].worldTransform.position;
+    effects.dustAt(wl.x, 0.18, wl.z);
+    effects.dustAt(wr.x, 0.18, wr.z);
+  }
+
+  /* Landings: a puff for a real drop, a knock only for a hard one. */
+  if (st.justLanded && st.landing > 4) {
+    effects.landingPuff(cp.x, cp.z);
+    if (st.landing > 6.5) knockCamera(st.landing);
+  }
 }
 
 function frame(now) {
@@ -478,7 +629,22 @@ function tick(dt, forced) {
     if (typeof d.mod.update === "function") d.mod.update(dt, d.ctx);
   }
 
+  updateCarEffects(dt);
+  effects.update(dt);
+  receipts.update(dt, cp.x, cp.z);
+
   updateCamera(dt);
+  updateKeyLight();
+
+  /* The routing slip: position and heading from the chassis, the
+     reconciled set straight from the tally's own bookkeeping. */
+  mapForward.set(0, 0, 1).applyQuaternion(car.group.quaternion);
+  mapState.x = cp.x;
+  mapState.z = cp.z;
+  mapState.heading = Math.atan2(mapForward.x, mapForward.z);
+  mapState.reconciledSet = hud.reconciledSet();
+  hud.updateMap(mapState);
+
   renderer.render(scene, camera);
 
   if (!veiled) {
@@ -500,6 +666,9 @@ if (new URLSearchParams(window.location.search).has("dev")) {
   window.__trail = {
     step(frames, forced) {
       for (let i = 0; i < frames; i += 1) tick(1 / 60, forced || null);
+    },
+    gl() {
+      return { scene, camera, renderer, keyLight, THREE };
     },
     goto(i) {
       const s = LAYOUT[i - 1];
@@ -527,6 +696,12 @@ if (new URLSearchParams(window.location.search).has("dev")) {
         z: Math.round(p.z * 100) / 100,
         speed: Math.round(Math.hypot(v.x, v.y, v.z) * 100) / 100,
       };
+    },
+    car() {
+      return car.status;
+    },
+    receipts() {
+      return receipts.collected() + "/" + receipts.total;
     },
     hud,
   };
