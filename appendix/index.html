@@ -229,6 +229,7 @@ a.door:hover .side{color:var(--brass);}
   padding:1.4rem 1.5rem;
   flex-wrap:wrap;
 }
+.toss{flex:none;}
 .coin{
   width:84px;
   height:84px;
@@ -385,9 +386,11 @@ footer a:hover{color:var(--brass);}
     <p class="label"><b>H</b> &middot; The tiebreaker</p>
     <p class="brief">For decisions that do not deserve a meeting. State the two options, flip, obey.</p>
     <div class="statement cointable">
-      <div class="coin" id="coin" aria-hidden="true">
-        <div class="face front"><svg viewBox="8 15 48 34" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg></div>
-        <div class="face back"><span>77</span></div>
+      <div class="toss" id="toss" aria-hidden="true">
+        <div class="coin" id="coin">
+          <div class="face front"><svg viewBox="8 15 48 34" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg></div>
+          <div class="face back"><span>77</span></div>
+        </div>
       </div>
       <div class="coinside">
         <button class="btn" type="button" id="flip">Flip the coin</button>
@@ -439,13 +442,16 @@ footer a:hover{color:var(--brass);}
   </div>
 </footer>
 
+<script src="/vendor/gsap/gsap.min.js"></script>
 <script>
 document.documentElement.classList.add("js");
 (function () {
+  if (!window.gsap) { return; }
   var coin = document.getElementById("coin");
+  var toss = document.getElementById("toss");
   var flip = document.getElementById("flip");
   var ruling = document.getElementById("ruling");
-  if (coin && flip) {
+  if (coin && toss && flip) {
     var turns = 0;
     var LINES = [
       "The coin has ruled. Minute it.",
@@ -461,6 +467,17 @@ document.documentElement.classList.add("js");
       var heads = Math.random() < 0.5;
       turns += 3 + Math.floor(Math.random() * 2);
       coin.style.transform = "rotateY(" + (turns * 360 + (heads ? 0 : 180)) + "deg)";
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        // The wrapper carries the vertical travel: a y tween on the coin
+        // itself would overwrite the rotateY spin, since transforms on one
+        // element replace each other.
+        gsap.killTweensOf(toss);
+        gsap.timeline()
+          .to(toss, { y: -40, duration: 0.45, ease: "power2.out" })
+          .to(toss, { y: 0, duration: 0.35, ease: "power2.in" })
+          .to(toss, { y: -6, duration: 0.1, ease: "power1.out" })
+          .to(toss, { y: 0, duration: 0.1, ease: "power1.in" });
+      }
       ruling.innerHTML = "&middot; &middot; &middot;";
       window.setTimeout(function () {
         ruling.innerHTML = "<b>" + (heads ? "Heads, the monogram." : "Tails, the number.") + "</b> " +

@@ -261,6 +261,7 @@ a.gback:hover{color:var(--brass);}
 .wirewrap .corr{fill:none;stroke:#15181A;stroke-linecap:round;stroke-linejoin:round;}
 .wirewrap .wire{fill:none;stroke:var(--brass);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .1s ease;}
 .wirewrap.flash .wire{stroke:#F2F4F5;}
+.wirewrap.demo .wire{stroke:var(--brass-hi);}
 .wirewrap .pad{fill:var(--brass-soft);stroke:var(--brass);stroke-width:1.5;}
 .wirewrap .padend{fill:none;stroke:var(--text-3);stroke-width:1.5;}
 .wirewrap .padlbl{font-family:var(--mono);font-size:9px;letter-spacing:.15em;fill:var(--text-3);}
@@ -590,6 +591,8 @@ footer a:hover{color:var(--brass);}
   </div>
 </footer>
 
+<script src="/vendor/gsap/gsap.min.js"></script>
+<script src="/vendor/gsap/MotionPathPlugin.min.js"></script>
 <script>
 (function () {
 "use strict";
@@ -1519,6 +1522,98 @@ inits.entry = function () {
 
 menuBests();
 route();
+})();
+
+/* =============================================================
+   INVIGILATOR'S DEMONSTRATION (Steady Hand)
+   ============================================================= */
+(function () {
+"use strict";
+if (!window.gsap) { return; }
+if (!window.MotionPathPlugin) { return; }
+window.gsap.registerPlugin(window.MotionPathPlugin);
+
+var svg = document.getElementById("wiresvg");
+var path = document.getElementById("wirepath");
+var wrap = document.getElementById("wirewrap");
+if (!svg || !path || !wrap) { return; }
+
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// once per pageview, deliberately never written to storage
+var played = false;
+var active = false;
+var bead = null;
+var rmTimer = null;
+var padCentre = null;
+
+function toBox(e) {
+  var r = svg.getBoundingClientRect();
+  return { x: (e.clientX - r.left) * 600 / r.width, y: (e.clientY - r.top) * 320 / r.height };
+}
+function removeBead() {
+  if (bead && bead.parentNode) { bead.parentNode.removeChild(bead); }
+  bead = null;
+}
+function stopDemo() {
+  if (!active) { return; }
+  active = false;
+  svg.removeEventListener("pointermove", onPointer);
+  svg.removeEventListener("pointerdown", onPointer);
+  if (rmTimer) { clearTimeout(rmTimer); rmTimer = null; }
+  wrap.classList.remove("demo");
+  if (bead) {
+    window.gsap.killTweensOf(bead);
+    window.gsap.to(bead, { opacity: 0, duration: 0.3, ease: "power2.out", onComplete: removeBead });
+  }
+}
+function onPointer(e) {
+  // mirrors the game's own start test, so a run always wins over the demo
+  var p = toBox(e);
+  var dx = p.x - padCentre.x, dy = p.y - padCentre.y;
+  if (e.type === "pointerdown" || Math.sqrt(dx * dx + dy * dy) < 17) { stopDemo(); }
+}
+function runDemo() {
+  played = true;
+  active = true;
+  // computed here, once the router has unhidden the section: geometry
+  // APIs on a non-rendered path throw in some engines
+  padCentre = path.getPointAtLength(0);
+  svg.addEventListener("pointermove", onPointer);
+  svg.addEventListener("pointerdown", onPointer);
+  if (reduce) {
+    // no travelling bead under reduced motion: show the route statically;
+    // the page's global RM rule makes the stroke change an instant jump
+    wrap.classList.add("demo");
+    rmTimer = setTimeout(stopDemo, 1500);
+    return;
+  }
+  bead = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  bead.setAttribute("r", "5");
+  bead.setAttribute("fill", "#C9AA7C");
+  // the bead must never intercept the reader's pointer
+  bead.setAttribute("style", "pointer-events:none;opacity:0;filter:drop-shadow(0 0 6px rgba(201,170,124,.55));");
+  svg.appendChild(bead);
+  window.gsap.to(bead, {
+    duration: 3,
+    delay: 0.5,
+    ease: "none",
+    motionPath: { path: path },
+    onStart: function () {
+      window.gsap.to(bead, { opacity: 1, duration: 0.25, ease: "power2.out" });
+    },
+    onComplete: stopDemo
+  });
+}
+function arm() {
+  if (played || active) { return; }
+  if (location.hash.replace("#", "") !== "wire") { return; }
+  runDemo();
+}
+window.addEventListener("hashchange", function () {
+  if (active && location.hash.replace("#", "") !== "wire") { stopDemo(); }
+  arm();
+});
+arm();
 })();
 </script>
 

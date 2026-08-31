@@ -92,6 +92,7 @@ article{
   color:var(--text-3);
 }
 .label b{color:var(--brass);font-weight:400;}
+#streakline{font-variant-numeric:tabular-nums;}
 h1{
   margin:.9rem 0 0;
   font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
@@ -260,6 +261,8 @@ footer a:hover{color:var(--brass);}
   </div>
 </footer>
 
+<script src="/vendor/gsap/gsap.min.js"></script>
+<script src="/vendor/gsap/ScrambleTextPlugin.min.js"></script>
 <script>
 (function () {
 "use strict";
@@ -464,6 +467,72 @@ if (prior && prior.day === dayKey) {
     var first = $("sheet").querySelector("button.srow");
     if (first) { first.focus(); }
   });
+}
+})();
+
+/* Sheet reference settle: a cosmetic scramble of the figures in the header
+   line, and of the streak figure once the done panel shows. It runs only
+   after the game script has written the real values to the DOM, so a missing
+   vendor file or a failure in here can never touch the game logic. */
+(function () {
+"use strict";
+if (!window.gsap || !window.ScrambleTextPlugin) { return; }
+gsap.registerPlugin(ScrambleTextPlugin);
+// no animation path: the real values are already in the DOM, so just leave them
+if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
+function $(id) { return document.getElementById(id); }
+function settleFigures(el) {
+  if (!el) { return; }
+  var txt = el.textContent;
+  if (!/\d/.test(txt)) { return; }
+  // wrap each digit run in a span so words and separators never flicker
+  var frag = document.createDocumentFragment();
+  var spans = [];
+  var re = /\d+/g;
+  var last = 0;
+  var m = re.exec(txt);
+  while (m) {
+    if (m.index > last) { frag.appendChild(document.createTextNode(txt.slice(last, m.index))); }
+    var s = document.createElement("span");
+    s.textContent = m[0];
+    spans.push(s);
+    frag.appendChild(s);
+    last = m.index + m[0].length;
+    m = re.exec(txt);
+  }
+  if (last < txt.length) { frag.appendChild(document.createTextNode(txt.slice(last))); }
+  el.textContent = "";
+  el.appendChild(frag);
+  var tl = gsap.timeline({
+    // put the flat text node back so the element ends exactly as it began
+    onComplete: function () { el.textContent = txt; }
+  });
+  spans.forEach(function (s, ix) {
+    tl.to(s, {
+      duration: 0.4,
+      ease: "power2.out",
+      scrambleText: { text: s.textContent, chars: "0123456789" }
+    }, ix * 0.04); // slight offset so the whole line settles left to right in about half a second
+  });
+}
+
+settleFigures($("metaline"));
+
+var done = $("done");
+var streakSettled = false;
+function settleStreak() {
+  if (streakSettled) { return; }
+  streakSettled = true;
+  settleFigures($("streakline"));
+}
+if (done && !done.hidden) {
+  // revisit path: the done panel is already showing at load
+  settleStreak();
+} else if (done && window.MutationObserver) {
+  var mo = new MutationObserver(function () {
+    if (!done.hidden) { mo.disconnect(); settleStreak(); }
+  });
+  mo.observe(done, { attributes: true, attributeFilter: ["hidden"] });
 }
 })();
 </script>

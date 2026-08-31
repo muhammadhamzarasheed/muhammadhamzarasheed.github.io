@@ -89,13 +89,45 @@ a.back:focus-visible{outline:2px solid var(--brass);outline-offset:4px;}
   margin-top:1.5rem;
 }
 .stamp svg{height:.9rem;width:auto;color:var(--brass);flex:none;}
+.figure{display:flex;flex-direction:column;align-items:center;gap:.6rem;}
+.rule{display:block;width:100%;height:7px;opacity:.7;}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
+}
 </style>
 </head>
 <body>
+<div class="figure">
 <div class="code">404</div>
+<svg class="rule" viewBox="0 0 200 7" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="0.5" x2="200" y2="0.5" stroke="#C9AA7C" stroke-width="1"/><line x1="0" y1="6.5" x2="200" y2="6.5" stroke="#C9AA7C" stroke-width="1"/></svg>
+</div>
 <h1>This page does not reconcile.</h1>
 <p>The entry you are looking for is not in this ledger. Check the reference, or return to the record and start from a figure that exists.</p>
 <a class="back" href="/">Return to the record</a>
 <div class="stamp"><svg viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza &middot; muhammadhamza.co.uk</div>
+<script src="/vendor/gsap/gsap.min.js"></script>
+<script src="/vendor/gsap/ScrambleTextPlugin.min.js"></script>
+<script src="/vendor/gsap/DrawSVGPlugin.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap || !window.ScrambleTextPlugin || !window.DrawSVGPlugin) { return; }
+  gsap.registerPlugin(ScrambleTextPlugin, DrawSVGPlugin);
+  var code = document.querySelector(".code");
+  var lines = document.querySelectorAll(".rule line");
+  if (!code || lines.length !== 2) { return; }
+  /* Reduced motion: the static markup is already the final state, so
+     bail before any start state is applied. */
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { return; }
+  /* Undrawn start states live here, not in CSS, so no-JS visitors see
+     the figure and the ruling-off complete. */
+  gsap.set(lines, { drawSVG: "0%" });
+  gsap.timeline({ defaults: { ease: "power2.out" } })
+    .to(code, {
+      duration: 0.6,
+      scrambleText: { text: "404", chars: "0123456789", speed: 1 }
+    })
+    .to(lines, { duration: 0.5, drawSVG: "100%" });
+})();
+</script>
 </body>
 </html>
