@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The calibration</title>
+<meta name="description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50. By Muhammad Hamza.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/calibration/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="The calibration">
+<meta property="og:description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/calibration/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The calibration">
+<meta name="twitter:description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --raise-2:#171A1C;
+  --line:#22262A;
+  --text:#F2F4F5;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-hi:#E2C79A;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:50rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+article{
+  max-width:50rem;
+  margin:0 auto;
+  padding:clamp(3rem,7vw,5rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
+p.lede{color:var(--text-2);max-width:62ch;margin:0;}
+p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+.gnote{color:var(--text-3);font-size:.9rem;margin:0 0 1.3rem;max-width:60ch;}
+
+/* ---------- instrument index ---------- */
+.menu{display:grid;gap:.8rem;margin-top:2.4rem;}
+.gcard{
+  display:flex;
+  gap:1.2rem;
+  align-items:flex-start;
+  padding:1.1rem 1.3rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+}
+.gcard .no{font-family:var(--mono);font-size:.6875rem;letter-spacing:.15em;color:var(--brass);flex:none;margin-top:.4rem;}
+.gcard .gmain{flex:1;min-width:0;}
+.gcard h2{margin:0;font-size:1.05rem;font-weight:600;letter-spacing:-.01em;}
+.gcard .gmain p{margin:.1rem 0 0;color:var(--text-3);font-size:.9rem;line-height:1.55;}
+.gcard .best{
+  display:block;
+  margin:.4rem 0 0;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+.gcard .btn{flex:none;align-self:center;}
+@media (max-width:34rem){
+  .gcard{flex-wrap:wrap;}
+  .gcard .btn{margin-left:calc(1.2rem + 2ch);}
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:1px solid var(--line);
+  color:var(--text-2);
+  padding:.55rem 1.2rem;
+  border-radius:2rem;
+  cursor:pointer;
+  transition:border-color .25s ease,color .25s ease;
+}
+.btn:hover{border-color:var(--brass);color:var(--text);}
+.btn.primary{border-color:var(--brass);color:var(--brass);}
+.btn.primary:hover{color:var(--brass-hi);border-color:var(--brass-hi);}
+.btn:disabled{opacity:.4;cursor:default;border-color:var(--line);color:var(--text-3);}
+.btn:disabled:hover{border-color:var(--line);color:var(--text-3);}
+.btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem;}
+
+/* ---------- the stage ---------- */
+.ghead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:2.4rem 0 .4rem;}
+.ghead h2{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
+.ghead h2 i{font-family:var(--mono);font-style:normal;font-size:.6875rem;letter-spacing:.15em;color:var(--brass);vertical-align:.45em;margin-right:.6rem;}
+button.gback{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  background:none;border:0;padding:0;
+  cursor:pointer;
+  transition:color .25s ease;
+  white-space:nowrap;
+}
+button.gback:hover{color:var(--brass);}
+.board{
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  padding:1.2rem;
+  position:relative;
+}
+.stageline{
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.stageline b{color:var(--text-2);font-weight:400;}
+.meter{
+  height:.6rem;
+  border:1px solid var(--line);
+  border-radius:.35rem;
+  background:var(--void);
+  overflow:hidden;
+  position:relative;
+  margin:.9rem 0 .35rem;
+}
+.meter-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--brass),var(--brass-hi));
+  transition:width .6s ease;
+}
+.meter.noanim .meter-fill{transition:none;}
+.meter::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 1px),var(--line) calc(10% - 1px),var(--line) 10%);
+  pointer-events:none;
+}
+.meterlab{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin:0;
+}
+.sprompt{margin-top:1.1rem;}
+.sprompt .rinst{color:var(--text-2);font-size:.95rem;margin:0 0 .6rem;max-width:56ch;}
+.rlab{font-family:var(--mono);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin:0 0 .3rem;}
+.scontrols{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.sreport{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.05em;
+  line-height:1.7;
+  color:var(--text-2);
+  min-height:1.5em;
+  margin:1rem 0 0;
+}
+.sreport b{color:var(--brass);font-weight:400;}
+
+/* ---------- results ---------- */
+.results{margin-top:.8rem;}
+.final{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:3.4rem;
+  margin:.6rem 0 0;
+  line-height:1.1;
+  color:var(--text);
+}
+.fverdict{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.7rem;
+  color:var(--brass);
+  margin:.3rem 0 0;
+}
+.rmeas{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.75rem;letter-spacing:.06em;color:var(--text-3);margin:.5rem 0 0;}
+
+/* ---------- hooks for instrument files ----------
+   Instruments style themselves with the classes above plus these.
+   No instrument ships its own CSS. */
+.cal-field{
+  position:relative;
+  height:240px;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background:var(--void);
+  overflow:hidden;
+  touch-action:none;
+}
+.cal-input{
+  width:100%;
+  max-width:22rem;
+  padding:.7rem 1rem;
+  background:var(--void);
+  border:1px solid var(--line);
+  border-radius:.6rem;
+  color:var(--text);
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:1.15rem;
+  letter-spacing:.12em;
+  outline:none;
+  transition:border-color .25s ease;
+}
+.cal-input:focus{border-color:var(--brass);}
+.cal-figure{
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:clamp(1.3rem,1.1rem + 1.4vw,2rem);
+  letter-spacing:.14em;
+  color:var(--text);
+  margin:.4rem 0;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.cal-swatch{
+  width:6rem;
+  height:6rem;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  flex:none;
+}
+.cal-note{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+  margin:.5rem 0 0;
+}
+
+footer{border-top:1px solid var(--line);margin-top:3rem;}
+footer .in{
+  max-width:50rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;animation-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/">The record</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <div id="intro">
+    <p class="label"><b>Off the record</b> &middot; instruments</p>
+    <h1>The calibration</h1>
+    <p class="byline">Five instruments &middot; five rounds each &middot; bests stay on this device</p>
+    <hr>
+    <p class="lede">Precision is not a gift. It is a practice, and practice slips quietly. These five instruments put a figure on <em>how far yours has slipped</em>.</p>
+  </div>
+
+  <noscript><p class="gnote" style="margin-top:2rem;">The instruments need JavaScript to take a reading. The rest of the site does not.</p></noscript>
+
+  <div class="menu" id="menu" tabindex="-1">
+    <div class="gcard" id="card-estimate">
+      <span class="no">01</span>
+      <div class="gmain">
+        <h2>The estimate</h2>
+        <p>A stretch of time shown once, then held from memory.</p>
+        <span class="best" id="best-estimate">needs JavaScript</span>
+      </div>
+      <button class="btn primary" id="begin-estimate" type="button" disabled>Begin</button>
+    </div>
+    <div class="gcard" id="card-rekey">
+      <span class="no">02</span>
+      <div class="gmain">
+        <h2>The re-key</h2>
+        <p>A reference shown once, then entered from memory, exactly.</p>
+        <span class="best" id="best-rekey">needs JavaScript</span>
+      </div>
+      <button class="btn primary" id="begin-rekey" type="button" disabled>Begin</button>
+    </div>
+    <div class="gcard" id="card-moved">
+      <span class="no">03</span>
+      <div class="gmain">
+        <h2>The moved entry</h2>
+        <p>One mark is shifted while you watch. Return it to its place.</p>
+        <span class="best" id="best-moved">needs JavaScript</span>
+      </div>
+      <button class="btn primary" id="begin-moved" type="button" disabled>Begin</button>
+    </div>
+    <div class="gcard" id="card-shade">
+      <span class="no">04</span>
+      <div class="gmain">
+        <h2>The shade</h2>
+        <p>A colour witnessed, then mixed again by eye.</p>
+        <span class="best" id="best-shade">needs JavaScript</span>
+      </div>
+      <button class="btn primary" id="begin-shade" type="button" disabled>Begin</button>
+    </div>
+    <div class="gcard" id="card-interval">
+      <span class="no">05</span>
+      <div class="gmain">
+        <h2>The interval</h2>
+        <p>A tone sounded once, then found again by ear.</p>
+        <span class="best" id="best-interval">needs JavaScript</span>
+      </div>
+      <button class="btn primary" id="begin-interval" type="button" disabled>Begin</button>
+    </div>
+  </div>
+
+  <!-- the shared stage: one play area for whichever instrument is open -->
+  <section id="stage" hidden tabindex="-1" aria-label="Instrument stage">
+    <div class="ghead">
+      <h2><i id="sno">01</i><span id="sname"></span></h2>
+      <button class="gback" id="sback" type="button">All instruments</button>
+    </div>
+    <div class="board" id="sboard">
+      <div class="stageline"><span id="sround">ROUND 1/5</span><span id="stotal">TOTAL <b>0/50</b></span></div>
+      <div class="meter" id="meter" aria-hidden="true"><div class="meter-fill" id="meterfill"></div></div>
+      <p class="meterlab" id="meterlab">precision &middot;/10</p>
+      <div class="sprompt" id="sprompt"></div>
+      <div class="scontrols" id="scontrols"></div>
+      <p class="sreport" id="sreport" role="status" aria-live="polite"></p>
+    </div>
+    <div class="board results" id="results" hidden tabindex="-1">
+      <p class="rlab">The reading</p>
+      <p class="final" id="rtotal">0/50</p>
+      <p class="fverdict" id="rverdict"></p>
+      <p class="rmeas" id="rbestline" role="status"></p>
+      <div class="btnrow">
+        <button class="btn primary" id="rreplay" type="button">Replay</button>
+        <button class="btn" id="rback" type="button">Back to instruments</button>
+      </div>
+    </div>
+  </section>
+
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/">Back to the record</a></p>
+    <p class="label"><a href="/appendix/">The appendix</a></p>
+    <p class="label">No prizes. Bests stay on this device.</p>
+  </div>
+</footer>
+
+<script>
+/* =============================================================
+   THE CALIBRATION SHELL AND REGISTRY: window.CAL
+
+   Instrument files live in ./i/ and load after this script.
+   Each is a classic script containing one IIFE that calls:
+
+     CAL.register({
+       id:    "estimate",           one of: estimate, rekey, moved,
+                                    shade, interval
+       name:  "The estimate",       shown as the stage title
+       blurb: "One line.",          one line, kept for reference
+       build: function (stageEl, api) { ... }
+     });
+
+   build(stageEl, api) is called ONCE per session start (Begin or
+   Replay). stageEl is the stage board element; instruments lay out
+   their round through the api rather than by writing to the board
+   directly. The shell owns the five round loop, the precision
+   meter, the running total, the results card and all bests.
+
+   api, valid for that session only:
+     api.round                current round, 1 to 5. Advances after
+                              each accepted submitRound.
+     api.submitRound(s, d)    log the round: s is the score, 0 to 10
+                              (clamped, rounded to an integer); d is
+                              a short detail line (HTML) shown in the
+                              round report. The shell sweeps the
+                              meter, updates the running total and
+                              advances the round. Calls beyond the
+                              fifth round are ignored. The instrument
+                              then presents its next round in its own
+                              time via setPrompt and setControls.
+     api.done()               end the session and show the results
+                              card. Rounds never submitted score 0.
+                              Call it after the fifth submitRound.
+     api.rng()                seeded PRNG, 0 to 1, fresh seed each
+                              session. Use it for every random draw
+                              so a session is internally coherent.
+     api.RM                   true when the reader prefers reduced
+                              motion: no sweeps, no travel, instant
+                              states.
+     api.setPrompt(html)      set the instruction area (innerHTML).
+     api.setControls(el)      put one element (usually a button or a
+                              small wrapper) in the control row, or
+                              pass null to clear it.
+
+   Scoring: five rounds of 0 to 10 make a total out of 50. The best
+   per instrument is kept under localStorage key "cal-best-<id>",
+   always read and written inside try/catch; with storage blocked
+   the page runs fully, bests are simply not remembered.
+
+   A missing or failed instrument file never breaks the page: its
+   card reads "away for repair" and its Begin stays disabled.
+   ============================================================= */
+(function () {
+"use strict";
+
+function $(id) { return document.getElementById(id); }
+function readLS(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function writeLS(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+var RM = false;
+try {
+  RM = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+} catch (e) {}
+
+var IDS = ["estimate", "rekey", "moved", "shade", "interval"];
+var registry = {};
+var session = null;
+var lastId = null;
+
+/* ---------- meter ---------- */
+var meterEl = $("meter");
+var fillEl = $("meterfill");
+var meterLab = $("meterlab");
+
+function meterZero() {
+  meterEl.classList.add("noanim");
+  fillEl.style.width = "0%";
+  meterLab.textContent = "precision ·/10";
+  // force the zero to land before any animated sweep
+  void fillEl.offsetWidth;
+  meterEl.classList.remove("noanim");
+}
+function meterSweep(s) {
+  meterEl.classList.add("noanim");
+  fillEl.style.width = "0%";
+  void fillEl.offsetWidth;
+  if (RM) {
+    // instant state: land the width while transitions are off
+    fillEl.style.width = (s * 10) + "%";
+    void fillEl.offsetWidth;
+    meterEl.classList.remove("noanim");
+  } else {
+    meterEl.classList.remove("noanim");
+    fillEl.style.width = (s * 10) + "%";
+  }
+  meterLab.textContent = "precision " + s + "/10";
+}
+
+/* ---------- verdicts and bests ---------- */
+function verdict(total) {
+  if (total >= 48) { return "Within tolerance."; }
+  if (total >= 40) { return "Serviceable."; }
+  if (total >= 30) { return "Drifting. Recalibrate."; }
+  return "Off the books. Again.";
+}
+function bestOf(id) {
+  var v = parseInt(readLS("cal-best-" + id) || "", 10);
+  return isNaN(v) ? -1 : v;
+}
+
+/* ---------- the session api ---------- */
+function makeApi(sess) {
+  return {
+    get round() { return Math.min(sess.scores.length + 1, 5); },
+    RM: RM,
+    rng: sess.rng,
+    setPrompt: function (html) {
+      if (sess !== session || sess.over) { return; }
+      $("sprompt").innerHTML = html == null ? "" : String(html);
+    },
+    setControls: function (el) {
+      if (sess !== session || sess.over) { return; }
+      var c = $("scontrols");
+      while (c.firstChild) { c.removeChild(c.firstChild); }
+      if (el) { c.appendChild(el); }
+    },
+    submitRound: function (score, detailHtml) {
+      if (sess !== session || sess.over || sess.scores.length >= 5) { return; }
+      var s = Math.round(Number(score));
+      if (isNaN(s)) { s = 0; }
+      s = clamp(s, 0, 10);
+      sess.scores.push(s);
+      sess.total += s;
+      meterSweep(s);
+      $("stotal").innerHTML = "TOTAL <b>" + sess.total + "/50</b>";
+      $("sreport").innerHTML =
+        (detailHtml ? String(detailHtml) + " &middot; " : "") +
+        "<b>" + s + "/10</b> for the round &middot; running total " + sess.total + "/50";
+      if (sess.scores.length < 5) {
+        $("sround").textContent = "ROUND " + (sess.scores.length + 1) + "/5";
+      }
+    },
+    done: function () {
+      if (sess !== session || sess.over) { return; }
+      sess.over = true;
+      var total = sess.total; // unsubmitted rounds stand at 0
+      var prev = bestOf(sess.id);
+      var isBest = total > prev;
+      if (isBest) { writeLS("cal-best-" + sess.id, String(total)); }
+      $("sboard").hidden = true;
+      $("rtotal").textContent = total + "/50";
+      $("rverdict").textContent = verdict(total);
+      $("rbestline").textContent = isBest
+        ? "a new best for this device"
+        : "best on this device: " + Math.max(prev, total) + "/50";
+      $("results").hidden = false;
+      $("results").focus();
+    }
+  };
+}
+
+/* ---------- open, close, replay ---------- */
+function begin(id) {
+  var def = registry[id];
+  if (!def) { return; }
+  lastId = id;
+  var seed = (Date.now() ^ Math.floor(Math.random() * 0x7FFFFFFF)) | 0;
+  session = { id: id, scores: [], total: 0, over: false, rng: mulberry32(seed) };
+  $("intro").hidden = true;
+  $("menu").hidden = true;
+  $("stage").hidden = false;
+  $("results").hidden = true;
+  $("sboard").hidden = false;
+  $("sno").textContent = pad2(IDS.indexOf(id) + 1);
+  $("sname").textContent = def.name || id;
+  $("sround").textContent = "ROUND 1/5";
+  $("stotal").innerHTML = "TOTAL <b>0/50</b>";
+  $("sreport").textContent = "";
+  $("sprompt").innerHTML = "";
+  var c = $("scontrols");
+  while (c.firstChild) { c.removeChild(c.firstChild); }
+  meterZero();
+  window.scrollTo(0, 0);
+  $("stage").focus();
+  try {
+    def.build($("sboard"), makeApi(session));
+  } catch (e) {
+    $("sreport").textContent = "The instrument has jammed. Press Escape to return to the index.";
+  }
+}
+
+function backToIndex() {
+  session = null;
+  $("stage").hidden = true;
+  $("intro").hidden = false;
+  $("menu").hidden = false;
+  menuBests();
+  window.scrollTo(0, 0);
+  $("menu").focus();
+}
+
+$("sback").addEventListener("click", backToIndex);
+$("rback").addEventListener("click", backToIndex);
+$("rreplay").addEventListener("click", function () {
+  if (lastId) { begin(lastId); }
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && !$("stage").hidden) { backToIndex(); }
+});
+
+/* ---------- the index ---------- */
+function menuBests() {
+  var i, id, el, v;
+  for (i = 0; i < IDS.length; i++) {
+    id = IDS[i];
+    el = $("best-" + id);
+    if (!registry[id]) {
+      el.textContent = "away for repair";
+      continue;
+    }
+    v = bestOf(id);
+    el.textContent = v >= 0 ? "best " + v + "/50" : "no record yet";
+  }
+}
+
+function finalise() {
+  var i, id, btn;
+  for (i = 0; i < IDS.length; i++) {
+    id = IDS[i];
+    btn = $("begin-" + id);
+    if (registry[id]) {
+      btn.disabled = false;
+      btn.addEventListener("click", (function (gid) {
+        return function () { begin(gid); };
+      })(id));
+    } else {
+      btn.disabled = true;
+    }
+  }
+  menuBests();
+}
+// instrument files load after this script; the registry is complete
+// by DOMContentLoaded, so the cards are finalised there
+document.addEventListener("DOMContentLoaded", finalise);
+
+/* ---------- the registry ---------- */
+window.CAL = {
+  register: function (def) {
+    if (!def || IDS.indexOf(def.id) === -1) { return; }
+    if (typeof def.build !== "function") { return; }
+    registry[def.id] = def;
+  },
+  begin: begin,
+  back: backToIndex
+};
+
+})();
+</script>
+<script src="./i/estimate.js"></script>
+<script src="./i/rekey.js"></script>
+<script src="./i/moved.js"></script>
+<script src="./i/shade.js"></script>
+<script src="./i/interval.js"></script>
+
+</body>
+</html>
