@@ -25,27 +25,32 @@ const SPOTS = [
 const COLLECT_R2 = 2.5 * 2.5;
 const REST_Y = 0.95;
 
-export function initReceipts(THREE, scene, onCollect) {
+export function initReceipts(THREE, scene, onCollect, reduceMotion) {
   /* A faint warm pool under each slip, so it reads from the road. */
   const glowCanvas = document.createElement("canvas");
   glowCanvas.width = glowCanvas.height = 128;
   const c = glowCanvas.getContext("2d");
   const grad = c.createRadialGradient(64, 64, 6, 64, 64, 64);
-  grad.addColorStop(0, "rgba(226,199,154,0.30)");
-  grad.addColorStop(0.5, "rgba(201,170,124,0.10)");
-  grad.addColorStop(1, "rgba(201,170,124,0)");
+  grad.addColorStop(0, "rgba(232,204,156,0.5)");
+  grad.addColorStop(0.5, "rgba(212,178,128,0.18)");
+  grad.addColorStop(1, "rgba(212,178,128,0)");
   c.fillStyle = grad;
   c.fillRect(0, 0, 128, 128);
   const glowTex = new THREE.CanvasTexture(glowCanvas);
   glowTex.colorSpace = THREE.SRGBColorSpace;
 
   const paperGeo = new THREE.PlaneGeometry(0.62, 0.88);
+  /* The slip itself burns gently past the bloom threshold, a lit page
+     hanging in the dark; the pool below stays a soft additive wash.
+     Each slip clones the material at boot so its periodic twinkle can
+     keep its own time; under reduced motion the glow simply holds. */
+  const PAPER_GLOW = 1.1;
   const paperMat = new THREE.MeshStandardMaterial({
     color: 0xEDEAE4,
     roughness: 0.6,
     metalness: 0,
     emissive: 0xEDEAE4,
-    emissiveIntensity: 0.18,
+    emissiveIntensity: PAPER_GLOW,
     side: THREE.DoubleSide,
   });
   const glowGeo = new THREE.CircleGeometry(1.15, 20);
@@ -61,7 +66,7 @@ export function initReceipts(THREE, scene, onCollect) {
   for (let i = 0; i < SPOTS.length; i += 1) {
     const spot = SPOTS[i];
     const g = new THREE.Group();
-    const paper = new THREE.Mesh(paperGeo, paperMat);
+    const paper = new THREE.Mesh(paperGeo, paperMat.clone());
     paper.position.y = REST_Y;
     const glow = new THREE.Mesh(glowGeo, glowMat);
     glow.rotation.x = -Math.PI / 2;
@@ -77,7 +82,10 @@ export function initReceipts(THREE, scene, onCollect) {
   let time = 0;
   let count = 0;
 
-  /* Slow spin, gentle bob, and the pick up check against the car. */
+  /* Slow spin, gentle bob, a periodic twinkle, and the pick up check
+     against the car. The twinkle is the crest of a slow sin wave, so
+     each slip flares softly for a moment every several seconds; it is
+     stilled entirely under reduced motion. */
   function update(dt, carX, carZ) {
     time += dt;
     for (let i = 0; i < items.length; i += 1) {
@@ -85,6 +93,11 @@ export function initReceipts(THREE, scene, onCollect) {
       if (it.taken) continue;
       it.paper.rotation.y = time * 1.05 + it.phase;
       it.paper.position.y = REST_Y + Math.sin(time * 1.7 + it.phase) * 0.1;
+      if (!reduceMotion) {
+        const crest = Math.sin(time * 0.9 + it.phase * 2.3);
+        it.paper.material.emissiveIntensity =
+          PAPER_GLOW + (crest > 0.92 ? (crest - 0.92) * 7 : 0);
+      }
       const dx = carX - it.x;
       const dz = carZ - it.z;
       if (dx * dx + dz * dz <= COLLECT_R2) {

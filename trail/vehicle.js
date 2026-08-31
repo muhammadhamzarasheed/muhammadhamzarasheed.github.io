@@ -78,7 +78,9 @@ export function buildCar(THREE, CANNON, scene, world) {
 
   /* ---------- the toy itself ---------- */
   /* A proper little coupe: tub, bonnet, rear deck, cabin, a glossy
-     screen, arches over the wheels, brass rims, lamps at both ends. */
+     screen, arches over the wheels, brass rims, lamps at both ends.
+     Every box comes through edged, so the panels arrive rounded and
+     softly shaded by default, a die cast body rather than a crate. */
   const group = new THREE.Group();
 
   const tub = edged(new THREE.BoxGeometry(0.94, 0.26, 1.9), { line: BRASS_BRIGHT });
@@ -95,10 +97,37 @@ export function buildCar(THREE, CANNON, scene, world) {
     opacity: 0.55,
     roughness: 0.14,
     metalness: 0.4,
+    emissive: LAMP,
+    emissiveIntensity: 0.16,
   });
   screen.position.set(0, 0.42, 0.3);
   screen.rotation.x = -0.42;
   group.add(tub, bonnet, deck, cabin, screen);
+
+  /* A brass pinstripe rides the waist of the body: one emissive
+     hairline, drawn hot enough to halo, tracing the tub a hair proud
+     of its shoulders with a small chamfer at each corner. */
+  const SPX = 0.49;
+  const SPZ = 0.97;
+  const SPY = 0.235;
+  const CH = 0.16;
+  const stripePts = [
+    new THREE.Vector3(SPX - CH, SPY, SPZ),
+    new THREE.Vector3(-SPX + CH, SPY, SPZ),
+    new THREE.Vector3(-SPX, SPY, SPZ - CH),
+    new THREE.Vector3(-SPX, SPY, -SPZ + CH),
+    new THREE.Vector3(-SPX + CH, SPY, -SPZ),
+    new THREE.Vector3(SPX - CH, SPY, -SPZ),
+    new THREE.Vector3(SPX, SPY, -SPZ + CH),
+    new THREE.Vector3(SPX, SPY, SPZ - CH),
+  ];
+  const pinstripe = new THREE.LineLoop(
+    new THREE.BufferGeometry().setFromPoints(stripePts),
+    new THREE.LineBasicMaterial({
+      color: new THREE.Color(BRASS).multiplyScalar(2.1),
+    }),
+  );
+  group.add(pinstripe);
 
   /* Arches riding the tub's shoulders, one over each wheel. */
   const archGeo = new THREE.BoxGeometry(0.14, 0.15, 0.66);
@@ -108,12 +137,13 @@ export function buildCar(THREE, CANNON, scene, world) {
     group.add(arch);
   }
 
-  /* Headlight lenses, emissive and warm; brass warm tail lamps. */
+  /* Headlight lenses, emissive and warm, hot enough to halo under the
+     bloom; brass warm tail lamps burning the same way. */
   const lensGeo = new THREE.BoxGeometry(0.16, 0.1, 0.04);
   const lensMat = new THREE.MeshStandardMaterial({
     color: 0xFFEACB,
     emissive: 0xFFDFAE,
-    emissiveIntensity: 2.4,
+    emissiveIntensity: 3.2,
     roughness: 0.35,
     metalness: 0,
   });
@@ -126,7 +156,7 @@ export function buildCar(THREE, CANNON, scene, world) {
   const tailMat = new THREE.MeshStandardMaterial({
     color: BRASS_BRIGHT,
     emissive: BRASS,
-    emissiveIntensity: 1.3,
+    emissiveIntensity: 2.2,
     roughness: 0.4,
     metalness: 0.2,
   });
@@ -136,9 +166,9 @@ export function buildCar(THREE, CANNON, scene, world) {
     group.add(tail);
   }
 
-  /* One real headlight: a single warm spot pooling on the road ahead.
-     Shadowless and cheap; the lenses above carry the glow itself. */
-  const headBeam = new THREE.SpotLight(LAMP, 40, 30, 0.5, 0.6, 1.6);
+  /* One real headlight: a single warm spot pooling bright on the road
+     ahead. Shadowless and cheap; the lenses carry the glow itself. */
+  const headBeam = new THREE.SpotLight(LAMP, 60, 32, 0.55, 0.6, 1.6);
   headBeam.position.set(0, 0.34, 0.9);
   headBeam.castShadow = false;
   const headTarget = new THREE.Object3D();
@@ -150,20 +180,84 @@ export function buildCar(THREE, CANNON, scene, world) {
   group.traverse((node) => {
     if (node.isMesh) node.castShadow = true;
   });
+
+  /* The beams made visible: two faint volumetric cones off the
+     lenses, additive, fading out along their length, apexes at the
+     glass. Added after the shadow walk so they never throw one. */
+  const beamCanvas = document.createElement("canvas");
+  beamCanvas.width = 1;
+  beamCanvas.height = 64;
+  const beamCtx = beamCanvas.getContext("2d");
+  const beamGrad = beamCtx.createLinearGradient(0, 0, 0, 64);
+  beamGrad.addColorStop(0, "#FFFFFF");
+  beamGrad.addColorStop(0.55, "#4D4234");
+  beamGrad.addColorStop(1, "#000000");
+  beamCtx.fillStyle = beamGrad;
+  beamCtx.fillRect(0, 0, 1, 64);
+  const beamTex = new THREE.CanvasTexture(beamCanvas);
+  const beamGeo = new THREE.ConeGeometry(0.8, 5.5, 12, 1, true);
+  beamGeo.rotateX(-Math.PI / 2);
+  beamGeo.translate(0, 0, 2.75);
+  const beamMat = new THREE.MeshBasicMaterial({
+    map: beamTex,
+    color: LAMP,
+    transparent: true,
+    opacity: 0.16,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+  });
+  for (const bx of [0.3, -0.3]) {
+    const cone = new THREE.Mesh(beamGeo, beamMat);
+    cone.position.set(bx, 0.2, 0.95);
+    cone.rotation.x = 0.06;
+    group.add(cone);
+  }
+
+  /* A soft warm glow in the cabin: one additive sprite drawn through
+     the glass at a whisper of opacity, the light of a small lamp left
+     on inside. Depth test off so the warmth reads from every angle;
+     at this size and opacity it stays a glow, never a beacon. */
+  const glowCanvas = document.createElement("canvas");
+  glowCanvas.width = glowCanvas.height = 64;
+  const glowCtx = glowCanvas.getContext("2d");
+  const glowGrad = glowCtx.createRadialGradient(32, 32, 4, 32, 32, 32);
+  glowGrad.addColorStop(0, "rgba(255,255,255,0.85)");
+  glowGrad.addColorStop(0.55, "rgba(255,255,255,0.25)");
+  glowGrad.addColorStop(1, "rgba(255,255,255,0)");
+  glowCtx.fillStyle = glowGrad;
+  glowCtx.fillRect(0, 0, 64, 64);
+  const cabinGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: new THREE.CanvasTexture(glowCanvas),
+    color: LAMP,
+    transparent: true,
+    opacity: 0.3,
+    depthWrite: false,
+    depthTest: false,
+    blending: THREE.AdditiveBlending,
+  }));
+  cabinGlow.scale.set(1.05, 0.72, 1);
+  cabinGlow.position.set(0, 0.5, -0.16);
+  cabinGlow.renderOrder = 3;
+  group.add(cabinGlow);
   scene.add(group);
 
   const wheelGeometry = new THREE.CylinderGeometry(0.26, 0.26, 0.18, 12);
   wheelGeometry.rotateZ(Math.PI / 2);
-  const rimGeometry = new THREE.CylinderGeometry(0.14, 0.14, 0.2, 8);
+  /* Rims sized up a touch, so the brass reads at speed. */
+  const rimGeometry = new THREE.CylinderGeometry(0.17, 0.17, 0.2, 8);
   rimGeometry.rotateZ(Math.PI / 2);
-  const rimMat = brassMat({ emissiveIntensity: 0.12 });
+  const rimMat = brassMat({ emissiveIntensity: 0.35 });
   const wheelMeshes = connections.map(() => {
     const wheel = new THREE.Group();
+    /* The tyres spin, so they skip the contact bake; a fixed shade
+       gradient would wheel around with them. */
     const tyre = edged(wheelGeometry, {
       line: BRASS,
       thresholdAngle: 40,
       fill: 0x141312,
       roughness: 0.9,
+      shaded: false,
     });
     const rim = new THREE.Mesh(rimGeometry, rimMat);
     rim.castShadow = true;
