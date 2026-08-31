@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The audit trail</title>
+<meta name="description" content="The record as a drivable world. Seven districts on one closed loop: method, now, experience, education, journal, field notes and contact.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="canonical" href="https://muhammadhamza.co.uk/trail/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Committed single theme, same ledger as the rest of the site. */
+:root{
+  --void:#0A0B0C;
+  --raise:#121415;
+  --raise-2:#171A1C;
+  --line:#22262A;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-bright:#E2C79A;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+body{
+  margin:0;
+  min-height:100vh;
+  min-height:100svh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+html.trail-on{overflow:hidden;}
+
+/* Film grain, a whisper of texture over everything, never interactive. */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:120;
+  pointer-events:none;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  font-weight:400;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+.mark{height:.95rem;width:auto;color:var(--brass);flex:none;}
+
+/* ---------- stage ---------- */
+#trailstage{position:fixed;inset:0;z-index:0;display:none;}
+#trailstage canvas{display:block;width:100%;height:100%;}
+html.js:not(.reduce):not(.trail-dead) #trailstage{display:block;}
+
+/* ---------- HUD ---------- */
+.hud{visibility:hidden;}
+html.trail-on:not(.trail-dead) .hud{visibility:visible;}
+.hud>*{position:fixed;z-index:10;margin:0;}
+.hud .lockup{top:1.4rem;left:1.6rem;}
+.hud .word{
+  margin:0;
+  display:flex;
+  align-items:center;
+  gap:.55rem;
+  font-size:.9375rem;
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+.hud .ret{
+  display:inline-block;
+  margin-top:.45rem;
+  font-family:var(--mono);
+  font-size:.625rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  border-bottom:1px solid transparent;
+  transition:color .25s ease,border-color .25s ease;
+}
+.hud .ret:hover{color:var(--brass);border-bottom-color:var(--brass);}
+.tally{
+  top:1.55rem;
+  right:1.6rem;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.tally b{color:var(--brass);font-weight:400;}
+.toast{
+  top:1.55rem;
+  left:50%;
+  transform:translate(-50%,-6px);
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-2);
+  white-space:nowrap;
+  opacity:0;
+  transition:opacity .35s ease,transform .35s ease;
+}
+.toast b{color:var(--brass);font-weight:400;}
+.toast.on{opacity:1;transform:translate(-50%,0);}
+.hint{
+  bottom:1.3rem;
+  left:50%;
+  transform:translateX(-50%);
+  width:max-content;
+  max-width:92vw;
+  text-align:center;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  line-height:1.9;
+}
+.hint .sub{font-size:.625rem;color:var(--line-2);color:var(--text-3);opacity:.7;}
+.hint .touch{display:none;}
+@media (pointer:coarse){
+  .hint .keys{display:none;}
+  .hint .touch{display:inline;}
+}
+.linkprompt{
+  bottom:4.8rem;
+  left:50%;
+  transform:translateX(-50%);
+  padding:.65rem 1.1rem;
+  background:var(--raise);
+  border:1px solid var(--line-2);
+  border-radius:.7rem;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:border-color .25s ease;
+}
+.linkprompt:hover{border-color:var(--brass);}
+
+/* ---------- touch dial ---------- */
+#traildial{
+  position:fixed;
+  left:1.4rem;
+  bottom:1.4rem;
+  z-index:20;
+  width:108px;
+  height:108px;
+  border:1px solid rgba(201,170,124,.4);
+  border-radius:50%;
+  background:rgba(18,20,21,.35);
+  touch-action:none;
+  display:none;
+}
+html.trail-on:not(.trail-dead) #traildial{display:block;}
+#traildial .knob{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:40px;
+  height:40px;
+  margin:-20px 0 0 -20px;
+  border-radius:50%;
+  border:1px solid var(--brass);
+  background:var(--brass-soft);
+}
+
+/* ---------- loading veil ---------- */
+#trailveil{
+  position:fixed;
+  inset:0;
+  z-index:70;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1.4rem;
+  background:var(--void);
+  transition:opacity .45s ease;
+}
+html.js:not(.reduce):not(.trail-dead) #trailveil{display:flex;}
+#trailveil.off{opacity:0;pointer-events:none;}
+.vword{
+  margin:0;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-2);
+}
+.vbar{width:10rem;height:2px;background:var(--line);overflow:hidden;}
+.vbar i{
+  display:block;
+  height:100%;
+  width:40%;
+  background:var(--brass);
+  animation:sweep 1.2s ease-in-out infinite;
+}
+@keyframes sweep{
+  from{transform:translateX(-110%);}
+  to{transform:translateX(360%);}
+}
+
+/* ---------- countersign ---------- */
+.cs{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(10,11,12,.88);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  opacity:0;
+  transition:opacity .45s ease;
+}
+.cs.on{opacity:1;}
+.csin{display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center;padding:2rem;}
+.csmark{height:5.5rem;width:auto;color:var(--brass);}
+.cs .csmark path{stroke-dasharray:140;stroke-dashoffset:140;}
+.cs.on .csmark path{
+  stroke-dashoffset:0;
+  transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1);
+}
+.cs.on .csmark path:nth-child(2){transition-delay:.25s;}
+.cs.on .csmark path:nth-child(3){transition-delay:.45s;}
+.csline{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
+.csnav{display:flex;gap:1.9rem;flex-wrap:wrap;justify-content:center;}
+.csnav a,
+.csnav button{
+  padding:0 0 3px;
+  background:none;
+  border:0;
+  border-bottom:1px solid transparent;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--brass);
+  cursor:pointer;
+  transition:border-color .25s ease;
+}
+.csnav a:hover,
+.csnav button:hover{border-bottom-color:var(--brass);}
+
+/* ---------- pause card ---------- */
+.pause{
+  position:fixed;
+  inset:0;
+  z-index:55;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:1.5rem;
+  background:rgba(10,11,12,.7);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.pausecard{
+  width:100%;
+  max-width:21rem;
+  background:var(--raise);
+  border:1px solid var(--line-2);
+  border-radius:1.125rem;
+  padding:1.6rem 1.6rem 1.4rem;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.pausecard nav{display:grid;gap:.1rem;margin:1rem 0 1.2rem;}
+.pausecard nav a{
+  display:flex;
+  gap:.8rem;
+  align-items:baseline;
+  padding:.45rem .5rem;
+  margin:0 -.5rem;
+  border-radius:.5rem;
+  font-family:var(--mono);
+  font-size:.8125rem;
+  color:var(--text-2);
+  transition:background .25s ease,color .25s ease;
+}
+.pausecard nav a b{font-weight:400;color:var(--brass);font-variant-numeric:tabular-nums;}
+.pausecard nav a:hover{background:var(--raise-2);color:var(--text);}
+.pausecard nav a.ret{margin-top:.4rem;border-top:1px solid var(--line);border-radius:0 0 .5rem .5rem;padding-top:.8rem;}
+#trailresume{
+  width:100%;
+  padding:.8rem 1rem;
+  background:var(--brass);
+  border:0;
+  border-radius:.7rem;
+  color:var(--void);
+  font-family:var(--mono);
+  font-size:.8125rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .25s ease;
+}
+#trailresume:hover{opacity:.85;}
+
+/* ---------- fallback list ---------- */
+#traillist{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.1rem;
+  text-align:center;
+  width:100%;
+  max-width:26rem;
+  padding:3.5rem 1.5rem;
+}
+html.js #traillist{display:none;}
+html.reduce #traillist,
+html.trail-dead #traillist{display:flex;}
+#traillist .top{display:flex;align-items:center;gap:.55rem;margin:0;}
+#traillist h1{
+  margin:0;
+  font-size:clamp(1.5rem,4.5vw,2.25rem);
+  font-weight:600;
+  letter-spacing:-.03em;
+  line-height:1.1;
+}
+#traillist .intro{margin:0;color:var(--text-2);line-height:1.65;font-size:.9375rem;}
+#trailenter{
+  margin-top:.4rem;
+  padding:.85rem 1.5rem;
+  background:var(--brass);
+  border:0;
+  border-radius:.8rem;
+  color:var(--void);
+  font-family:var(--mono);
+  font-size:.8125rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .25s ease;
+}
+#trailenter:hover{opacity:.85;}
+#traillist ol{
+  list-style:none;
+  margin:1rem 0 0;
+  padding:0;
+  display:grid;
+  gap:.55rem;
+  width:100%;
+  text-align:left;
+}
+#traillist ol a{
+  display:flex;
+  align-items:baseline;
+  gap:.9rem;
+  padding:.85rem 1.1rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.8rem;
+  font-weight:500;
+  font-size:.9375rem;
+  transition:border-color .25s ease,transform .25s ease;
+}
+#traillist ol a:hover{border-color:var(--brass);transform:translateY(-2px);}
+#traillist ol b{
+  font-family:var(--mono);
+  font-weight:400;
+  font-variant-numeric:tabular-nums;
+  font-size:.75rem;
+  letter-spacing:.1em;
+  color:var(--brass);
+}
+#traillist .back{margin-top:1.4rem;}
+#traillist .back a{transition:color .25s ease;}
+#traillist .back a:hover{color:var(--brass);}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="trailstage" aria-hidden="true"></div>
+
+<div class="hud">
+  <header class="lockup">
+    <p class="word"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>The audit trail</p>
+    <a class="ret" href="/">Return to the record</a>
+  </header>
+  <p class="tally" id="trailtally" aria-live="polite"><b id="trailcount">00</b>/07 reconciled</p>
+  <p class="toast" id="trailtoast" aria-live="polite" hidden><b id="trailtoastnum"></b><span id="trailtoasttxt"></span></p>
+  <button class="linkprompt" id="traillink" type="button" hidden></button>
+  <p class="hint">
+    <span class="keys">Drive with WASD or arrows. Space to brake.<br><span class="sub">R resets the car. E opens a plaque. Escape pauses.</span></span>
+    <span class="touch">Drag the dial to drive</span>
+  </p>
+</div>
+
+<div class="veil" id="trailveil" role="status">
+  <p class="vword">Opening the trail</p>
+  <div class="vbar" aria-hidden="true"><i></i></div>
+</div>
+
+<div class="cs" id="trailcs" role="dialog" aria-modal="true" aria-label="The record reconciles" hidden>
+  <div class="csin">
+    <svg class="csmark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>
+    <p class="csline">The record reconciles.</p>
+    <nav class="csnav">
+      <a href="/">Return to the record</a>
+      <button id="trailcsdrive" type="button">Drive on</button>
+    </nav>
+  </div>
+</div>
+
+<div class="pause" id="trailpause" role="dialog" aria-modal="true" aria-label="Paused" hidden>
+  <div class="pausecard">
+    <p class="label"><b>Paused</b> &middot; The trail holds its place</p>
+    <nav>
+      <a href="/#method"><b>01</b>Method</a>
+      <a href="/#now"><b>02</b>Now</a>
+      <a href="/#experience"><b>03</b>Experience</a>
+      <a href="/#education"><b>04</b>Education</a>
+      <a href="/#journal"><b>05</b>Journal</a>
+      <a href="/#elsewhere"><b>06</b>Field notes</a>
+      <a href="/#contact"><b>07</b>Contact</a>
+      <a class="ret" href="/">Return to the record</a>
+    </nav>
+    <button id="trailresume" type="button">Drive on</button>
+  </div>
+</div>
+
+<main id="traillist">
+  <p class="label top"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>The audit trail</p>
+  <h1>Read the trail as a list</h1>
+  <p class="intro">This page drives the record as a small world: seven districts on one closed loop, each mirroring a chapter of the homepage. Where the world cannot open, the districts below lead straight to the chapters themselves.</p>
+  <button id="trailenter" type="button" hidden>Enter the world</button>
+  <ol>
+    <li><a href="/#method"><b>01</b>Method</a></li>
+    <li><a href="/#now"><b>02</b>Now</a></li>
+    <li><a href="/#experience"><b>03</b>Experience</a></li>
+    <li><a href="/#education"><b>04</b>Education</a></li>
+    <li><a href="/#journal"><b>05</b>Journal</a></li>
+    <li><a href="/#elsewhere"><b>06</b>Field notes</a></li>
+    <li><a href="/#contact"><b>07</b>Contact</a></li>
+  </ol>
+  <p class="label back"><a href="/">Return to the record</a></p>
+</main>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.min.js",
+    "cannon-es": "/vendor/cannon-es/cannon-es.js"
+  }
+}
+</script>
+<script type="module" src="./main.js"></script>
+<script>
+(function () {
+  /* Boot guard. Runs before the module (modules are deferred): claims
+     the page for JS, checks WebGL, honours reduced motion, and falls
+     back to the list if the world has not signalled life in 6 seconds. */
+  var root = document.documentElement;
+  root.className += " js";
+
+  function dead() {
+    root.className = root.className.replace(" trail-on", "");
+    if (root.className.indexOf("trail-dead") === -1) {
+      root.className += " trail-dead";
+    }
+  }
+  window.__trailFallback = dead;
+
+  var canWebgl = false;
+  try {
+    var probe = document.createElement("canvas");
+    canWebgl = !!(window.WebGLRenderingContext &&
+      (probe.getContext("webgl2") || probe.getContext("webgl")));
+  } catch (e) { canWebgl = false; }
+  if (!canWebgl) {
+    window.__trailDead = true;
+    dead();
+    return;
+  }
+
+  var armed = false;
+  function arm() {
+    if (armed) { return; }
+    armed = true;
+    window.setTimeout(function () {
+      if (!window.__trailAlive) { dead(); }
+    }, 6000);
+  }
+
+  var reduce = false;
+  try {
+    reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch (e2) { reduce = false; }
+
+  if (reduce) {
+    /* The list comes first; the world waits for an explicit invitation. */
+    root.className += " reduce";
+    var enter = document.getElementById("trailenter");
+    if (enter) {
+      enter.hidden = false;
+      enter.addEventListener("click", function () {
+        root.className = root.className.replace(" reduce", "");
+        arm();
+        if (window.__trailStart) { window.__trailStart(); }
+        else { window.__trailWanted = true; }
+      });
+    }
+  } else {
+    window.__trailWanted = true;
+    arm();
+  }
+})();
+</script>
+</body>
+</html>
