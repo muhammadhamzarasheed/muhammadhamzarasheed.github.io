@@ -170,6 +170,9 @@ export function initEffects(THREE, scene) {
       opacity: 0,
       depthWrite: false,
     });
+    /* Driven past white in the linear buffer, so a fountain of
+       figures blooms like sparks rather than confetti. */
+    m.color.setScalar(2.3);
     const s = new THREE.Sprite(m);
     s.visible = false;
     glyphGroup.add(s);

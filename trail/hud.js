@@ -183,7 +183,16 @@ export function initMap(layout, roadRadius) {
 }
 
 function sizeMapCanvas() {
-  const size = MAP_SIZES[map.mode === 1 ? 1 : 0];
+  /* Clamped for small viewports: the card keeps clear of the dial on
+     a phone, and the large mode never outgrows the screen. */
+  const vw = window.innerWidth || 360;
+  const vh = window.innerHeight || 640;
+  let size = MAP_SIZES[map.mode === 1 ? 1 : 0];
+  if (map.mode === 1) {
+    size = Math.min(size, Math.floor(vw - 32), Math.floor(vh * 0.6));
+  } else {
+    size = Math.min(size, Math.max(96, Math.floor(vw * 0.32)));
+  }
   map.size = size;
   map.dpr = Math.min(window.devicePixelRatio || 1, 2);
   map.canvas.width = Math.round(size * map.dpr);

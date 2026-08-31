@@ -26,7 +26,9 @@
      helpers        everything world.js exports as helpers:
                     edged(geometry, opts), floorText(text, size, opts),
                     blobShadow(radius), plinth(w, h, d), column(r, h),
-                    beam(length, thickness)
+                    beam(length, thickness), brassMat(opts),
+                    worldText3D(text, size, opts), which returns null
+                    when the letterform face is unavailable
      addStatic(mesh, shape?, mass0Body?)
                     adds the mesh to the scene. With a CANNON shape it
                     also drops a static body at the mesh position,
@@ -49,6 +51,10 @@
 
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { buildWorld, LAYOUT, SPAWN, ROAD_RADIUS, helpers } from "./world.js";
 import { buildCar, TOP_SPEED } from "./vehicle.js";
 import { initEffects } from "./effects.js";
@@ -78,15 +84,36 @@ let camera = null;
 let physics = null;
 let car = null;
 let keyLight = null;
+let composer = null;
+let bloomPass = null;
+let atmosphere = null;
+let glowJoys = null;
 let effects = null;
 let receipts = null;
 let booted = false;
 let veiled = false;
 let reduceMotion = false;
+let coarsePointer = false;
 let lastTime = performance.now();
 let lastInputAt = performance.now();
 let lastStation = SPAWN;
 let activeLink = null;
+let joyTime = 0;
+
+/* Adaptive quality, decided fresh each session and stored nowhere.
+   Once the veil lifts, the real frame loop averages its own frame
+   times over four second windows. A window worse than the budget
+   steps the pipeline down one tier: first the bloom drops to half
+   resolution and the composer to a pixel ratio of 1, then the bloom
+   goes altogether; a window inside the budget settles the decision. */
+const PERF_WINDOW_MS = 4000;
+const PERF_BUDGET_MS = 22;
+let composerRatio = 1;
+let qualityTier = 0;
+let qualitySettled = false;
+let qualityAvgMs = 0;
+let perfAccum = 0;
+let perfFrames = 0;
 
 const updateFns = [];
 const triggers = [];
@@ -122,15 +149,15 @@ let dustTimer = 0;
 function start() {
   if (booted || window.__trailDead) return;
   booted = true;
-  try {
-    boot();
-  } catch (err) {
+  /* boot is async, awaiting the world build; any failure along the
+     way, sync or not, folds into the same fallback. */
+  boot().catch((err) => {
     if (window.__trailFallback) window.__trailFallback();
     console.error(err);
-  }
+  });
 }
 
-function boot() {
+async function boot() {
   hud.initHud();
   hud.initMap(LAYOUT, ROAD_RADIUS);
 
@@ -149,7 +176,45 @@ function boot() {
      long before it. */
   camera = new THREE.PerspectiveCamera(30, 1, 0.5, 900);
 
-  keyLight = buildWorld(THREE, scene).keyLight;
+  try {
+    coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+  } catch (err) {
+    coarsePointer = false;
+  }
+
+  /* The night pipeline: the scene renders through a selective bloom,
+     thresholded high so only the genuinely emissive things halo, the
+     brass, the lamps, the lenses, the stars, while the dark world
+     stays crisp. The composer runs at a gentler pixel ratio than the
+     canvas, capped tighter still on touch hardware; the OutputPass
+     carries tone mapping and colour out. Should any of it fail to
+     stand, the world simply renders plain: tick falls back to
+     renderer.render whenever composer is null. */
+  try {
+    composer = new EffectComposer(renderer);
+    composerRatio = Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.25 : 1.5);
+    composer.setPixelRatio(composerRatio);
+    composer.addPass(new RenderPass(scene, camera));
+    bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth || 1, window.innerHeight || 1),
+      0.55,   /* strength: a halo, never a wash */
+      0.4,    /* radius */
+      0.85,   /* threshold: only real light crosses */
+    );
+    composer.addPass(bloomPass);
+    composer.addPass(new OutputPass());
+  } catch (err) {
+    composer = null;
+    bloomPass = null;
+    console.error(err);
+  }
+
+  /* The world build awaits its letterform face, so 3D type stands
+     ready before any district builds. */
+  const world = await buildWorld(THREE, scene);
+  keyLight = world.keyLight;
+  atmosphere = world.updateAtmosphere;
+  glowJoys = world.updateGlow;
 
   physics = new CANNON.World();
   physics.gravity.set(0, -9.82, 0);
@@ -163,6 +228,15 @@ function boot() {
   ground.addShape(new CANNON.Box(new CANNON.Vec3(300, 1, 300)), new CANNON.Vec3(0, -1, 0));
   physics.addBody(ground);
 
+  /* The standing monogram at the loop's centre is solid: one low box
+     under the letters, turned with the lockup, so the heart landmark
+     is driven around rather than through. */
+  const heart = new CANNON.Body({ mass: 0 });
+  heart.addShape(new CANNON.Box(new CANNON.Vec3(3.7, 0.75, 1.2)));
+  heart.position.set(0, 0.75, 0);
+  heart.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 4);
+  physics.addBody(heart);
+
   car = buildCar(THREE, CANNON, scene, physics);
   car.reset(new THREE.Vector3(SPAWN.x, 0, SPAWN.z), SPAWN.angle);
 
@@ -173,7 +247,7 @@ function boot() {
   }
 
   effects = initEffects(THREE, scene);
-  receipts = initReceipts(THREE, scene, onReceipt);
+  receipts = initReceipts(THREE, scene, onReceipt, reduceMotion);
 
   /* Lay the districts out on their stations and wire the tally: the
      first entry into each reconciles it; all seven countersign. A
@@ -197,6 +271,25 @@ function boot() {
         hud.countersign();
       }
     }, null);
+  }
+
+  /* Each district's title stands as 3D letterforms behind its plot,
+     out along the station's outward vector and turned to the fixed
+     camera diagonal, the same convention the floor type reads by.
+     Where the letterform face could not load, the eyebrows on the
+     ground still carry the names alone. */
+  for (const mod of DISTRICTS) {
+    const st = LAYOUT[mod.index - 1];
+    const standing = helpers.worldText3D(mod.title, 2.4);
+    if (standing) {
+      standing.position.set(
+        st.x + Math.cos(st.angle) * 33,
+        0,
+        st.z - Math.sin(st.angle) * 33,
+      );
+      standing.rotation.y = Math.PI / 4;
+      scene.add(standing);
+    }
   }
 
   wireInput();
@@ -287,7 +380,11 @@ function addLink(x, z, label, url) {
   }
   const ring = new THREE.LineLoop(
     new THREE.BufferGeometry().setFromPoints(pts),
-    new THREE.LineBasicMaterial({ color: 0xC9AA7C, transparent: true, opacity: 0.6 }),
+    new THREE.LineBasicMaterial({
+      color: new THREE.Color(0xC9AA7C).multiplyScalar(2.1),
+      transparent: true,
+      opacity: 0.6,
+    }),
   );
   ring.position.y = 0.04;
   group.add(ring);
@@ -391,13 +488,7 @@ function wireInput() {
   window.addEventListener("pointerdown", poke);
   window.addEventListener("touchstart", poke, { passive: true });
   document.getElementById("traillink").addEventListener("click", openActiveLink);
-  let coarse = false;
-  try {
-    coarse = window.matchMedia("(pointer: coarse)").matches;
-  } catch (err) {
-    coarse = false;
-  }
-  if (coarse) buildDial();
+  if (coarsePointer) buildDial();
 }
 
 /* A brass dial for thumbs: drag up to drive, sideways to steer. */
@@ -470,8 +561,56 @@ function onResize() {
      draw buffer to a single pixel; keep the last real size instead. */
   if (w < 2 || h < 2) return;
   renderer.setSize(w, h);
+  if (composer) {
+    composer.setSize(w, h);
+    /* The composer hands every pass its full buffer size, so the half
+       resolution bloom of quality tier 1 is reasserted after it. */
+    if (qualityTier === 1 && bloomPass) {
+      bloomPass.setSize(
+        Math.max(1, Math.round((w * composerRatio) / 2)),
+        Math.max(1, Math.round((h * composerRatio) / 2)),
+      );
+    }
+  }
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
+}
+
+/* Steps the render pipeline down one tier. Tier 1 halves the bloom's
+   working resolution and drops the composer to a pixel ratio of 1;
+   tier 2 removes the bloom pass altogether. */
+function applyQuality(tier) {
+  if (!composer) return;
+  if (tier === 1 && bloomPass) {
+    composerRatio = 1;
+    composer.setPixelRatio(1);
+    bloomPass.setSize(
+      Math.max(1, Math.round(window.innerWidth / 2)),
+      Math.max(1, Math.round(window.innerHeight / 2)),
+    );
+  } else if (tier === 2 && bloomPass) {
+    composer.removePass(bloomPass);
+    bloomPass.dispose();
+    bloomPass = null;
+  }
+}
+
+/* One real frame's cost, in milliseconds, fed from the live loop
+   only; the dev harness steps never count. */
+function samplePerf(ms) {
+  if (qualitySettled) return;
+  perfAccum += Math.min(100, ms);
+  perfFrames += 1;
+  if (perfAccum < PERF_WINDOW_MS) return;
+  qualityAvgMs = perfAccum / perfFrames;
+  perfAccum = 0;
+  perfFrames = 0;
+  if (qualityAvgMs > PERF_BUDGET_MS && qualityTier < 2) {
+    qualityTier += 1;
+    applyQuality(qualityTier);
+  } else {
+    qualitySettled = true;
+  }
 }
 
 function checkTriggers() {
@@ -587,7 +726,8 @@ function updateCarEffects(dt) {
 
 function frame(now) {
   requestAnimationFrame(frame);
-  const dt = Math.min(0.05, (now - lastTime) / 1000);
+  const rawMs = now - lastTime;
+  const dt = Math.min(0.05, rawMs / 1000);
   lastTime = now;
 
   /* The page rests when hidden, paused, or left alone for a minute;
@@ -600,7 +740,10 @@ function frame(now) {
      opened in the background for over a minute must still wake into a
      rendered world, not a black screen waiting for a keypress. */
   if (veiled && now - lastInputAt > IDLE_LIMIT) return;
+  /* Frames behind the veil never count toward the quality decision. */
+  const measurable = veiled;
   tick(dt, null);
+  if (measurable) samplePerf(rawMs);
 }
 
 function tick(dt, forced) {
@@ -632,6 +775,16 @@ function tick(dt, forced) {
   updateCarEffects(dt);
   effects.update(dt);
   receipts.update(dt, cp.x, cp.z);
+  /* The drifting air holds still under reduced motion: the mist and
+     the motes stand as set dressing rather than scroll and drift. */
+  if (atmosphere && !reduceMotion) atmosphere(dt, camPos.x, camPos.z);
+
+  /* The small joys, none of which move under reduced motion: lamp
+     bulbs waver a whisper, and the centre mark breathes very slowly. */
+  if (glowJoys && !reduceMotion) {
+    joyTime += dt;
+    glowJoys(joyTime);
+  }
 
   updateCamera(dt);
   updateKeyLight();
@@ -645,7 +798,8 @@ function tick(dt, forced) {
   mapState.reconciledSet = hud.reconciledSet();
   hud.updateMap(mapState);
 
-  renderer.render(scene, camera);
+  if (composer) composer.render();
+  else renderer.render(scene, camera);
 
   if (!veiled) {
     veiled = true;
@@ -702,6 +856,15 @@ if (new URLSearchParams(window.location.search).has("dev")) {
     },
     receipts() {
       return receipts.collected() + "/" + receipts.total;
+    },
+    quality() {
+      return {
+        tier: qualityTier,
+        settled: qualitySettled,
+        avgMs: Math.round(qualityAvgMs * 100) / 100,
+        bloom: qualityTier === 0 ? "full" : qualityTier === 1 ? "half" : "off",
+        composerPixelRatio: composerRatio,
+      };
     },
     hud,
   };

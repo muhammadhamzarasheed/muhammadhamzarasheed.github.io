@@ -122,9 +122,15 @@ html.trail-on:not(.trail-dead) .hud{visibility:visible;}
 }
 .receipts{top:3rem;}
 .toast{
-  top:1.55rem;
+  top:1.45rem;
   left:50%;
   transform:translate(-50%,-6px);
+  padding:.4rem .85rem;
+  background:rgba(10,11,12,.68);
+  border:1px solid var(--line);
+  border-radius:.6rem;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
   font-family:var(--mono);
   font-variant-numeric:tabular-nums;
   font-size:.6875rem;
@@ -151,6 +157,7 @@ html.trail-on:not(.trail-dead) .hud{visibility:visible;}
   text-transform:uppercase;
   color:var(--text-3);
   line-height:1.9;
+  text-shadow:0 1px 10px rgba(10,11,12,.85);
 }
 .hint .sub{font-size:.625rem;color:var(--line-2);color:var(--text-3);opacity:.7;}
 .hint .touch{display:none;}
@@ -184,7 +191,7 @@ html.trail-on:not(.trail-dead) .hud{visibility:visible;}
   align-items:center;
   gap:.4rem;
   padding:.55rem .55rem .45rem;
-  background:rgba(10,11,12,.9);
+  background:rgba(10,11,12,.94);
   border:1px solid var(--line-2);
   border-radius:.8rem;
   cursor:pointer;
@@ -275,7 +282,7 @@ html.js:not(.reduce):not(.trail-dead) #trailveil{display:flex;}
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(10,11,12,.88);
+  background:rgba(10,11,12,.92);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
   opacity:0;
@@ -527,6 +534,7 @@ html.trail-dead #traillist{display:flex;}
 {
   "imports": {
     "three": "/vendor/three/three.module.min.js",
+    "three/addons/": "/vendor/three/examples/jsm/",
     "cannon-es": "/vendor/cannon-es/cannon-es.js"
   }
 }
