@@ -8,17 +8,23 @@
    forward impulse is applied along surface normal cross axle. A
    positive steering value turns the car left. */
 
-import { edged, blobShadow, BRASS, BRASS_BRIGHT } from "./world.js";
+import { edged, blobShadow, brassMat, BRASS, BRASS_BRIGHT, LAMP } from "./world.js";
 
 const MASS = 46;
-const ENGINE = 230;          /* per driven wheel; two driven wheels */
-const TOP_SPEED = 13;        /* world units per second */
-const REVERSE_SPEED = 6;
+const ENGINE = 350;          /* per driven wheel; two driven wheels */
+export const TOP_SPEED = 18; /* world units per second */
+const REVERSE_SPEED = 7;
 const GRIP_REAR = 3.6;
-const GRIP_REAR_DRIFT = 1.15;
-const HANDBRAKE = 8;
+const GRIP_REAR_DRIFT = 1.5;
+const HANDBRAKE = 2;         /* light enough that a drift keeps rolling */
 const FOOTBRAKE = 6;
 const ROLL_DRAG = 0.12;      /* light rolling friction when coasting */
+const DRIFT_YAW = 2.6;       /* steer led yaw while the handbrake is down */
+const DRIFT_YAW_CAP = 1.8;   /* rad per second; the spin never runs away */
+const AIR_YAW = 1.5;         /* a small say over heading while airborne */
+const AIR_LEVEL = 7;         /* how firmly the car levels itself mid air */
+const AIR_DAMP = 2.5;        /* bleed on tumbling spin while airborne */
+const AIR_GRACE = 0.15;      /* seconds of air before flight rules apply */
 
 export function buildCar(THREE, CANNON, scene, world) {
   /* ---------- physics ---------- */
@@ -71,25 +77,102 @@ export function buildCar(THREE, CANNON, scene, world) {
   vehicle.addToWorld(world);
 
   /* ---------- the toy itself ---------- */
+  /* A proper little coupe: tub, bonnet, rear deck, cabin, a glossy
+     screen, arches over the wheels, brass rims, lamps at both ends. */
   const group = new THREE.Group();
-  const body = edged(new THREE.BoxGeometry(0.9, 0.32, 1.9), { line: BRASS_BRIGHT });
-  body.position.y = 0.12;
-  const cabin = edged(new THREE.BoxGeometry(0.68, 0.24, 0.8), { line: BRASS_BRIGHT });
-  cabin.position.set(0, 0.4, -0.22);
-  const screen = edged(new THREE.BoxGeometry(0.6, 0.2, 0.08), { line: BRASS_BRIGHT });
-  screen.position.set(0, 0.37, 0.24);
-  screen.rotation.x = -0.32;
-  group.add(body, cabin, screen);
+
+  const tub = edged(new THREE.BoxGeometry(0.94, 0.26, 1.9), { line: BRASS_BRIGHT });
+  tub.position.y = 0.1;
+  const bonnet = edged(new THREE.BoxGeometry(0.78, 0.13, 0.66), { line: BRASS_BRIGHT });
+  bonnet.position.set(0, 0.29, 0.52);
+  const deck = edged(new THREE.BoxGeometry(0.78, 0.11, 0.42), { line: BRASS_BRIGHT });
+  deck.position.set(0, 0.28, -0.72);
+  const cabin = edged(new THREE.BoxGeometry(0.7, 0.3, 0.8), { line: BRASS_BRIGHT });
+  cabin.position.set(0, 0.44, -0.16);
+  const screen = edged(new THREE.BoxGeometry(0.62, 0.28, 0.05), {
+    fill: 0x151618,
+    line: BRASS_BRIGHT,
+    opacity: 0.55,
+    roughness: 0.14,
+    metalness: 0.4,
+  });
+  screen.position.set(0, 0.42, 0.3);
+  screen.rotation.x = -0.42;
+  group.add(tub, bonnet, deck, cabin, screen);
+
+  /* Arches riding the tub's shoulders, one over each wheel. */
+  const archGeo = new THREE.BoxGeometry(0.14, 0.15, 0.66);
+  for (const [ax, az] of [[0.47, 0.62], [-0.47, 0.62], [0.47, -0.62], [-0.47, -0.62]]) {
+    const arch = edged(archGeo, { line: BRASS, opacity: 0.5 });
+    arch.position.set(ax, 0.22, az);
+    group.add(arch);
+  }
+
+  /* Headlight lenses, emissive and warm; brass warm tail lamps. */
+  const lensGeo = new THREE.BoxGeometry(0.16, 0.1, 0.04);
+  const lensMat = new THREE.MeshStandardMaterial({
+    color: 0xFFEACB,
+    emissive: 0xFFDFAE,
+    emissiveIntensity: 2.4,
+    roughness: 0.35,
+    metalness: 0,
+  });
+  for (const lx of [0.3, -0.3]) {
+    const lens = new THREE.Mesh(lensGeo, lensMat);
+    lens.position.set(lx, 0.2, 0.955);
+    group.add(lens);
+  }
+  const tailGeo = new THREE.BoxGeometry(0.14, 0.07, 0.04);
+  const tailMat = new THREE.MeshStandardMaterial({
+    color: BRASS_BRIGHT,
+    emissive: BRASS,
+    emissiveIntensity: 1.3,
+    roughness: 0.4,
+    metalness: 0.2,
+  });
+  for (const tx of [0.32, -0.32]) {
+    const tail = new THREE.Mesh(tailGeo, tailMat);
+    tail.position.set(tx, 0.2, -0.955);
+    group.add(tail);
+  }
+
+  /* One real headlight: a single warm spot pooling on the road ahead.
+     Shadowless and cheap; the lenses above carry the glow itself. */
+  const headBeam = new THREE.SpotLight(LAMP, 40, 30, 0.5, 0.6, 1.6);
+  headBeam.position.set(0, 0.34, 0.9);
+  headBeam.castShadow = false;
+  const headTarget = new THREE.Object3D();
+  headTarget.position.set(0, -0.2, 10);
+  headBeam.target = headTarget;
+  group.add(headBeam, headTarget);
+
+  /* The whole toy throws a shadow; the lines stay lines. */
+  group.traverse((node) => {
+    if (node.isMesh) node.castShadow = true;
+  });
   scene.add(group);
 
   const wheelGeometry = new THREE.CylinderGeometry(0.26, 0.26, 0.18, 12);
   wheelGeometry.rotateZ(Math.PI / 2);
+  const rimGeometry = new THREE.CylinderGeometry(0.14, 0.14, 0.2, 8);
+  rimGeometry.rotateZ(Math.PI / 2);
+  const rimMat = brassMat({ emissiveIntensity: 0.12 });
   const wheelMeshes = connections.map(() => {
-    const wheel = edged(wheelGeometry, { line: BRASS, thresholdAngle: 40 });
+    const wheel = new THREE.Group();
+    const tyre = edged(wheelGeometry, {
+      line: BRASS,
+      thresholdAngle: 40,
+      fill: 0x141312,
+      roughness: 0.9,
+    });
+    const rim = new THREE.Mesh(rimGeometry, rimMat);
+    rim.castShadow = true;
+    wheel.add(tyre, rim);
     scene.add(wheel);
     return wheel;
   });
 
+  /* Contact tint only; the real shadow comes from the lamplight. */
   const shadow = blobShadow(1.25);
   scene.add(shadow);
 
@@ -97,11 +180,31 @@ export function buildCar(THREE, CANNON, scene, world) {
   let steerCurrent = 0;
   let tiltTime = 0;
   let righting = false;
+  let wasGrounded = true;
+  let airTime = 0;
+  let prevVy = 0;
   const workVec = new CANNON.Vec3();
+  const workVec2 = new CANNON.Vec3();
   const upLocal = new CANNON.Vec3(0, 1, 0);
   const fwdLocal = new CANNON.Vec3(0, 0, 1);
+  const rightLocal = new CANNON.Vec3(1, 0, 0);
   const yAxis = new CANNON.Vec3(0, 1, 0);
   const uprightQ = new CANNON.Quaternion();
+
+  /* Read only flight data for the camera and the effects: filled in
+     every update, never reallocated. slip is signed lateral speed
+     along the car's right axis; landing is the downward speed a
+     just landed frame arrived with. */
+  const status = {
+    speed: 0,
+    forwardSpeed: 0,
+    slip: 0,
+    grounded: true,
+    airborne: false,
+    drifting: false,
+    justLanded: false,
+    landing: 0,
+  };
 
   function syncMeshes() {
     group.position.copy(chassisBody.position);
@@ -112,7 +215,8 @@ export function buildCar(THREE, CANNON, scene, world) {
       wheelMeshes[i].position.copy(t.position);
       wheelMeshes[i].quaternion.copy(t.quaternion);
     }
-    shadow.position.set(chassisBody.position.x, 0.02, chassisBody.position.z);
+    /* Held a hair above the road surface so the tint reads there too. */
+    shadow.position.set(chassisBody.position.x, 0.045, chassisBody.position.z);
   }
 
   /* input: { steer: -1..1 with +1 left, throttle: -1..1, brake: bool } */
@@ -121,12 +225,25 @@ export function buildCar(THREE, CANNON, scene, world) {
     const speed = Math.hypot(vel.x, vel.z);
     const forward = chassisBody.quaternion.vmult(fwdLocal, workVec);
     const forwardSpeed = forward.x * vel.x + forward.z * vel.z;
+    const right = chassisBody.quaternion.vmult(rightLocal, workVec2);
+    const slip = right.x * vel.x + right.z * vel.z;
+    const grounded = vehicle.numWheelsOnGround > 0;
+
+    /* Landing bookkeeping first, on last frame's air time: the frame
+       the wheels return after real air, report the downward speed
+       they arrived with. */
+    status.justLanded = grounded && !wasGrounded && airTime > 0.12 && prevVy < -3;
+    status.landing = status.justLanded ? -prevVy : 0;
+    wasGrounded = grounded;
+    if (grounded) airTime = 0;
+    else airTime += dt;
 
     if (input.steer || input.throttle || input.brake) chassisBody.wakeUp();
 
-    /* Steering: quick, but it tightens up as speed drops. */
-    const maxSteer = 0.62 / (1 + speed * 0.07);
-    steerCurrent += (input.steer * maxSteer - steerCurrent) * Math.min(1, dt * 9);
+    /* Steering: tight and eager at walking pace, relaxing as the car
+       gathers speed so full tilt never snaps sideways. */
+    const maxSteer = 0.75 / (1 + speed * 0.055);
+    steerCurrent += (input.steer * maxSteer - steerCurrent) * Math.min(1, dt * 12);
     vehicle.setSteeringValue(steerCurrent, 0);
     vehicle.setSteeringValue(steerCurrent, 1);
 
@@ -136,6 +253,9 @@ export function buildCar(THREE, CANNON, scene, world) {
     if (input.throttle > 0) {
       const headroom = Math.max(0, 1 - Math.max(forwardSpeed, 0) / TOP_SPEED);
       force = ENGINE * input.throttle * headroom;
+      /* Anti wheelie: power fades as the nose lifts, so a hard launch
+         squats and surges rather than looping over backwards. */
+      if (forward.y > 0.12) force *= Math.max(0, 1 - (forward.y - 0.12) * 6);
     } else if (input.throttle < 0) {
       if (forwardSpeed > 0.8) {
         brake = FOOTBRAKE;
@@ -145,13 +265,25 @@ export function buildCar(THREE, CANNON, scene, world) {
       }
     }
 
-    /* Handbrake on Space: rear wheels lock and loosen for the drift. */
+    /* Handbrake on Space: the rear end loosens, a light lock keeps the
+       car rolling through the slide, and a steer led nudge of yaw
+       swings the tail so the drift answers the wheel. Positive steer
+       yaws positive about y; verified against the vendored solver. */
     let rearGrip = GRIP_REAR;
     let rearBrake = brake;
     if (input.brake) {
       rearBrake = HANDBRAKE;
       rearGrip = GRIP_REAR_DRIFT;
       force = 0;
+      if (grounded && forwardSpeed > 2) {
+        chassisBody.angularVelocity.y +=
+          steerCurrent * DRIFT_YAW * Math.min(1, forwardSpeed / 10) * dt;
+        if (chassisBody.angularVelocity.y > DRIFT_YAW_CAP) {
+          chassisBody.angularVelocity.y = DRIFT_YAW_CAP;
+        } else if (chassisBody.angularVelocity.y < -DRIFT_YAW_CAP) {
+          chassisBody.angularVelocity.y = -DRIFT_YAW_CAP;
+        }
+      }
     }
     vehicle.wheelInfos[2].frictionSlip = rearGrip;
     vehicle.wheelInfos[3].frictionSlip = rearGrip;
@@ -164,12 +296,26 @@ export function buildCar(THREE, CANNON, scene, world) {
     vehicle.applyEngineForce(-force, 2);
     vehicle.applyEngineForce(-force, 3);
 
-    /* Gentle self righting: tipped past sixty degrees for two seconds
-       and the world quietly puts the car back on its wheels. */
+    /* Airborne, and properly so rather than a one frame skip of the
+       suspension: steer keeps a small say over heading, tumbling spin
+       bleeds away, and the up axis is nudged back toward level so
+       every jump comes down on the wheels, never the roof. */
+    if (!grounded && airTime > AIR_GRACE) {
+      chassisBody.angularVelocity.y += input.steer * AIR_YAW * dt;
+      const upW = chassisBody.quaternion.vmult(upLocal, workVec2);
+      const damp = 1 - Math.min(1, dt * AIR_DAMP);
+      chassisBody.angularVelocity.x =
+        chassisBody.angularVelocity.x * damp - upW.z * AIR_LEVEL * dt;
+      chassisBody.angularVelocity.z =
+        chassisBody.angularVelocity.z * damp + upW.x * AIR_LEVEL * dt;
+    }
+
+    /* Gentle self righting: tipped right over for a moment and the
+       world quietly puts the car back on its wheels. */
     const up = chassisBody.quaternion.vmult(upLocal, workVec);
     if (up.y < 0.5) tiltTime += dt;
     else if (!righting) tiltTime = 0;
-    if (tiltTime > 2) righting = true;
+    if (tiltTime > 1.2) righting = true;
     if (righting) {
       const fwd = chassisBody.quaternion.vmult(fwdLocal, workVec);
       const yaw = Math.atan2(fwd.x, fwd.z);
@@ -182,6 +328,14 @@ export function buildCar(THREE, CANNON, scene, world) {
         tiltTime = 0;
       }
     }
+
+    status.speed = speed;
+    status.forwardSpeed = forwardSpeed;
+    status.slip = slip;
+    status.grounded = grounded;
+    status.airborne = !grounded;
+    status.drifting = !!input.brake && grounded && speed > 3;
+    prevVy = chassisBody.velocity.y;
 
     syncMeshes();
   }
@@ -197,6 +351,12 @@ export function buildCar(THREE, CANNON, scene, world) {
     steerCurrent = 0;
     tiltTime = 0;
     righting = false;
+    wasGrounded = true;
+    airTime = 0;
+    prevVy = 0;
+    status.justLanded = false;
+    status.landing = 0;
+    status.drifting = false;
     for (let i = 0; i < vehicle.wheelInfos.length; i += 1) {
       vehicle.applyEngineForce(0, i);
       vehicle.setBrake(0, i);
@@ -205,5 +365,5 @@ export function buildCar(THREE, CANNON, scene, world) {
     syncMeshes();
   }
 
-  return { group, chassisBody, vehicle, update, reset };
+  return { group, chassisBody, vehicle, status, update, reset };
 }
