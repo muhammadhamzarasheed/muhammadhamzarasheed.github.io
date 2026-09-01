@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Not in this ledger</title>
+<title>Not in this ledger &middot; Muhammad Hamza</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -11,36 +11,46 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
+  --brass-soft:rgba(201,170,124,.14);
   --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
 }
 *{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   min-height:100vh;
   min-height:100svh;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:1.5rem;
-  text-align:center;
   padding:2rem;
   background:var(--void);
   color:var(--text);
   font-family:var(--sans);
   -webkit-font-smoothing:antialiased;
 }
+main{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.5rem;
+  text-align:center;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
 .code{
   font-family:var(--mono);
   font-variant-numeric:tabular-nums;
@@ -69,14 +79,13 @@ a.back{
   padding:.9rem 1.6rem;
   background:var(--raise);
   border:1px solid var(--line);
-  border-radius:1rem;
+  border-radius:1.125rem;
   color:var(--text);
   font-weight:500;
   text-decoration:none;
-  transition:border-color .3s ease,transform .3s ease;
+  transition:border-color .25s ease,transform .25s ease;
 }
 a.back:hover{border-color:var(--brass);transform:translateY(-2px);}
-a.back:focus-visible{outline:2px solid var(--brass);outline-offset:4px;}
 .stamp{
   display:flex;
   align-items:center;
@@ -97,6 +106,7 @@ a.back:focus-visible{outline:2px solid var(--brass);outline-offset:4px;}
 </style>
 </head>
 <body>
+<main>
 <div class="figure">
 <div class="code">404</div>
 <svg class="rule" viewBox="0 0 200 7" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="0.5" x2="200" y2="0.5" stroke="#C9AA7C" stroke-width="1"/><line x1="0" y1="6.5" x2="200" y2="6.5" stroke="#C9AA7C" stroke-width="1"/></svg>
@@ -105,6 +115,7 @@ a.back:focus-visible{outline:2px solid var(--brass);outline-offset:4px;}
 <p>The entry you are looking for is not in this ledger. Check the reference, or return to the record and start from a figure that exists.</p>
 <a class="back" href="/">Return to the record</a>
 <div class="stamp"><svg viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza &middot; muhammadhamza.co.uk</div>
+</main>
 <script src="/vendor/gsap/gsap.min.js"></script>
 <script src="/vendor/gsap/ScrambleTextPlugin.min.js"></script>
 <script src="/vendor/gsap/DrawSVGPlugin.min.js"></script>

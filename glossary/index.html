@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The glossary</title>
+<title>The glossary &middot; Muhammad Hamza</title>
 <meta name="description" content="Assessment and accounting jargon in plain English: resits, compensation, moderation, accruals and the rest, defined dryly and accurately. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/glossary/">
@@ -16,19 +16,24 @@
 <meta property="og:description" content="Assessment and accounting jargon in plain English: resits, compensation, moderation, accruals and the rest.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/glossary/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The glossary">
 <meta name="twitter:description" content="Assessment and accounting jargon in plain English: resits, compensation, moderation, accruals and the rest.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -39,7 +44,7 @@
 }
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -125,7 +130,7 @@ p.lede a:hover{border-bottom-color:var(--brass);}
   transition:border-color .25s ease;
 }
 .finder input:focus{border-color:var(--brass);}
-.finder input::placeholder{color:#5A646B;}
+.finder input::placeholder{color:var(--text-3);}
 .terms{margin:1.6rem 0 0;}
 .term{
   padding:1.15rem 0 1.05rem;
@@ -158,6 +163,17 @@ p.lede a:hover{border-bottom-color:var(--brass);}
   font-size:.8125rem;
   color:var(--text-3);
 }
+.nores a{color:var(--brass);border-bottom:1px solid transparent;transition:border-color .25s ease;}
+.nores a:hover{border-bottom-color:var(--brass);}
+.vh{
+  position:absolute;
+  width:1px;height:1px;
+  padding:0;margin:-1px;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
+  border:0;
+}
 footer{border-top:1px solid var(--line);margin-top:3.5rem;}
 footer .in{
   max-width:44rem;
@@ -171,12 +187,12 @@ footer .in{
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
 @media print{
-  :root{--void:#fff;--raise:#fff;--line:#D9D9D5;--text:#16181A;--text-2:#3C4348;--text-3:#5A646B;--brass:#8A6D3F;--brass-soft:rgba(138,109,63,.12);}
+  :root{color-scheme:light;--void:#fff;--raise:#fff;--line:#D9D9D5;--text:#16181A;--text-2:#3C4348;--text-3:#5A646B;--brass:#8A6D3F;--brass-soft:rgba(138,109,63,.12);}
   body{background:#fff;}
   .bar,footer,.finder{display:none !important;}
 }
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -200,7 +216,8 @@ footer a:hover{color:var(--brass);}
   <div class="finder"><input type="text" id="q" placeholder="Find a term" autocomplete="off" spellcheck="false" aria-label="Search the glossary"></div>
 
   <dl class="terms" id="terms"></dl>
-  <p class="nores" id="nores" hidden>Nothing under that word. Try the email instead; the register is always open to additions.</p>
+  <p class="vh" id="count" aria-live="polite"></p>
+  <p class="nores" id="nores" aria-live="polite" hidden>Nothing under that word. Try <a href="mailto:hello@muhammadhamza.co.uk">the email</a> instead; the register is always open to additions.</p>
 </article>
 </main>
 
@@ -262,6 +279,11 @@ TERMS.forEach(function (t) {
 
 var q = document.getElementById("q");
 var nores = document.getElementById("nores");
+var count = document.getElementById("count");
+function announce(shown) {
+  count.textContent = shown === 1 ? "1 term shown" : shown + " terms shown";
+}
+announce(TERMS.length);
 q.addEventListener("input", function () {
   var v = q.value.trim().toLowerCase();
   var shown = 0;
@@ -271,6 +293,7 @@ q.addEventListener("input", function () {
     if (hit) { shown += 1; }
   });
   nores.hidden = shown !== 0;
+  announce(shown);
 });
 })();
 </script>

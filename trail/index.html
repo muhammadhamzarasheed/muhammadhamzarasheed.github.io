@@ -3,19 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The audit trail</title>
+<title>The audit trail &middot; Muhammad Hamza</title>
 <meta name="description" content="The record as a drivable world. Seven districts on one closed loop: method, now, experience, education, journal, field notes and contact.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/trail/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="The audit trail">
+<meta property="og:description" content="The record as a drivable world. Seven districts on one closed loop: method, now, experience, education, journal, field notes and contact.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/trail/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The audit trail">
+<meta name="twitter:description" content="The record as a drivable world. Seven districts on one closed loop: method, now, experience, education, journal, field notes and contact.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 /* Committed single theme, same ledger as the rest of the site. */
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --raise-2:#171A1C;
@@ -25,7 +39,7 @@
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
-  --brass-bright:#E2C79A;
+  --brass-hi:#E2C79A;
   --brass-soft:rgba(201,170,124,.14);
   --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
@@ -48,6 +62,7 @@ body{
 ::selection{background:var(--brass-soft);color:var(--text);}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+html{scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 html.trail-on{overflow:hidden;}
 
 /* Film grain, a whisper of texture over everything, never interactive. */
@@ -117,7 +132,7 @@ html.trail-on:not(.trail-dead) .hud{visibility:visible;}
 .tally.pulse b{animation:tallypulse .6s ease;}
 @keyframes tallypulse{
   0%{transform:scale(1);color:var(--brass);}
-  30%{transform:scale(1.4);color:var(--brass-bright);}
+  30%{transform:scale(1.4);color:var(--brass-hi);}
   100%{transform:scale(1);color:var(--brass);}
 }
 .receipts{top:3rem;}
@@ -159,7 +174,7 @@ html.trail-on:not(.trail-dead) .hud{visibility:visible;}
   line-height:1.9;
   text-shadow:0 1px 10px rgba(10,11,12,.85);
 }
-.hint .sub{font-size:.625rem;color:var(--line-2);color:var(--text-3);opacity:.7;}
+.hint .sub{font-size:.625rem;color:var(--text-2);}
 .hint .touch{display:none;}
 @media (pointer:coarse){
   .hint .keys{display:none;}
@@ -390,9 +405,22 @@ html.js:not(.reduce):not(.trail-dead) #trailveil{display:flex;}
   max-width:26rem;
   padding:3.5rem 1.5rem;
 }
-html.js #traillist{display:none;}
-html.reduce #traillist,
-html.trail-dead #traillist{display:flex;}
+/* While the world runs the list leaves the layout but stays in the
+   accessibility tree: the standard screen reader clip pattern. Under
+   reduced motion or a dead world the guard's classes stand the rule
+   down, so the base flex styles put the list back on show. */
+html.js:not(.reduce):not(.trail-dead) #traillist{
+  position:absolute;
+  width:1px;
+  height:1px;
+  margin:-1px;
+  padding:0;
+  border:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
 #traillist .top{display:flex;align-items:center;gap:.55rem;margin:0;}
 #traillist h1{
   margin:0;
@@ -528,23 +556,27 @@ html.trail-dead #traillist{display:flex;}
     <li><a href="/#contact"><b>07</b>Contact</a></li>
   </ol>
   <p class="label back"><a href="/">Return to the record</a></p>
+  <p class="label">Kept by Muhammad Hamza</p>
 </main>
 
 <script type="importmap">
 {
   "imports": {
-    "three": "/vendor/three/three.module.min.js",
+    "three": "/vendor/three/three.module.min.js?v=2",
     "three/addons/": "/vendor/three/examples/jsm/",
-    "cannon-es": "/vendor/cannon-es/cannon-es.js"
+    "cannon-es": "/vendor/cannon-es/cannon-es.js?v=2",
+    "/vendor/three/three.core.min.js": "/vendor/three/three.core.min.js?v=2",
+    "./world.js": "./world.js?v=2"
   }
 }
 </script>
-<script type="module" src="./main.js"></script>
 <script>
 (function () {
-  /* Boot guard. Runs before the module (modules are deferred): claims
-     the page for JS, checks WebGL, honours reduced motion, and falls
-     back to the list if the world has not signalled life in 6 seconds. */
+  /* Boot guard. Runs alone, before any module: claims the page for JS,
+     checks WebGL, honours reduced motion, and only once those checks
+     decide the world should boot pulls the 3D graph down with a
+     dynamic import, so fallback visitors never fetch it. Falls back
+     to the list if the world has not signalled life in 6 seconds. */
   var root = document.documentElement;
   root.className += " js";
 
@@ -577,6 +609,37 @@ html.trail-dead #traillist{display:flex;}
     }, 6000);
   }
 
+  var fetched = false;
+  function loadWorld() {
+    /* Preload hints and the module itself, only at the moment the
+       world is actually wanted. The import map points world.js and
+       the vendor internals at the same versioned addresses, so each
+       preloaded file matches its eventual import exactly. */
+    if (fetched) { return; }
+    fetched = true;
+    var deps = [
+      "/vendor/three/three.module.min.js?v=2",
+      "/vendor/three/three.core.min.js?v=2",
+      "/vendor/cannon-es/cannon-es.js?v=2",
+      "./world.js?v=2"
+    ];
+    for (var i = 0; i < deps.length; i += 1) {
+      var link = document.createElement("link");
+      link.rel = "modulepreload";
+      link.href = deps[i];
+      document.head.appendChild(link);
+    }
+    import("./main.js?v=2").then(function () {
+      /* The module starts itself when it finds __trailWanted already
+         raised; this call only covers a flag raised between request
+         and evaluation. __trailStart ignores a second invitation. */
+      if (window.__trailWanted && window.__trailStart) { window.__trailStart(); }
+    }).catch(function (err) {
+      dead();
+      if (window.console && console.error) { console.error(err); }
+    });
+  }
+
   var reduce = false;
   try {
     reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -590,14 +653,16 @@ html.trail-dead #traillist{display:flex;}
       enter.hidden = false;
       enter.addEventListener("click", function () {
         root.className = root.className.replace(" reduce", "");
+        window.__trailWanted = true;
         arm();
         if (window.__trailStart) { window.__trailStart(); }
-        else { window.__trailWanted = true; }
+        else { loadWorld(); }
       });
     }
   } else {
     window.__trailWanted = true;
     arm();
+    loadWorld();
   }
 })();
 </script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Something for your career</title>
+<title>Something for your career &middot; Muhammad Hamza</title>
 <meta name="description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/career/">
@@ -16,20 +16,25 @@
 <meta property="og:description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/career/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Something for your career">
 <meta name="twitter:description" content="Free career tools that run in your browser: a clean CV builder, a sixteen point CV check, an interview drill and an application ledger. Your words never leave your device.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --raise-2:#171A1C;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -41,7 +46,8 @@
 }
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -226,7 +232,7 @@ a.gback:hover{color:var(--brass);}
 }
 .cvform input:focus,.cvform textarea:focus{border-color:var(--brass);}
 .cvform textarea{resize:vertical;min-height:4.6rem;}
-.cvform ::placeholder{color:#5A646B;}
+.cvform ::placeholder{color:var(--text-3);}
 .entrycard{
   border:1px solid var(--line);
   border-radius:.6rem;
@@ -242,6 +248,7 @@ a.gback:hover{color:var(--brass);}
   border:1px solid var(--line);
   border-radius:.4rem;
   color:var(--text-3);
+  min-height:24px;
   padding:.15rem .55rem;
   cursor:pointer;
   transition:border-color .25s ease,color .25s ease;
@@ -344,8 +351,8 @@ a.gback:hover{color:var(--brass);}
   margin-top:.35rem;
   width:16px;
   height:16px;
-  border:1px solid #444C52;
-  border-radius:4px;
+  border:1px solid var(--line-2);
+  border-radius:3px;
   background:var(--void);
   cursor:pointer;
   position:relative;
@@ -461,7 +468,7 @@ a.gback:hover{color:var(--brass);}
   transition:border-color .25s ease;
 }
 .ledgerform input:focus{border-color:var(--brass);}
-.ledgerform input::placeholder{color:#5A646B;}
+.ledgerform input::placeholder{color:var(--text-3);}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:.6rem;}
 table.apps{
   width:100%;
@@ -543,6 +550,7 @@ footer a:hover{color:var(--brass);}
    white text on white. CV view (html.printcv): the sheet alone. */
 @media print{
   :root{
+    color-scheme:light;
     --void:#FFFFFF;
     --raise:#FFFFFF;
     --raise-2:#F2F2F0;
@@ -580,7 +588,7 @@ footer a:hover{color:var(--brass);}
   html.printcv .sheet{orphans:3;widows:3;}
 }
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -735,11 +743,12 @@ footer a:hover{color:var(--brass);}
       </div>
       <div class="tablewrap">
         <table class="apps" id="appstable">
-          <thead><tr><th>Role</th><th>Organisation</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+          <caption class="vh">Application ledger</caption>
+          <thead><tr><th scope="col">Role</th><th scope="col">Organisation</th><th scope="col">Applied</th><th scope="col">Status</th><th scope="col"></th></tr></thead>
           <tbody id="appsbody"></tbody>
         </table>
       </div>
-      <p class="hudline" id="ledgertotals"></p>
+      <p class="hudline" id="ledgertotals" role="status"></p>
       <div class="btnrow"><button class="btn" type="button" id="l-csv">Download as CSV</button></div>
     </div>
   </section>
@@ -821,9 +830,16 @@ function refile(host, mutate) {
 var TOOLS = ["cv", "check", "drill", "ledger"];
 var inits = {}, enters = {}, leaves = {}, built = {}, current = null;
 
+function focusReveal(el) {
+  // hand focus to the container the route just revealed, so keyboard
+  // and reader users land where the view did
+  el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+}
 function route() {
   var h = location.hash.replace("#", "");
   var next = TOOLS.indexOf(h) > -1 ? h : null;
+  var from = current;
   if (current && current !== next && leaves[current]) { leaves[current](); }
   $("menu").hidden = !!next;
   $("intro").hidden = !!next;
@@ -836,8 +852,10 @@ function route() {
     if (!built[next]) { built[next] = true; inits[next](); }
     if (enters[next]) { enters[next](); }
     window.scrollTo(0, 0);
+    focusReveal($("g-" + next));
   } else {
     menuNotes();
+    if (from) { focusReveal($("menu")); }
   }
 }
 window.addEventListener("hashchange", route);

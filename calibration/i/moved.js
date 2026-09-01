@@ -66,7 +66,7 @@ function headSpan(txt) {
 window.CAL.register({
   id: "moved",
   name: "The moved entry",
-  blurb: "One mark is shifted while you watch. Return it to its place.",
+  blurb: "Two entries trade places behind a passing shade. Point out the pair.",
   build: function (stageEl, api) {
     var timers = [];
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
