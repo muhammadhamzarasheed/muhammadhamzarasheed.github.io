@@ -479,6 +479,31 @@ html.js:not(.reduce):not(.trail-dead) #traillist{
 #traillist .back a{transition:color .25s ease;}
 #traillist .back a:hover{color:var(--brass);}
 
+/* ---------- turning the page ---------- */
+/* Cross-document view transitions: the whole site is one ledger, and
+   arriving here should still read as a page being turned. The trail
+   boots behind its own veil though, and the canvas is resized as the
+   world claims the viewport, so the root gets a plain fade only: a
+   slide during that resize could smear the frame. 240ms, eased. The
+   HUD lockup monogram carries the name "mark" (the only element on
+   this page allowed to), so the signature morphs across from the
+   record's bar. Browsers without the API skip the unknown at-rule and
+   pseudo-elements and simply navigate; reduced motion collapses both
+   the fade and the default crossfade to an instant swap. */
+@view-transition{navigation:auto;}
+.hud .lockup .mark{view-transition-name:mark;}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation:240ms ease both turn-fade-out;}
+  ::view-transition-new(root){animation:240ms ease both turn-fade-in;}
+  @keyframes turn-fade-out{to{opacity:0;}}
+  @keyframes turn-fade-in{from{opacity:0;}}
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){animation-duration:.001ms !important;}
+}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
