@@ -306,6 +306,31 @@ footer .in{
 }
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
+
+/* ---------- turning the page ---------- */
+/* Cross-document view transitions: the whole site is one ledger, and
+   moving between its pages reads as a page being turned in front of
+   the reader. Old page slips 2% left as it fades, new page follows in
+   from the right, 240ms, eased. The bar monogram carries the name
+   "mark" (the only element on this page allowed to), so the signature
+   morphs between pages while the sheet turns. Browsers without the
+   API skip the unknown at-rule and pseudo-elements and simply
+   navigate; reduced motion collapses both the choreography and the
+   default crossfade to an instant swap. */
+@view-transition{navigation:auto;}
+.sig .mark{view-transition-name:mark;}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation:240ms ease both turn-out;}
+  ::view-transition-new(root){animation:240ms ease both turn-in;}
+  @keyframes turn-out{to{opacity:0;transform:translateX(-2%);}}
+  @keyframes turn-in{from{opacity:0;transform:translateX(2%);}}
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){animation-duration:.001ms !important;}
+}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
   a.door:hover{transform:none;}

@@ -1263,17 +1263,40 @@ footer .label a:hover{color:var(--brass);}
   transition:opacity .6s cubic-bezier(.16,.8,.3,1),transform .6s cubic-bezier(.16,.8,.3,1);
 }
 .js h2.on .w{opacity:1;transform:none;}
-/* The name arrives letter by letter once the fonts are ready. The
-   spans only exist when motion is allowed, so no gate is needed on
-   the start state; words stay unbreakable so the line wraps whole. */
+/* The name is written by nib once the fonts are ready. Characters
+   appear left to right, each landing instantly but wet: bright brass
+   with a faint glow, drying to ink over 450ms. The spans only exist
+   when motion is allowed, so no gate is needed on the start state;
+   words stay unbreakable so the line wraps whole. */
 .js .hero h1 .word{display:inline-block;white-space:nowrap;}
 .js .hero h1 .c{
-  display:inline-block;
-  opacity:0;
-  transform:translateY(.35em);
-  transition:opacity .7s cubic-bezier(.16,.8,.3,1),transform .7s cubic-bezier(.16,.8,.3,1);
+  visibility:hidden;
+  color:#E2C79A;
+  text-shadow:0 0 14px rgba(226,199,154,.3);
 }
-.js .hero h1.chars-on .c{opacity:1;transform:none;}
+.js .hero h1 .c.ink{
+  visibility:visible;
+  color:var(--text);
+  text-shadow:0 0 14px rgba(226,199,154,0);
+  transition:color .45s ease,text-shadow .45s ease;
+}
+/* The nib caret rides the writing edge in the flow of the line, so
+   the letter-spacing settle on the heading carries it along without
+   any measuring. It appears with the first stroke and lifts off
+   300ms after the last. */
+.js .hero h1 .nib{
+  display:inline-block;
+  width:2px;
+  height:1em;
+  margin-left:.03em;
+  vertical-align:-.12em;
+  background:var(--brass);
+  box-shadow:0 0 10px rgba(226,199,154,.4);
+  opacity:0;
+  pointer-events:none;
+}
+.js .hero h1 .nib.on{opacity:1;}
+.js .hero h1 .nib.off{opacity:0;transition:opacity .3s ease;}
 /* Revealed cards must keep their own hover transitions: the reveal
    shorthand would otherwise replace them and make hovers snap. */
 .js .tile.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .3s ease,border-color .3s ease;}
@@ -1288,10 +1311,115 @@ footer .label a:hover{color:var(--brass);}
     transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),letter-spacing 1.2s cubic-bezier(.2,.7,.2,1);
   }
 }
+/* ---------- date stamps ---------- */
+/* The numbered eyebrows arrive like a date stamp: pressed flat rather
+   than risen. When the reveal marks one on it thumps home, and a
+   pressure ring spreads from the number, the same language as the
+   spine node ripple. The tally takes the same stamp the moment the
+   books balance. */
+.js .stamp.up{transform:none;}
+.js .stamp.up.on{transition:opacity .16s ease;}
+.js .stamp.on{animation:thump .16s cubic-bezier(.2,1.4,.4,1);}
+@keyframes thump{
+  from{transform:scale(1.14);}
+  to{transform:scale(1);}
+}
+.stamp b{position:relative;}
+.stamp b::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:9px;
+  height:9px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid var(--brass);
+  opacity:0;
+  pointer-events:none;
+}
+.js .stamp.on b::after{animation:press .5s ease-out forwards;}
+@keyframes press{
+  from{width:9px;height:9px;opacity:.8;}
+  to{width:34px;height:34px;opacity:0;}
+}
+/* ---------- ruled off and reviewed ---------- */
+/* Each chapter closes the way a ledger page does: once the reader has
+   moved past it, a hairline rules the section off and a brass tick
+   beside the heading marks it reviewed. The rule is static content,
+   present and complete without JS; only the drawing is scripted. The
+   tick is pure decoration and exists only once JS is running, in the
+   same stroke language as the hero checklist. */
+.rule{
+  width:100%;
+  height:1px;
+  margin-top:clamp(2rem,4vw,3rem);
+  background:var(--line);
+}
+.js .rule{
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .7s ease;
+}
+.js .rule.drawn{transform:scaleX(1);}
+section h2{position:relative;}
+/* Narrow viewports set the tick inline ahead of the heading; from the
+   spine breakpoint up it moves into the left margin, absolutely
+   positioned so the text never reflows when it draws. */
+.h2tick{
+  width:.7em;
+  height:.56em;
+  display:inline-block;
+  margin-right:.35em;
+}
+@media (min-width:68rem){
+  .h2tick{position:absolute;left:-1.15em;top:.26em;margin:0;}
+}
+.h2tick path{
+  fill:none;
+  stroke:var(--brass);
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:12;
+  stroke-dashoffset:12;
+  transition:stroke-dashoffset .35s ease;
+}
+.h2tick.drawn path{stroke-dashoffset:0;}
+
+/* ---------- turning the page ---------- */
+/* Cross-document view transitions: the whole site is one ledger, and
+   moving between its pages should read as a page being turned in front
+   of the reader. The leaving page slips 2% left as it fades; the
+   arriving page follows in from the right, 240ms, eased. The nav
+   monogram carries the name "mark", so the browser morphs the
+   signature between pages while the sheet beneath it turns. Exactly
+   one element per page may hold the name; a duplicate cancels the
+   whole transition. Browsers without the API skip the unknown at-rule
+   and pseudo-elements and simply navigate, and reduced motion
+   collapses both the choreography and the default crossfade to an
+   instant swap. */
+@view-transition{navigation:auto;}
+.sig .mark{view-transition-name:mark;}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation:240ms ease both turn-out;}
+  ::view-transition-new(root){animation:240ms ease both turn-in;}
+  @keyframes turn-out{to{opacity:0;transform:translateX(-2%);}}
+  @keyframes turn-in{from{opacity:0;transform:translateX(2%);}}
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){animation-duration:.001ms !important;}
+}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .up{opacity:1;transform:none;}
   .js h2 .w{opacity:1;transform:none;}
+  /* The ledger arrives already ruled off and reviewed. */
+  .js .rule{transform:none;}
+  .h2tick path{stroke-dashoffset:0;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
@@ -1330,7 +1458,7 @@ footer .label a:hover{color:var(--brass);}
 
 <aside class="spine" id="spine" aria-label="Reading progress">
   <div class="rail" id="rail"><div class="fill" id="fill"></div></div>
-  <span class="tally" id="tally"><b>00</b>/07 reconciled</span>
+  <span class="tally stamp" id="tally"><b>00</b>/07 reconciled</span>
 </aside>
 
 <main id="top">
@@ -1366,7 +1494,7 @@ footer .label a:hover{color:var(--brass);}
 
   <section id="method">
     <div class="shell mid">
-      <p class="label up"><b>01</b> &middot; Method</p>
+      <p class="label up stamp"><b>01</b> &middot; Method</p>
       <h2 class="up d1">Three rules, borrowed from audit, applied to assessment.</h2>
       <p class="prose up d2">Assessment data decides progression, awards and appeals. It deserves the same discipline a financial statement gets, and the discipline travels: it does not belong to any one employer, rulebook or system.</p>
 
@@ -1390,6 +1518,7 @@ footer .label a:hover{color:var(--brass);}
           </div>
         </article>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -1409,7 +1538,7 @@ footer .label a:hover{color:var(--brass);}
 
   <section id="now">
     <div class="shell mid">
-      <p class="label up"><b>02</b> &middot; Now</p>
+      <p class="label up stamp"><b>02</b> &middot; Now</p>
       <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
       <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
 
@@ -1446,12 +1575,13 @@ footer .label a:hover{color:var(--brass);}
           <p>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</p>
         </div></article>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
   <section id="experience" style="padding-top:0;">
     <div class="shell mid">
-      <p class="label up"><b>03</b> &middot; Experience</p>
+      <p class="label up stamp"><b>03</b> &middot; Experience</p>
       <h2 class="up d1">Where the method was built.</h2>
       <p class="prose up d2">Finance first, then education. The order matters: the habits came from accounting, and assessment is where they turned out to be needed most.</p>
 
@@ -1507,12 +1637,13 @@ footer .label a:hover{color:var(--brass);}
           <p class="meta"><b>Sep 2022 to present</b>London</p>
         </article>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
   <section id="education" style="padding-top:0;">
     <div class="shell mid">
-      <p class="label up"><b>04</b> &middot; Education</p>
+      <p class="label up stamp"><b>04</b> &middot; Education</p>
       <h2 class="up d1">Still studying, deliberately.</h2>
       <p class="prose up d2">Assessment administration works better when the person running it understands assessment design, not just assessment processing. Knowing why a rubric is built a certain way changes how you handle the edge cases it produces.</p>
 
@@ -1572,12 +1703,13 @@ footer .label a:hover{color:var(--brass);}
           <p>Partner university liaison, stakeholder communication, student advocacy, cross team collaboration, research and writing.</p>
         </div>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
   <section id="journal" style="padding-top:0;">
     <div class="shell mid">
-      <p class="label up"><b>05</b> &middot; Journal</p>
+      <p class="label up stamp"><b>05</b> &middot; Journal</p>
       <h2 class="up d1">Written down plainly.</h2>
       <p class="prose up d2">Occasional essays on assessment, fairness, and the habits that carry between finance and education. Each one opens in its own tab, so the record stays where you left it.</p>
 
@@ -1639,12 +1771,13 @@ footer .label a:hover{color:var(--brass);}
           <p class="meta"><b>August 2026</b>3 minute read</p>
         </article>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
   <section id="elsewhere" class="creedbox">
     <div class="shell mid">
-      <p class="label up"><b>06</b> &middot; Field notes</p>
+      <p class="label up stamp"><b>06</b> &middot; Field notes</p>
       <h2 class="up d1">The part I do not try to control.</h2>
       <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. Pakistan whenever I can get back. And the country I live in gets the spare weekends: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, all four nations at one time or another, New Year in London one year and Edinburgh the next. None of it had to tie out.</p>
       <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
@@ -1665,12 +1798,13 @@ footer .label a:hover{color:var(--brass);}
           <dd><span>Gibraltar</span><span>Italy</span><span>Germany</span><span>Austria</span><span>Albania</span><span>T&uuml;rkiye</span></dd>
         </div>
       </dl>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
   <section id="contact">
     <div class="shell mid">
-      <p class="label up"><b>07</b> &middot; Contact</p>
+      <p class="label up stamp"><b>07</b> &middot; Contact</p>
       <h2 class="up d1">Open to connecting.</h2>
       <p class="prose up d2">I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
 
@@ -1697,6 +1831,7 @@ footer .label a:hover{color:var(--brass);}
         <a href="mailto:hello@muhammadhamza.co.uk">Email <i>hello@muhammadhamza.co.uk</i></a>
         <a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener">Curriculum Vitae <i>pdf, two pages</i></a>
       </div>
+      <div class="rule" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -1878,11 +2013,14 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
 })();
 
-/* ---------- the name, letter by letter ---------- */
+/* ---------- the name, written by nib ---------- */
 /* Split only once the fonts are ready, so no letter is measured in a
-   fallback face. Each character rises on its own beat after the d1
-   delay; the letter-spacing settle on the heading itself carries on
-   underneath. Reduced motion never splits at all. */
+   fallback face. After the d1 beat the name is written left to right,
+   one character every 45ms: each lands instantly but wet, drying to
+   ink in the CSS. The nib caret is an inline element moved through
+   the line after the newest character, so the letter-spacing settle
+   carries it along; it lifts off 300ms after the last stroke.
+   Reduced motion never splits at all. */
 (function () {
   if (RM || !document.fonts || !document.fonts.ready) { return; }
   var h1 = document.querySelector(".hero h1");
@@ -1893,7 +2031,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var wrap = document.createElement("span");
     wrap.setAttribute("aria-hidden", "true");
     var words = text.split(/\s+/).filter(Boolean);
-    var n = 0;
+    var chars = [];
     words.forEach(function (word, wi) {
       var ws = document.createElement("span");
       ws.className = "word";
@@ -1901,17 +2039,39 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var s = document.createElement("span");
         s.className = "c";
         s.textContent = ch;
-        s.style.transitionDelay = (0.08 + n * 0.03).toFixed(2) + "s";
         ws.appendChild(s);
-        n += 1;
+        chars.push(s);
       });
       wrap.appendChild(ws);
       if (wi < words.length - 1) { wrap.appendChild(document.createTextNode(" ")); }
     });
     h1.textContent = "";
     h1.appendChild(wrap);
-    void h1.offsetWidth;
-    h1.classList.add("chars-on");
+    if (!chars.length) { return; }
+
+    var nib = document.createElement("span");
+    nib.className = "nib";
+    nib.setAttribute("aria-hidden", "true");
+
+    var i = 0;
+    function write() {
+      var c = chars[i];
+      c.classList.add("ink");
+      c.parentNode.insertBefore(nib, c.nextSibling);
+      i += 1;
+      if (i < chars.length) {
+        window.setTimeout(write, 45);
+      } else {
+        window.setTimeout(function () { nib.classList.add("off"); }, 300);
+      }
+    }
+    // The nib arrives first, poised at the start of the line, then
+    // begins to write.
+    window.setTimeout(function () {
+      chars[0].parentNode.insertBefore(nib, chars[0]);
+      nib.classList.add("on");
+      window.setTimeout(write, 140);
+    }, 80);
   });
 })();
 
@@ -1943,29 +2103,82 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     return b;
   });
 
+  /* ---------- ruled off and reviewed ---------- */
+  /* Each chapter is ruled off once the reader has moved past it: its
+     foot above thirty percent of the viewport, or the end of the page
+     reached, which closes whatever the footer leaves too short to
+     pass. The hairline draws, the tick beside the heading strokes in,
+     and both stay for the visit. Ticks are built here, after the
+     heading splitter, so the split never erases them. Reduced motion
+     rules everything off at once: the books arrive already reviewed. */
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var rules = sections.map(function (s) { return s.querySelector(".rule"); });
+  var ticks = sections.map(function (s) {
+    var h = s.querySelector("h2");
+    if (!h) { return null; }
+    var t = document.createElementNS(SVGNS, "svg");
+    t.setAttribute("class", "h2tick");
+    t.setAttribute("viewBox", "0 0 10 8");
+    t.setAttribute("aria-hidden", "true");
+    t.setAttribute("focusable", "false");
+    var p = document.createElementNS(SVGNS, "path");
+    p.setAttribute("d", "M1 4.2 3.6 6.8 9 1.4");
+    t.appendChild(p);
+    h.insertBefore(t, h.firstChild);
+    return t;
+  });
+  var ruled = ids.map(function () { return false; });
+  var toRule = ids.length;
+  function ruleOff(i) {
+    ruled[i] = true;
+    toRule -= 1;
+    if (rules[i]) { rules[i].classList.add("drawn"); }
+    if (ticks[i]) { ticks[i].classList.add("drawn"); }
+  }
+  if (RM) {
+    for (var ri = 0; ri < ids.length; ri++) { ruleOff(ri); }
+  }
+
   var queued = false;
+  var lastSeen = -1;
   var shown = window.matchMedia("(min-width:68rem)");
   function frame() {
     queued = false;
-    // Below 68rem the spine is display:none; skip the layout reads.
-    if (!shown.matches) { return; }
+    var wide = shown.matches;
+    // Below 68rem the spine is display:none; once every section is
+    // also ruled off there is nothing left to measure.
+    if (!wide && toRule === 0) { return; }
     var doc = document.documentElement;
     var max = doc.scrollHeight - window.innerHeight;
+    var mid = window.innerHeight * 0.55;
+    var passline = window.innerHeight * 0.3;
+    var atEnd = max > 0 && window.scrollY >= max - 8;
+    var seen = 0;
+    for (var i = 0; i < sections.length; i++) {
+      var r = sections[i].getBoundingClientRect();
+      if (wide) {
+        var done = r.top < mid;
+        nodes[i].classList.toggle("done", done);
+        if (done) { seen += 1; }
+      }
+      if (!ruled[i] && (r.bottom < passline || atEnd)) { ruleOff(i); }
+    }
+    if (!wide) { return; }
     var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     fill.style.height = (p * 100) + "%";
-    var seen = 0;
-    var mid = window.innerHeight * 0.55;
-    sections.forEach(function (s, i) {
-      var done = s.getBoundingClientRect().top < mid;
-      nodes[i].classList.toggle("done", done);
-      if (done) { seen += 1; }
-    });
-    // Every section seen: the books balance. Scrolling back up reopens
-    // the count, exactly as a ledger would.
-    if (seen === ids.length) {
-      tally.innerHTML = "<b>in balance</b>";
-    } else {
-      tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/" + String(ids.length).padStart(2, "0") + " reconciled";
+    // Every section seen: the books balance and the tally takes the
+    // date stamp. Scrolling back up reopens the count, exactly as a
+    // ledger would. The line is rewritten only when the count moves,
+    // never per frame; reduced motion gets the words with no stamp.
+    if (seen !== lastSeen) {
+      lastSeen = seen;
+      if (seen === ids.length) {
+        tally.innerHTML = "<b>in balance</b>";
+        if (!RM) { tally.classList.add("on"); }
+      } else {
+        tally.classList.remove("on");
+        tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/" + String(ids.length).padStart(2, "0") + " reconciled";
+      }
     }
   }
   function schedule() {
@@ -2120,6 +2333,21 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var W = 0, H = 0, parts = [], running = false, raf = 0, heroVis = true;
   var px = 0.5, py = 0.5;
 
+  /* The attentive field. When the pointer slows or rests over the
+     hero, the record surfaces: one real figure from the page fades in
+     near the pointer, drifts upward and dissolves, and the drifting
+     digits closest to it brighten while it lives. One slot, allocated
+     once; every timing runs off the rAF clock the field already keeps.
+     Fine pointers only: a touch screen never rests a pointer. */
+  var FINE = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+  var FIGS = ["10/13", "12,000", "2019", "07/07", "hello@"];
+  var figIdx = 0;
+  var slot = { on: false, text: "", x: 0, y: 0, born: 0 };
+  var coolUntil = 0;
+  var overHero = false, everMoved = false;
+  var relX = 0, relY = 0;
+  var lastCX = 0, lastCY = 0, lastMoveT = 0, slowSince = 0;
+
   function size() {
     // Mobile URL bars fire resize without changing the hero box; a
     // rebuild would teleport every drifting digit for no reason.
@@ -2148,10 +2376,37 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     }
   }
 
-  function draw() {
+  function draw(now) {
     ctx.clearRect(0, 0, W, H);
     var ox = (px - 0.5) * 26;
     var oy = (py - 0.5) * 18;
+
+    /* Surfacing lifecycle. env is the alpha envelope, a half sine over
+       a 2.2s life; rise is how far the figure has drifted upward. A
+       new surfacing only begins once the pointer has been slow for
+       250ms over the hero and the 2s cooldown has cleared. */
+    var env = 0, rise = 0;
+    if (FINE) {
+      if (slot.on) {
+        var life = now - slot.born;
+        if (life >= 2200) {
+          slot.on = false;
+          coolUntil = now + 2000;
+        } else {
+          env = Math.sin((life / 2200) * Math.PI);
+          rise = (life / 2200) * 24;
+        }
+      }
+      if (!slot.on && everMoved && overHero && now >= coolUntil && now - slowSince >= 250) {
+        slot.on = true;
+        slot.born = now;
+        slot.text = FIGS[figIdx];
+        figIdx = (figIdx + 1) % FIGS.length;
+        slot.x = Math.min(W - 44, Math.max(44, relX));
+        slot.y = Math.min(H - 24, Math.max(56, relY));
+      }
+    }
+
     for (var i = 0; i < parts.length; i++) {
       var p = parts[i];
       p.x += p.vx; p.y += p.vy;
@@ -2165,9 +2420,28 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (p.pulse > 0) {
         ctx.fillStyle = "rgba(201,170,124," + (0.30 * p.pulse).toFixed(3) + ")";
       } else {
-        ctx.fillStyle = "rgba(160,168,173," + p.a.toFixed(3) + ")";
+        /* Digits near a live surfacing lean towards it, brightening
+           with its envelope and settling back as it dissolves. */
+        var a = p.a;
+        if (env > 0) {
+          var sdx = p.x - slot.x, sdy = p.y - slot.y;
+          if (sdx * sdx + sdy * sdy < 6400) {
+            a = Math.min(0.18, a * (1 + 0.6 * env));
+          }
+        }
+        ctx.fillStyle = "rgba(160,168,173," + a.toFixed(3) + ")";
       }
       ctx.fillText(String(p.d), p.x + ox * p.depth, p.y + oy * p.depth);
+    }
+
+    /* The surfaced figure itself: same mono face as the field, half
+       again their size, brass, dissolving as it rises. */
+    if (env > 0) {
+      ctx.font = '18px "IBM Plex Mono", monospace';
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(201,170,124," + (0.28 * env).toFixed(3) + ")";
+      ctx.fillText(slot.text, slot.x, slot.y - rise);
+      ctx.textAlign = "start";
     }
     raf = window.requestAnimationFrame(draw);
   }
@@ -2180,7 +2454,28 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   window.addEventListener("pointermove", function (e) {
     px = e.clientX / window.innerWidth;
     py = e.clientY / window.innerHeight;
+    if (!FINE) { return; }
+    /* Attentive field bookkeeping: where the pointer is relative to
+       the hero, and how fast it is moving. Any movement above the
+       threshold (about 120px per second) restarts the rest timer. */
+    var t = window.performance ? performance.now() : 0;
+    var r = hero.getBoundingClientRect();
+    relX = e.clientX - r.left;
+    relY = e.clientY - r.top;
+    overHero = relX >= 0 && relX <= r.width && relY >= 0 && relY <= r.height;
+    if (lastMoveT) {
+      var dt = t - lastMoveT;
+      var dx = e.clientX - lastCX;
+      var dy = e.clientY - lastCY;
+      if (dt > 0 && dx * dx + dy * dy > 0.0144 * dt * dt) { slowSince = t; }
+    } else {
+      slowSince = t;
+    }
+    lastCX = e.clientX; lastCY = e.clientY; lastMoveT = t;
+    everMoved = true;
   }, { passive: true });
+  /* The pointer leaving the page must not read as resting on it. */
+  document.addEventListener("pointerleave", function () { overHero = false; });
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) { stop(); } else { start(); }
   });
