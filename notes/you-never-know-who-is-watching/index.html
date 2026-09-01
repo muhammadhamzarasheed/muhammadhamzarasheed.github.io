@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>You never know who is watching</title>
+<title>You never know who is watching &middot; Muhammad Hamza</title>
 <meta name="description" content="Two student roles I took to help others turned out to build the person who does my job today. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/notes/you-never-know-who-is-watching/">
@@ -16,13 +16,16 @@
 <meta property="og:description" content="Two student roles I took to help others turned out to build the person who does my job today.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/notes/you-never-know-who-is-watching/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="You never know who is watching">
 <meta name="twitter:description" content="Two student roles I took to help others turned out to build the person who does my job today.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -43,10 +46,12 @@
 </script>
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -56,7 +61,7 @@
   --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
 }
 *{box-sizing:border-box;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -178,8 +183,12 @@ footer .in{
 }
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
+.js .head{opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;}
+.js .head+hr{transform:scaleX(0);transform-origin:left;transition:transform .6s ease .2s;}
+.js.arrived .head{opacity:1;transform:translateY(0);}
+.js.arrived .head+hr{transform:scaleX(1);}
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -194,9 +203,11 @@ footer a:hover{color:var(--brass);}
 
 <main>
 <article>
-  <p class="label"><b>Entry</b> &middot; 07</p>
-  <h1>You never know who is watching</h1>
-  <p class="byline"><b>Muhammad Hamza</b> &middot; Assessment Lead &middot; August 2026 &middot; 3 minute read</p>
+  <header class="head">
+    <p class="label"><b>Entry</b> &middot; 07</p>
+    <h1>You never know who is watching</h1>
+    <p class="byline"><b>Muhammad Hamza</b> &middot; Assessment Lead &middot; August 2026 &middot; 3 minute read</p>
+  </header>
 
   <hr>
 
@@ -224,9 +235,26 @@ footer a:hover{color:var(--brass);}
 <footer>
   <div class="in">
     <p class="label"><a href="/">Back to the record</a></p>
-    <p class="label"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/">Reply on LinkedIn</a></p>
+    <p class="label"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" target="_blank" rel="noopener">Reply on LinkedIn</a></p>
   </div>
 </footer>
+
+<script>
+/* Arrival: the entry header fades up and the rule under it draws in
+   once the document is ready. The start states live under .js, so a
+   visit with scripts off renders the finished page. Reduced motion is
+   handled by the kill block in the stylesheet, which collapses the
+   transitions to nothing. */
+(function () {
+  var root = document.documentElement;
+  root.classList.add("js");
+  document.addEventListener("DOMContentLoaded", function () {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { root.classList.add("arrived"); });
+    });
+  });
+})();
+</script>
 
 </body>
 </html>

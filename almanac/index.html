@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The almanac</title>
+<title>The almanac &middot; Muhammad Hamza</title>
 <meta name="description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester, all computed on the page. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/almanac/">
@@ -16,19 +16,24 @@
 <meta property="og:description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/almanac/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The almanac">
 <meta name="twitter:description" content="Today, reconciled: day and week counts, the working days that remain, sunrise, sunset and the state of the moon over Manchester.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -39,7 +44,7 @@
 }
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -124,7 +129,7 @@ p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(
   gap:.8rem;
 }
 .inst .head span{font-size:.9375rem;font-weight:600;letter-spacing:-.01em;color:var(--text);}
-.inst .head .leader{flex:1;min-width:1.5rem;border-bottom:1px dotted #3B434A;transform:translateY(-4px);}
+.inst .head .leader{flex:1;min-width:1.5rem;border-bottom:1px dotted var(--line-2);transform:translateY(-4px);}
 .inst .head b{
   font-family:var(--mono);
   font-variant-numeric:tabular-nums;
@@ -189,12 +194,12 @@ footer .in{
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
 @media print{
-  :root{--void:#fff;--raise:#fff;--line:#D9D9D5;--text:#16181A;--text-2:#3C4348;--text-3:#5A646B;--brass:#8A6D3F;--brass-soft:rgba(138,109,63,.12);}
+  :root{color-scheme:light;--void:#fff;--raise:#fff;--line:#D9D9D5;--text:#16181A;--text-2:#3C4348;--text-3:#5A646B;--brass:#8A6D3F;--brass-soft:rgba(138,109,63,.12);}
   body{background:#fff;}
   .bar,footer{display:none !important;}
 }
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -209,7 +214,7 @@ footer a:hover{color:var(--brass);}
 
 <main>
 <article>
-  <p class="label"><b>Appendix C</b> &middot; the almanac</p>
+  <p class="label"><b>Appendix E</b> &middot; the almanac</p>
   <h1>Today, reconciled</h1>
   <p class="byline">Computed on this page &middot; no forecast service &middot; Manchester's sky</p>
   <hr>
@@ -405,7 +410,7 @@ window.setTimeout(function () { $("doybar").style.width = pct.toFixed(2) + "%"; 
   // the dark disc
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-  ctx.fillStyle = "#15181A";
+  ctx.fillStyle = "#171A1C";
   ctx.fill();
   ctx.lineWidth = 2;
   ctx.strokeStyle = "#333A3F";

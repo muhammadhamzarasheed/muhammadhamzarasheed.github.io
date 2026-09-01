@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The calibration</title>
+<title>The calibration · Muhammad Hamza</title>
 <meta name="description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/calibration/">
@@ -16,20 +16,25 @@
 <meta property="og:description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/calibration/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The calibration">
 <meta name="twitter:description" content="Five precision instruments: an estimate, a re-key, a moved entry, a shade and an interval. Five rounds each, scored out of 50.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --raise-2:#171A1C;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -41,7 +46,7 @@
 }
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -331,9 +336,7 @@ footer .in{
 }
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
-@media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;animation-duration:.001ms !important;}
-}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}}
 </style>
 </head>
 <body>
@@ -380,7 +383,7 @@ footer a:hover{color:var(--brass);}
       <span class="no">03</span>
       <div class="gmain">
         <h2>The moved entry</h2>
-        <p>One mark is shifted while you watch. Return it to its place.</p>
+        <p>Two entries trade places behind a passing shade. Point out the pair.</p>
         <span class="best" id="best-moved">needs JavaScript</span>
       </div>
       <button class="btn primary" id="begin-moved" type="button" disabled>Begin</button>

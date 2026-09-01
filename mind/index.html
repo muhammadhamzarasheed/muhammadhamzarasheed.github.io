@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Something for your mind</title>
+<title>Something for your mind &middot; Muhammad Hamza</title>
 <meta name="description" content="Six small games: judgement by eye, a steady hand, snake in brass, lights out, a stubborn odometer and a data entry test. No prizes. By Muhammad Hamza.">
 <meta name="theme-color" content="#0A0B0C">
 <link rel="canonical" href="https://muhammadhamza.co.uk/mind/">
@@ -16,19 +16,25 @@
 <meta property="og:description" content="Six small games: judgement by eye, a steady hand, snake in brass, lights out, a stubborn odometer and a data entry test. No prizes.">
 <meta property="og:url" content="https://muhammadhamza.co.uk/mind/">
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Something for your mind">
 <meta name="twitter:description" content="Six small games: judgement by eye, a steady hand, snake in brass, lights out, a stubborn odometer and a data entry test. No prizes.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <style>
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
+  --raise-2:#171A1C;
   --line:#22262A;
-  --text:#F2F4F5;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -40,7 +46,7 @@
 }
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
-html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:#333A3F var(--void);}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
 body{
   margin:0;
   background:var(--void);
@@ -109,6 +115,19 @@ h1{
 hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
 p.lede{color:var(--text-2);max-width:62ch;margin:0;}
 p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+/* while a game is open the intro steps aside, but the h1 stays in the
+   document, visually hidden, so the page never loses its heading */
+#intro.veiled > :not(h1){display:none;}
+#intro.veiled h1{
+  position:absolute;
+  width:1px;height:1px;
+  margin:-1px;padding:0;border:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+#g-eye,#g-wire,#g-snake,#g-lights,#g-reels,#g-entry,#menu{outline:none;}
 
 /* ---------- menu ---------- */
 .menu{display:grid;gap:.8rem;margin-top:2.4rem;}
@@ -142,7 +161,7 @@ a.gcard:hover{border-color:var(--brass);}
 .ghead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin:2.4rem 0 .4rem;}
 .ghead h2{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
 .ghead h2 i{font-family:var(--mono);font-style:normal;font-size:.6875rem;letter-spacing:.15em;color:var(--brass);vertical-align:.45em;margin-right:.6rem;}
-a.gback{font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);transition:color .25s ease;white-space:nowrap;}
+a.gback{font-family:var(--mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);transition:color .25s ease;white-space:nowrap;display:inline-block;padding:.35rem 0;}
 a.gback:hover{color:var(--brass);}
 .gnote{color:var(--text-3);font-size:.9rem;margin:0 0 1.3rem;max-width:60ch;}
 .board{
@@ -258,9 +277,9 @@ a.gback:hover{color:var(--brass);}
 
 /* ---------- steady hand ---------- */
 .wirewrap svg{display:block;width:100%;height:auto;touch-action:none;-webkit-user-select:none;user-select:none;}
-.wirewrap .corr{fill:none;stroke:#15181A;stroke-linecap:round;stroke-linejoin:round;}
+.wirewrap .corr{fill:none;stroke:var(--raise-2);stroke-linecap:round;stroke-linejoin:round;}
 .wirewrap .wire{fill:none;stroke:var(--brass);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .1s ease;}
-.wirewrap.flash .wire{stroke:#F2F4F5;}
+.wirewrap.flash .wire{stroke:var(--text);}
 .wirewrap.demo .wire{stroke:var(--brass-hi);}
 .wirewrap .pad{fill:var(--brass-soft);stroke:var(--brass);stroke-width:1.5;}
 .wirewrap .padend{fill:none;stroke:var(--text-3);stroke-width:1.5;}
@@ -298,7 +317,7 @@ a.gback:hover{color:var(--brass);}
 .lgrid button{
   aspect-ratio:1;
   border-radius:.5rem;
-  border:1px solid var(--line);
+  border:1px solid var(--line-2);
   background:var(--void);
   cursor:pointer;
   transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
@@ -415,7 +434,7 @@ footer .in{
 footer a{transition:color .25s ease;}
 footer a:hover{color:var(--brass);}
 @media (prefers-reduced-motion:reduce){
-  *{transition-duration:.001ms !important;}
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
@@ -476,7 +495,7 @@ footer a:hover{color:var(--brass);}
   <!-- 01 The Eye -->
   <section id="g-eye" hidden>
     <div class="ghead"><h2><i>01</i>The Eye</h2><a class="gback" href="#">All games</a></div>
-    <p class="gnote">Five rounds, one attempt each: a midpoint, a centre, three seconds, a circle, ten seconds. You estimate, the page measures, the gap is the score.</p>
+    <p class="gnote">Five rounds, one attempt each: a midpoint, a centre, three seconds, a circle, ten seconds. You estimate, the page measures, the gap is the score. The pointing rounds need a mouse, touch or stylus.</p>
     <div class="board" id="eyestage"></div>
     <div class="ledger" id="eyeledger" hidden></div>
   </section>
@@ -484,9 +503,9 @@ footer a:hover{color:var(--brass);}
   <!-- 02 Steady Hand -->
   <section id="g-wire" hidden>
     <div class="ghead"><h2><i>02</i>Steady Hand</h2><a class="gback" href="#">All games</a></div>
-    <p class="gnote">Rest your pointer on the brass pad, then follow the wire to the ring without touching the edges of the channel. Three lives. Touches cost three seconds each. On a phone, trace with your finger and the channel is a little kinder.</p>
+    <p class="gnote">Rest your pointer on the brass pad, then follow the wire to the ring without touching the edges of the channel. Three lives. Touches cost three seconds each. On a phone, trace with your finger and the channel is a little kinder. This one needs a mouse, touch or stylus.</p>
     <div class="board wirewrap" id="wirewrap">
-      <svg id="wiresvg" viewBox="0 0 600 320" aria-label="Steady hand wire course">
+      <svg id="wiresvg" viewBox="0 0 600 320" role="img" aria-label="Steady hand wire course">
         <path class="corr" id="wirecorr" d=""/>
         <path class="wire" id="wirepath" d="M 45 258 C 100 100 170 78 230 148 C 282 209 300 242 362 221 C 432 197 420 92 481 76 C 522 65 546 96 558 132"/>
         <circle class="pad" id="wirestart" r="17"/>
@@ -498,7 +517,7 @@ footer a:hover{color:var(--brass);}
     <div class="hud">
       <span id="wirelives"><span class="life">&#9679;</span> <span class="life">&#9679;</span> <span class="life">&#9679;</span></span>
       <span id="wiretime">0.0 s</span>
-      <span id="wiremsg">waiting at the pad</span>
+      <span id="wiremsg" role="status">waiting at the pad</span>
     </div>
     <div class="btnrow"><button class="btn" id="wirereset" type="button">Reset</button></div>
   </section>
@@ -511,7 +530,7 @@ footer a:hover{color:var(--brass);}
       <canvas id="snakecv" aria-label="Snake game board"></canvas>
       <div class="overlay" id="snakeover">
         <p class="big">Snake</p>
-        <p id="snakeovermsg">Press an arrow key, or swipe, to begin.</p>
+        <p id="snakeovermsg" role="status">Press an arrow key, or swipe, to begin.</p>
         <button class="btn primary" id="snakego" type="button">Begin</button>
       </div>
     </div>
@@ -548,7 +567,7 @@ footer a:hover{color:var(--brass);}
       <span>moves <b id="lightsmoves">0</b></span>
       <span id="lightspar"></span>
     </div>
-    <p class="reelmsg" id="lightsmsg"></p>
+    <p class="reelmsg" id="lightsmsg" role="status"></p>
     <div class="btnrow">
       <button class="btn" id="lightsreset" type="button">Reset board</button>
       <button class="btn" id="lightsrandom" type="button">Random board</button>
@@ -568,7 +587,7 @@ footer a:hover{color:var(--brass);}
         <div class="reel"><div class="strip"></div></div>
         <div class="reel"><div class="strip"></div></div>
       </div>
-      <p class="reelmsg" id="reelmsg"></p>
+      <p class="reelmsg" id="reelmsg" role="status"></p>
       <div class="reelbtns">
         <button class="btn primary" id="reelstop" type="button">Start</button>
         <button class="btn" id="reelnew" type="button" hidden>New target</button>
@@ -621,20 +640,28 @@ var leaves = {};  // called when navigating away
 var built = {};
 var current = null;
 
+function focusPane(el) {
+  // keyboard focus must land somewhere real when panes swap, never on body
+  el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+}
 function route() {
   var h = location.hash.replace("#", "");
   var next = GAMES.indexOf(h) > -1 ? h : null;
+  var from = current;
   if (current && current !== next && leaves[current]) { leaves[current](); }
   $("menu").hidden = !!next;
-  $("intro").hidden = !!next;
+  $("intro").classList.toggle("veiled", !!next);
   GAMES.forEach(function (g) { $("g-" + g).hidden = (g !== next); });
   current = next;
   if (next) {
     if (!built[next]) { built[next] = true; inits[next](); }
     if (enters[next]) { enters[next](); }
     window.scrollTo(0, 0);
+    focusPane($("g-" + next));
   } else {
     menuBests();
+    if (from) { focusPane($("menu")); }
   }
 }
 window.addEventListener("hashchange", route);
@@ -1157,7 +1184,7 @@ inits.snake = function () {
   function draw() {
     ctx.fillStyle = "#0A0B0C";
     ctx.fillRect(0, 0, cell * COLS, cell * ROWS);
-    ctx.fillStyle = "rgba(242,244,245,.045)";
+    ctx.fillStyle = "rgba(237,234,228,.045)";
     for (var gx = 1; gx < COLS; gx++) {
       for (var gy = 1; gy < ROWS; gy++) {
         ctx.fillRect(gx * cell - 1, gy * cell - 1, 1, 1);

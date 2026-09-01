@@ -18,14 +18,14 @@
 <meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Muhammad Hamza. Reconcile before you report. Evidence every decision. Build the audit trail as you go.">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Muhammad Hamza">
 <meta name="twitter:description" content="Assessment Lead at UK Management College. Reconcile before you report, evidence every decision, build the audit trail as you go.">
 <meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -57,12 +57,13 @@
 /* Committed single theme. Every colour is painted explicitly so the page
    holds its own ground whatever the viewer's system is set to. */
 :root{
+  color-scheme:dark;
   --void:#0A0B0C;
   --raise:#121415;
   --raise-2:#171A1C;
   --line:#22262A;
   --line-2:#333A3F;
-  --text:#F2F4F5;
+  --text:#EDEAE4;
   --text-2:#A0A8AD;
   --text-3:#7B858C;
   --brass:#C9AA7C;
@@ -95,6 +96,38 @@ body{
 ::selection{background:var(--brass-soft);color:var(--text);}
 a{color:inherit;text-decoration:none;}
 :focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+
+/* Screen reader only: present in the accessibility tree, absent from view. */
+.vh{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
+  border:0;
+}
+
+/* Skip link: parked above the viewport until keyboard focus calls it down. */
+.skip{
+  position:fixed;
+  top:.9rem;
+  left:50%;
+  transform:translate(-50%,-300%);
+  z-index:200;
+  padding:.6rem 1.1rem;
+  background:var(--raise);
+  border:1px solid var(--brass);
+  border-radius:.6rem;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.skip:focus{transform:translate(-50%,0);}
 
 /* Thin dark scrollbar so the frame matches the page. Standard properties
    only: mixing them with ::-webkit-scrollbar rules makes modern Chromium
@@ -708,13 +741,13 @@ h2{
 }
 .q p{margin:0;}
 .q p + p{margin-top:.8rem;}
-.q .w{color:rgba(242,244,245,.14);transition:color .3s ease;}
+.q .w{color:rgba(237,234,228,.32);transition:color .3s ease;}
 .q .w.on{color:var(--text);}
 .q p.turn .w{
   font-family:var(--serif);
   font-style:italic;
   font-weight:400;
-  color:rgba(201,170,124,.16);
+  color:rgba(201,170,124,.37);
 }
 .q p.turn .w.on{color:var(--brass);}
 .qclose{
@@ -884,6 +917,41 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 }
 .prior i{font-style:normal;font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--text-3);font-variant-numeric:tabular-nums;text-transform:uppercase;}
 
+/* ---------- journal strip ---------- */
+/* The journal reads as a shelf: cards in a horizontal scroll-snap
+   strip, native scrolling doing all the work, arrow keys included
+   once the strip has focus. Narrow viewports keep the vertical stack,
+   where a sideways shelf would fight the thumb. */
+@media (min-width:40rem){
+  .strip{
+    display:flex;
+    gap:1rem;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;
+    padding:.25rem .25rem 1.15rem;
+    scrollbar-width:thin;
+    scrollbar-color:var(--line-2) var(--void);
+  }
+  .strip .item{
+    flex:0 0 auto;
+    display:block;
+    min-width:20rem;
+    max-width:24rem;
+    margin:0;
+    padding:1.75rem 1.6rem;
+    scroll-snap-align:start;
+    background:var(--raise);
+    border:1px solid var(--line);
+    border-radius:var(--r);
+  }
+  .strip .item:last-child{border-bottom:1px solid var(--line);}
+  .strip .item .meta{text-align:left;margin-top:1.1rem;}
+  @media (hover:hover){
+    .strip .item:hover{background:var(--raise-2);}
+  }
+}
+
 /* ---------- capability columns ---------- */
 .cols{
   display:grid;
@@ -933,6 +1001,8 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 .js .grp.up.on dd span:nth-child(4){transition-delay:.18s;}
 .js .grp.up.on dd span:nth-child(5){transition-delay:.24s;}
 .js .grp.up.on dd span:nth-child(6){transition-delay:.3s;}
+.js .grp.up.on dd span:nth-child(7){transition-delay:.36s;}
+.js .grp.up.on dd span:nth-child(8){transition-delay:.42s;}
 @media (hover:hover){
   .grp dd span:hover{
     transform:rotate(-2.5deg) translateY(-2px);
@@ -1021,6 +1091,33 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-3);
 }
 .ans .src a{color:var(--brass);}
+/* The clerk checks the record before speaking: three brass dots for a
+   beat, then the answer settles in. Both gestures sit behind the
+   motion gate; reduced motion gets the answer straight away. */
+.dots{display:inline-block;}
+.dots i{
+  display:inline-block;
+  width:3px;
+  height:3px;
+  margin-left:4px;
+  border-radius:50%;
+  background:var(--brass);
+  vertical-align:.1em;
+}
+@media (prefers-reduced-motion:no-preference){
+  .dots i{animation:dotpulse .6s ease-in-out infinite;}
+  .dots i:nth-child(2){animation-delay:.15s;}
+  .dots i:nth-child(3){animation-delay:.3s;}
+  @keyframes dotpulse{
+    0%,100%{opacity:.25;transform:translateY(0);}
+    50%{opacity:1;transform:translateY(-2px);}
+  }
+  .ans.in{animation:ansin .25s ease both;}
+  @keyframes ansin{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:none;}
+  }
+}
 
 /* ---------- contact ---------- */
 .reach{margin-top:2.75rem;display:grid;gap:.75rem;width:100%;max-width:34rem;}
@@ -1035,7 +1132,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   border:1px solid var(--line);
   border-radius:var(--r);
   font-weight:500;
-  transition:background .3s ease,border-color .3s ease,transform .3s ease;
+  transition:background .3s ease,border-color .25s ease,transform .3s ease;
 }
 .reach i{font-style:normal;font-family:var(--mono);font-size:.75rem;letter-spacing:.05em;color:var(--text-3);font-weight:400;}
 @media (hover:hover){
@@ -1047,6 +1144,30 @@ footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
 footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:baseline;}
 footer .label a{transition:color .25s ease;}
 footer .label a:hover{color:var(--brass);}
+/* The monogram signs the page off: three strokes drawn in order once
+   the reader reaches the footer, once per load. Same dashoffset trick
+   as the hero crest, fired by a class instead of a keyframe. Start
+   states live under the motion gate only, so reduced motion and no-JS
+   visitors both keep the finished mark. Opacity snaps on per stroke
+   because round linecaps render a stray dot at zero draw length. */
+@media (prefers-reduced-motion:no-preference){
+  .js #countersign path{
+    stroke-dasharray:140;
+    stroke-dashoffset:140;
+    opacity:0;
+  }
+  .js #countersign.sign path{
+    stroke-dashoffset:0;
+    opacity:1;
+    transition:stroke-dashoffset .5s cubic-bezier(.2,.7,.2,1) 0s,opacity 0s linear 0s;
+  }
+  .js #countersign.sign path:nth-child(2){
+    transition:stroke-dashoffset .3s cubic-bezier(.2,.7,.2,1) .4s,opacity 0s linear .4s;
+  }
+  .js #countersign.sign path:nth-child(3){
+    transition:stroke-dashoffset .25s cubic-bezier(.2,.7,.2,1) .65s,opacity 0s linear .65s;
+  }
+}
 .hint{display:none;}
 @media (hover:hover) and (pointer:fine){
   .hint{display:block;}
@@ -1132,6 +1253,27 @@ footer .label a:hover{color:var(--brass);}
 .js .up.d3{transition-delay:.24s;}
 .js .up.d4{transition-delay:.32s;}
 .js .up.d5{transition-delay:.4s;}
+/* Section headings rise word by word once the reveal marks them on.
+   Each word carries its own inline transition-delay; the reduced
+   motion kill block flattens both duration and delay. */
+.js h2 .w{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(.5em);
+  transition:opacity .6s cubic-bezier(.16,.8,.3,1),transform .6s cubic-bezier(.16,.8,.3,1);
+}
+.js h2.on .w{opacity:1;transform:none;}
+/* The name arrives letter by letter once the fonts are ready. The
+   spans only exist when motion is allowed, so no gate is needed on
+   the start state; words stay unbreakable so the line wraps whole. */
+.js .hero h1 .word{display:inline-block;white-space:nowrap;}
+.js .hero h1 .c{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(.35em);
+  transition:opacity .7s cubic-bezier(.16,.8,.3,1),transform .7s cubic-bezier(.16,.8,.3,1);
+}
+.js .hero h1.chars-on .c{opacity:1;transform:none;}
 /* Revealed cards must keep their own hover transitions: the reveal
    shorthand would otherwise replace them and make hovers snap. */
 .js .tile.up.on{transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),background .3s ease,border-color .3s ease;}
@@ -1149,11 +1291,14 @@ footer .label a:hover{color:var(--brass);}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .up{opacity:1;transform:none;}
+  .js h2 .w{opacity:1;transform:none;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 </style>
 </head>
 <body>
+
+<a class="skip" href="#top">Skip to content</a>
 
 <nav class="nav" id="nav">
   <div class="shell">
@@ -1164,7 +1309,7 @@ footer .label a:hover{color:var(--brass);}
       <li><a href="#experience">Experience</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#journal">Journal</a></li>
-      <li><a href="#elsewhere">Elsewhere</a></li>
+      <li><a href="#elsewhere">Field notes</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="/appendix/" target="_blank" rel="noopener">After hours</a></li>
     </ul>
@@ -1178,7 +1323,7 @@ footer .label a:hover{color:var(--brass);}
   <a href="#experience">Experience</a>
   <a href="#education">Education</a>
   <a href="#journal">Journal</a>
-  <a href="#elsewhere">Elsewhere</a>
+  <a href="#elsewhere">Field notes</a>
   <a href="#contact">Contact</a>
   <a href="/appendix/" target="_blank" rel="noopener">After hours</a>
 </div>
@@ -1436,7 +1581,7 @@ footer .label a:hover{color:var(--brass);}
       <h2 class="up d1">Written down plainly.</h2>
       <p class="prose up d2">Occasional essays on assessment, fairness, and the habits that carry between finance and education. Each one opens in its own tab, so the record stays where you left it.</p>
 
-      <div class="record">
+      <div class="record strip" role="region" tabindex="0" aria-label="Journal entries, scroll list">
         <article class="item up">
           <div>
             <h3><a href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener">Accuracy is an equity issue</a></h3>
@@ -1548,7 +1693,7 @@ footer .label a:hover{color:var(--brass);}
       </div>
 
       <div class="reach up d4">
-        <a href="https://www.linkedin.com/in/muhammadhamzarasheed/">LinkedIn <i>in/muhammadhamzarasheed</i></a>
+        <a href="https://www.linkedin.com/in/muhammadhamzarasheed/" target="_blank" rel="noopener">LinkedIn <i>in/muhammadhamzarasheed</i></a>
         <a href="mailto:hello@muhammadhamza.co.uk">Email <i>hello@muhammadhamza.co.uk</i></a>
         <a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener">Curriculum Vitae <i>pdf, two pages</i></a>
       </div>
@@ -1561,22 +1706,23 @@ footer .label a:hover{color:var(--brass);}
   <div class="shell">
     <p class="label lockup"><svg class="mark" id="countersign" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza</p>
     <p class="label hint">Press <kbd>/</kbd> to navigate</p>
-    <p class="label"><a href="/appendix/" target="_blank" rel="noopener">Something for you</a></p>
+    <p class="label"><a href="/appendix/" target="_blank" rel="noopener">After hours</a></p>
     <p class="label">Reconcile before you report</p>
   </div>
 </footer>
 
 <div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Quick navigation" hidden>
   <div class="card">
-    <input id="palq" type="text" placeholder="Where to?" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="pallist" aria-autocomplete="list" aria-label="Search destinations">
+    <input id="palq" type="text" placeholder="Where to?" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="pallist" aria-autocomplete="list" aria-label="Search destinations">
+    <span class="vh" id="palcount" aria-live="polite"></span>
     <ul id="pallist" role="listbox" aria-label="Destinations">
       <li role="option" id="palopt-1" aria-selected="false"><a href="#method" tabindex="-1">Method <i>section</i></a></li>
       <li role="option" id="palopt-2" aria-selected="false"><a href="#now" tabindex="-1">Now <i>section</i></a></li>
       <li role="option" id="palopt-3" aria-selected="false"><a href="#experience" tabindex="-1">Experience <i>section</i></a></li>
       <li role="option" id="palopt-4" aria-selected="false"><a href="#education" tabindex="-1">Education <i>section</i></a></li>
-      <li role="option" id="palopt-5" aria-selected="false"><a href="#elsewhere" tabindex="-1">Elsewhere <i>section</i></a></li>
-      <li role="option" id="palopt-6" aria-selected="false"><a href="#contact" tabindex="-1">Contact <i>section</i></a></li>
       <li role="option" id="palopt-12" aria-selected="false"><a href="#journal" tabindex="-1">Journal <i>section</i></a></li>
+      <li role="option" id="palopt-5" aria-selected="false"><a href="#elsewhere" tabindex="-1">Field notes <i>section</i></a></li>
+      <li role="option" id="palopt-6" aria-selected="false"><a href="#contact" tabindex="-1">Contact <i>section</i></a></li>
       <li role="option" id="palopt-10" aria-selected="false"><a href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener" tabindex="-1">Accuracy is an equity issue <i>entry</i></a></li>
       <li role="option" id="palopt-13" aria-selected="false"><a href="/notes/starting-over-is-not-going-backwards/" target="_blank" rel="noopener" tabindex="-1">Starting over is not going backwards <i>entry</i></a></li>
       <li role="option" id="palopt-14" aria-selected="false"><a href="/notes/the-person-you-are-becoming/" target="_blank" rel="noopener" tabindex="-1">The person you are becoming <i>entry</i></a></li>
@@ -1584,7 +1730,7 @@ footer .label a:hover{color:var(--brass);}
       <li role="option" id="palopt-16" aria-selected="false"><a href="/notes/the-wrong-rulebook/" target="_blank" rel="noopener" tabindex="-1">The wrong rulebook <i>entry</i></a></li>
       <li role="option" id="palopt-17" aria-selected="false"><a href="/notes/what-cannot-be-cured/" target="_blank" rel="noopener" tabindex="-1">What cannot be cured <i>entry</i></a></li>
       <li role="option" id="palopt-18" aria-selected="false"><a href="/notes/you-never-know-who-is-watching/" target="_blank" rel="noopener" tabindex="-1">You never know who is watching <i>entry</i></a></li>
-      <li role="option" id="palopt-7" aria-selected="false"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" tabindex="-1">LinkedIn <i>profile</i></a></li>
+      <li role="option" id="palopt-7" aria-selected="false"><a href="https://www.linkedin.com/in/muhammadhamzarasheed/" target="_blank" rel="noopener" tabindex="-1">LinkedIn <i>profile</i></a></li>
       <li role="option" id="palopt-8" aria-selected="false"><a href="mailto:hello@muhammadhamza.co.uk" tabindex="-1">Email <i>write</i></a></li>
       <li role="option" id="palopt-19" aria-selected="false"><a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener" tabindex="-1">Curriculum Vitae <i>pdf</i></a></li>
       <li role="option" id="palopt-20" aria-selected="false"><a href="#officehours" tabindex="-1">Office hours <i>ask</i></a></li>
@@ -1599,11 +1745,34 @@ footer .label a:hover{color:var(--brass);}
   </div>
 </div>
 
-<script src="/vendor/gsap/gsap.min.js"></script>
-<script src="/vendor/gsap/DrawSVGPlugin.min.js"></script>
 <script>
 document.documentElement.classList.add("js");
 var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- section headings, word by word ---------- */
+/* Same splitter as the illuminated quote: every heading word gets its
+   own span and its own delay, and the heading keeps its full text for
+   assistive tech via aria-label. Runs before the reveal pass so no
+   heading is marked on before its words exist. */
+(function () {
+  [].slice.call(document.querySelectorAll("section h2")).forEach(function (h) {
+    var text = h.textContent;
+    h.setAttribute("aria-label", text);
+    var wrap = document.createElement("span");
+    wrap.setAttribute("aria-hidden", "true");
+    var parts = text.split(/\s+/).filter(Boolean);
+    parts.forEach(function (w, i) {
+      var s = document.createElement("span");
+      s.className = "w";
+      s.textContent = w;
+      s.style.transitionDelay = (i * 0.06).toFixed(2) + "s";
+      wrap.appendChild(s);
+      if (i < parts.length - 1) { wrap.appendChild(document.createTextNode(" ")); }
+    });
+    h.textContent = "";
+    h.appendChild(wrap);
+  });
+})();
 
 /* ---------- reveal + nav shade ---------- */
 (function () {
@@ -1709,6 +1878,43 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
 })();
 
+/* ---------- the name, letter by letter ---------- */
+/* Split only once the fonts are ready, so no letter is measured in a
+   fallback face. Each character rises on its own beat after the d1
+   delay; the letter-spacing settle on the heading itself carries on
+   underneath. Reduced motion never splits at all. */
+(function () {
+  if (RM || !document.fonts || !document.fonts.ready) { return; }
+  var h1 = document.querySelector(".hero h1");
+  if (!h1) { return; }
+  document.fonts.ready.then(function () {
+    var text = h1.textContent;
+    h1.setAttribute("aria-label", text);
+    var wrap = document.createElement("span");
+    wrap.setAttribute("aria-hidden", "true");
+    var words = text.split(/\s+/).filter(Boolean);
+    var n = 0;
+    words.forEach(function (word, wi) {
+      var ws = document.createElement("span");
+      ws.className = "word";
+      word.split("").forEach(function (ch) {
+        var s = document.createElement("span");
+        s.className = "c";
+        s.textContent = ch;
+        s.style.transitionDelay = (0.08 + n * 0.03).toFixed(2) + "s";
+        ws.appendChild(s);
+        n += 1;
+      });
+      wrap.appendChild(ws);
+      if (wi < words.length - 1) { wrap.appendChild(document.createTextNode(" ")); }
+    });
+    h1.textContent = "";
+    h1.appendChild(wrap);
+    void h1.offsetWidth;
+    h1.classList.add("chars-on");
+  });
+})();
+
 /* ---------- audit spine ---------- */
 (function () {
   var spine = document.getElementById("spine");
@@ -1718,7 +1924,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!spine || !rail) { return; }
 
   var ids = ["method", "now", "experience", "education", "journal", "elsewhere", "contact"];
-  var names = ["Method", "Now", "Experience", "Education", "Journal", "Elsewhere", "Contact"];
+  var names = ["Method", "Now", "Experience", "Education", "Journal", "Field notes", "Contact"];
   var sections = ids.map(function (id) { return document.getElementById(id); });
   var nodes = ids.map(function (id, i) {
     var b = document.createElement("button");
@@ -1754,7 +1960,13 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       nodes[i].classList.toggle("done", done);
       if (done) { seen += 1; }
     });
-    tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/" + String(ids.length).padStart(2, "0") + " reconciled";
+    // Every section seen: the books balance. Scrolling back up reopens
+    // the count, exactly as a ledger would.
+    if (seen === ids.length) {
+      tally.innerHTML = "<b>in balance</b>";
+    } else {
+      tally.innerHTML = "<b>" + String(seen).padStart(2, "0") + "</b>/" + String(ids.length).padStart(2, "0") + " reconciled";
+    }
   }
   function schedule() {
     if (queued) { return; }
@@ -2177,7 +2389,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       a: "Seven entries so far, from why accuracy is an equity issue to what starting over actually costs. They live in the <a href=\"#journal\">Journal</a>, and each opens in its own tab.",
       s: "Journal", h: "#journal" },
     { k: ["travel", "travelled", "travelling", "traveled", "trips", "visited", "elsewhere", "countries", "places", "been"],
-      a: "Italy twice over, Germany, Austria, Albania, Turkiye, Gibraltar, Pakistan whenever I can get back, and all four nations of the country I live in. At work I remove uncertainty. Away from the desk, none of it has to tie out.",
+      a: "Italy twice over, Germany, Austria, Albania, Türkiye, Gibraltar, Pakistan whenever I can get back, and all four nations of the country I live in. At work I remove uncertainty. Away from the desk, none of it has to tie out.",
       s: "Field notes", h: "#elsewhere" },
     { k: ["manchester", "based", "location", "where are you", "live"],
       a: "Manchester. The clock at the top of this page keeps Manchester time for every visitor, because that is where the books are kept.",
@@ -2207,10 +2419,25 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var FALLBACK = "That one is not in the record yet, and I would rather say so than guess. The direct route works: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.<span class=\"src\">From the record: <a href=\"#contact\">Contact</a></span>";
 
+  // The clerk consults the register before speaking: a short beat of
+  // brass dots, then the answer fades in. Reduced motion skips both
+  // the delay and the fade and simply states the answer.
+  var pend = 0;
+  function present(html) {
+    if (RM) { ans.innerHTML = html; return; }
+    window.clearTimeout(pend);
+    ans.classList.remove("in");
+    ans.innerHTML = "Checking the record<span class=\"dots\" aria-hidden=\"true\"><i></i><i></i><i></i></span>";
+    pend = window.setTimeout(function () {
+      ans.innerHTML = html;
+      ans.classList.add("in");
+    }, 300);
+  }
+
   function answer(q) {
     q = (q || "").toLowerCase().replace(/[^a-z0-9\s,+]/g, " ").replace(/\s+/g, " ").trim();
     if (!q) {
-      ans.innerHTML = "Office hours are open. Ask anything that is on the record, or start with one of the questions above.";
+      present("Office hours are open. Ask anything that is on the record, or start with one of the questions above.");
       return;
     }
     // Filler words score nothing; phrases still match exactly at any
@@ -2237,9 +2464,9 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (score > bestScore) { bestScore = score; best = item; }
     });
     if (best && bestScore >= 2) {
-      ans.innerHTML = best.a + "<span class=\"src\">From the record: <a href=\"" + best.h + "\">" + best.s + "</a></span>";
+      present(best.a + "<span class=\"src\">From the record: <a href=\"" + best.h + "\">" + best.s + "</a></span>");
     } else {
-      ans.innerHTML = FALLBACK;
+      present(FALLBACK);
     }
   }
 
@@ -2262,6 +2489,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var list = document.getElementById("pallist");
   if (!pal || !input) { return; }
   var rows = [].slice.call(list.querySelectorAll("li"));
+  var count = document.getElementById("palcount");
   var last = null;
 
   function visible() {
@@ -2285,6 +2513,8 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     last = document.activeElement;
     pal.hidden = false;
     input.value = "";
+    input.setAttribute("aria-expanded", "true");
+    if (count) { count.textContent = ""; }
     rows.forEach(function (r) { r.classList.remove("hide"); });
     list.scrollTop = 0;
     select(rows[0]);
@@ -2297,6 +2527,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
   function shut() {
     pal.classList.remove("open");
+    input.setAttribute("aria-expanded", "false");
     window.setTimeout(function () { pal.hidden = true; }, 220);
     if (last && last.focus) { last.focus(); }
   }
@@ -2305,7 +2536,11 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     rows.forEach(function (r) {
       r.classList.toggle("hide", q !== "" && r.textContent.toLowerCase().indexOf(q) === -1);
     });
-    select(visible()[0] || null);
+    var vis = visible();
+    if (count) {
+      count.textContent = vis.length === 1 ? "1 result" : vis.length + " results";
+    }
+    select(vis[0] || null);
   }
 
   document.addEventListener("keydown", function (e) {
@@ -2339,36 +2574,31 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- footer countersign ---------- */
 /* The monogram signs the page off: three strokes drawn in order once
-   the reader reaches the footer, once per load. */
+   the reader reaches the footer, once per load. The drawing itself is
+   pure CSS; this only adds the class. Reduced motion keeps the mark
+   complete because the start states never apply there. */
 (function () {
-  if (!window.gsap) { return; }
   var mark = document.getElementById("countersign");
-  if (!mark || !window.DrawSVGPlugin || !("IntersectionObserver" in window)) { return; }
-  // Reduced motion, or anything missing above: the mark simply stays
-  // complete, exactly as it renders without JS.
-  if (RM) { return; }
-  gsap.registerPlugin(window.DrawSVGPlugin);
-  var paths = mark.querySelectorAll("path");
-  // Start states from JS only, never CSS, so no-JS visitors keep the
-  // finished monogram. Each path also drops to alpha 0: round linecaps
-  // render a stray dot at zero draw length in some browsers.
-  gsap.set(paths, { drawSVG: "0%", autoAlpha: 0 });
+  if (!mark || RM) { return; }
+  if (!("IntersectionObserver" in window)) { mark.classList.add("sign"); return; }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) { return; }
       io.unobserve(e.target);
-      var tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-      // Stroke order as the pen would take it: the M, the far stem,
-      // then the crossbar, each starting as the previous nears its end.
-      tl.set(paths[0], { autoAlpha: 1 }, 0)
-        .to(paths[0], { drawSVG: "100%", duration: 0.5 }, 0)
-        .set(paths[1], { autoAlpha: 1 }, 0.4)
-        .to(paths[1], { drawSVG: "100%", duration: 0.3 }, 0.4)
-        .set(paths[2], { autoAlpha: 1 }, 0.65)
-        .to(paths[2], { drawSVG: "100%", duration: 0.25 }, 0.65);
+      mark.classList.add("sign");
     });
   }, { threshold: 0.6 });
   io.observe(mark);
+})();
+
+/* ---------- the record is held open ---------- */
+/* Stepping away does not close the books: the tab says so, and the
+   original title returns with the reader. */
+(function () {
+  var title = document.title;
+  document.addEventListener("visibilitychange", function () {
+    document.title = document.hidden ? "The record is held open" : title;
+  });
 })();
 </script>
 

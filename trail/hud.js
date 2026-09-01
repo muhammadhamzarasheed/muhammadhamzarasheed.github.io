@@ -8,6 +8,9 @@ let toastTimer = 0;
 let toastFade = 0;
 let paused = false;
 let signed = false;
+let csOpen = false;
+let csReturnTo = null;
+let pauseReturnTo = null;
 
 export function initHud() {
   els.count = document.getElementById("trailcount");
@@ -26,6 +29,35 @@ export function initHud() {
   const drive = document.getElementById("trailcsdrive");
   if (drive) drive.addEventListener("click", dismissCountersign);
   if (els.resume) els.resume.addEventListener("click", () => setPaused(false));
+  document.addEventListener("keydown", trapTab);
+}
+
+/* The open overlay is opaque: keep Tab inside it, the same walk the
+   homepage menu takes. Escape still closes through the usual route. */
+function trapTab(event) {
+  if (event.key !== "Tab") return;
+  const dialog = paused && els.pause && !els.pause.hidden ? els.pause
+    : csOpen && els.cs ? els.cs
+    : null;
+  if (!dialog) return;
+  const focusables = [].slice.call(
+    dialog.querySelectorAll("a[href], button:not([disabled])"),
+  );
+  if (!focusables.length) return;
+  let i = focusables.indexOf(document.activeElement);
+  if (i === -1) i = 0;
+  let next = event.shiftKey ? i - 1 : i + 1;
+  if (next < 0) next = focusables.length - 1;
+  if (next >= focusables.length) next = 0;
+  event.preventDefault();
+  focusables[next].focus();
+}
+
+/* Hand focus back to wherever it stood before a dialog claimed it. */
+function restoreFocus(el) {
+  if (el && typeof el.focus === "function" && document.contains(el)) {
+    el.focus();
+  }
 }
 
 /* First entry into a district settles it: the tally ticks over once,
@@ -96,6 +128,8 @@ export function hideLinkPrompt() {
 export function countersign() {
   if (signed || !els.cs) return;
   signed = true;
+  csOpen = true;
+  csReturnTo = document.activeElement;
   els.cs.hidden = false;
   requestAnimationFrame(() => {
     requestAnimationFrame(() => els.cs.classList.add("on"));
@@ -106,8 +140,11 @@ export function countersign() {
 
 export function dismissCountersign() {
   if (!els.cs || els.cs.hidden) return;
+  csOpen = false;
   els.cs.classList.remove("on");
   setTimeout(() => { els.cs.hidden = true; }, 450);
+  restoreFocus(csReturnTo);
+  csReturnTo = null;
 }
 
 export function countersignOpen() {
@@ -116,10 +153,17 @@ export function countersignOpen() {
 
 /* Escape: a small pause card with the same doors as the fallback. */
 export function setPaused(next) {
+  const was = paused;
   paused = !!next;
   if (els.pause) {
     els.pause.hidden = !paused;
-    if (paused && els.resume) els.resume.focus();
+    if (paused && !was) {
+      pauseReturnTo = document.activeElement;
+      if (els.resume) els.resume.focus();
+    } else if (!paused && was) {
+      restoreFocus(pauseReturnTo);
+      pauseReturnTo = null;
+    }
   }
 }
 
