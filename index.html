@@ -1201,6 +1201,20 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-3);
 }
 .ans .src a{color:var(--brass);}
+/* Follow-ups: after an answer settles, up to three further questions
+   from the register, in the same mono chip language as the openers.
+   They live outside the live region, so the answer is announced once
+   and the chips are not. */
+.asknext{margin-top:.8rem;align-items:center;}
+.asknext[hidden]{display:none;}
+.asknext .nl{
+  font-family:var(--mono);
+  font-size:.6563rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-right:.25rem;
+}
 /* The clerk checks the record before speaking: three brass dots for a
    beat, then the answer settles in. Both gestures sit behind the
    motion gate; reduced motion gets the answer straight away. */
@@ -1965,6 +1979,7 @@ section h2{position:relative;}
           <button type="button">How do I reach you?</button>
         </div>
         <div class="ans" id="hoursans" aria-live="polite">Office hours are open. Ask anything that is on the record, or start with one of the questions above.</div>
+        <div class="chips asknext" id="hoursnext" role="group" aria-label="Ask next" hidden></div>
       </div>
 
       <div class="letterhead up d4">
@@ -3007,136 +3022,495 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* ---------- office hours ---------- */
 /* A curated register of answers. Nothing is generated on the fly:
    every reply was written in advance and names its source, and a
-   question outside the record gets an honest referral, not a guess. */
+   question outside the record gets an honest referral, not a guess.
+   Matching is deterministic and local: exact phrases first, then a
+   folded pass that forgives plurals, tenses and a few synonyms, then
+   a bounded single-edit pass for longer words. No network, and no
+   question is kept anywhere. */
 (function () {
   var form = document.getElementById("hoursform");
   var input = document.getElementById("hoursq");
   var ans = document.getElementById("hoursans");
   var chips = document.getElementById("hourschips");
+  var next = document.getElementById("hoursnext");
   if (!form || !input || !ans) { return; }
 
+  /* The register. Each entry: k, key phrases, the first of which is
+     the question its follow-up chip shows; a, the answer, three
+     sentences at most; s and h, the named source; rel, up to three
+     entries offered as follow-ups. Each entry notes the page its
+     facts are checked against. */
   var QA = [
-    { k: ["what do you do", "actually do", "your job", "your role", "day to day", "assessment lead", "work"],
-      a: "I lead the Assessment Office at UK Management College: results processing, progression and award decisions, and regulatory compliance for <b>12,000+ students</b> on seven programmes across six campuses, delivered with four validating partner universities.",
-      s: "Now", h: "#now" },
+    // 00 · The role. Source: #now.
+    { k: ["what do you actually do", "what do you do", "your role", "where do you work", "day to day", "assessment lead", "assesment", "ukmc", "uk management college", "management college"],
+      a: "I am Assessment Lead at UK Management College: assessment operations and regulatory compliance for <b>12,000+ students</b> on seven programmes across six campuses, delivered with four validating partner universities. Getting it right the first time is the job.",
+      s: "Now", h: "#now", rel: [2, 12, 7] },
+    // 01 · The person. Source: hero creed.
     { k: ["who are you", "about you", "introduce", "who is muhammad", "yourself"],
       a: "Assessment professional and ACCA finalist, working where financial reporting and academic governance borrow from each other. The systems I run decide progression, awards and appeals, so they are built to survive scrutiny.",
-      s: "The record", h: "#top" },
-    { k: ["acca", "qualified", "accountant", "chartered", "papers", "exams"],
-      a: "ACCA finalist: <b>10 of 13 papers</b> completed, including Strategic Business Leader. Not yet a member, and I say finalist rather than qualified for exactly that reason. Alongside it: an MSc in Accounting and Finance with Merit.",
-      s: "Education", h: "#education" },
-    { k: ["education", "degree", "msc", "studied", "qualifications", "diploma", "university of cumbria", "icap"],
-      a: "MSc Accounting and Finance (Merit) and an Advanced Diploma (Merit), both at BPP University. A PgC in Teaching and Learning in Professional and Higher Education is in progress at the University of Cumbria, and the foundations were laid at ICAP in Pakistan.",
-      s: "Education", h: "#education" },
-    { k: ["experience", "career", "history", "worked", "previous roles", "bpp", "atom"],
-      a: "Assessment Lead and before that Assessment Support Coordinator at UK Management College; Student Ambassador and Student Voice Representative at BPP; and three years as an Accounting Associate with Atom Services across their US and Pakistan operations.",
-      s: "Experience", h: "#experience" },
-    { k: ["method", "how do you work", "principles", "approach", "reconcile before"],
-      a: "Three rules, borrowed from audit. <b>Reconcile before you report</b>: check the figure against source before anyone sees it. <b>Evidence every decision</b>: every outcome traceable to the regulation that produced it. <b>Build the audit trail as you go</b>: the record exists because the work was done properly.",
-      s: "Method", h: "#method" },
-    { k: ["equity", "fairness", "fair process", "why accuracy", "students least"],
-      a: "A marking error does not land evenly. It lands hardest on the students with the least capacity to challenge it. Fair process is not separate from good process: it is the point of it. The full argument is <a href=\"/notes/accuracy-is-an-equity-issue/\" target=\"_blank\" rel=\"noopener\">Entry 01</a>.",
-      s: "Journal", h: "#journal" },
-    { k: ["game", "games", "play", "puzzle", "drive", "marksheet"],
-      a: "The games live on one floor now: <a href=\"/appendix/\" target=\"_blank\" rel=\"noopener\">After hours</a>. A drivable audit trail, five instruments of precision and six small games. No prizes.",
-      s: "After hours", h: "/appendix/" },
-    { k: ["contact", "reach", "email", "get in touch", "hire", "message", "talk"],
-      a: "Email <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> or find me on <a href=\"https://www.linkedin.com/in/muhammadhamzarasheed/\" target=\"_blank\" rel=\"noopener\">LinkedIn</a>. I answer both.",
-      s: "Contact", h: "#contact" },
-    { k: ["phone", "number", "call", "mobile"],
-      a: "Email is the route from here: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>. If a call is needed, we can arrange one from there.",
-      s: "Contact", h: "#contact" },
-    { k: ["cv", "resume", "curriculum vitae", "download"],
-      a: "Yes: <a href=\"/Muhammad-Hamza-CV.pdf\" target=\"_blank\" rel=\"noopener\">two pages, PDF</a>, on the same letterhead as this site. It reads cleanly for both people and applicant tracking systems.",
-      s: "Contact", h: "#contact" },
-    { k: ["partner universities", "regulations", "rulebook", "four partners", "compliance", "validating"],
+      s: "The record", h: "#top", rel: [0, 17, 29] },
+    // 02 · The counts. Source: #now figures.
+    { k: ["how many students", "students", "scale", "campuses", "campus", "programmes", "programs", "program", "12000", "12,000", "in scope", "counts"],
+      a: "<b>12,000+ students</b> in scope, seven programmes, six campuses and four partner universities. The counts are kept under Now.",
+      s: "Now", h: "#now", rel: [3, 4, 0] },
+    // 03 · The partners. Source: #now prose and /notes/the-wrong-rulebook/.
+    { k: ["how many partner universities", "partner universities", "partners", "four partners", "validating", "university partners", "regulation sets", "regulations", "compliance"],
       a: "Four validating partner universities means four regulation sets, four assessment calendars and four sets of reporting requirements running at once. The quickest way to get a decision wrong is to be confident about the wrong rulebook, so nothing here is answered from memory. There is an essay on this: <a href=\"/notes/the-wrong-rulebook/\" target=\"_blank\" rel=\"noopener\">The wrong rulebook</a>.",
-      s: "Now", h: "#now" },
-    { k: ["students", "campuses", "programmes", "scale", "how many", "12000", "12,000"],
-      a: "The current scope: <b>12,000+ students</b>, seven programmes, six campuses, four validating partner universities. The per-cycle workload runs past 3,000 student records.",
-      s: "Now", h: "#now" },
-    { k: ["writing", "write", "written", "wrote", "essays", "essay", "articles", "journal", "entries", "blog", "read"],
-      a: "Seven entries so far, from why accuracy is an equity issue to what starting over actually costs. They live in the <a href=\"#journal\">Journal</a>, and each opens in its own tab.",
-      s: "Journal", h: "#journal" },
-    { k: ["travel", "travelled", "travelling", "traveled", "trips", "visited", "elsewhere", "countries", "places", "been"],
-      a: "Italy twice over, Germany, Austria, Albania, Türkiye, Gibraltar, Pakistan whenever I can get back, and all four nations of the country I live in. At work I remove uncertainty. Away from the desk, none of it has to tie out.",
-      s: "Field notes", h: "#elsewhere" },
-    { k: ["manchester", "based", "location", "where are you", "live"],
-      a: "Manchester. The clock at the top of this page keeps Manchester time for every visitor, because that is where the books are kept.",
-      s: "The record", h: "#top" },
-    { k: ["why education", "accounting to education", "move to education", "moved to education", "into education", "left accounting", "career change", "moved", "restart", "started over", "ca to acca"],
+      s: "Now", h: "#now", rel: [26, 2, 12] },
+    // 04 · The six headings. Source: #now tiles.
+    { k: ["what are you good at", "good at", "capabilities", "strengths", "responsibilities", "what do you cover"],
+      a: "Six headings under Now: regulatory compliance, assessment operations, process translation, data and reporting, progression and awards, and partnership and collaboration. Each one is built to survive a board, an auditor or an appeal.",
+      s: "Now", h: "#now", rel: [5, 6, 12] },
+    // 05 · Excel and data. Source: #now data tile, #education cols.
+    { k: ["how do you use excel", "excel", "exel", "spreadsheet", "spreadsheets", "tools", "data", "reporting"],
+      a: "Advanced Excel used the way an auditor uses it: reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record. Alongside it, marks processing, operational reporting and data integrity.",
+      s: "Now", h: "#now", rel: [4, 2, 12] },
+    // 06 · Progression and awards. Source: #now tile, /glossary/.
+    { k: ["what happens with resits", "resits", "resit", "capping", "capped", "progression", "awards", "award eligibility", "classification", "classifcation"],
+      a: "Progression, resits, capping and award eligibility, applied so that every outcome can be traced back to the regulation that produced it. The plain English versions of those words are in <a href=\"/glossary/\" target=\"_blank\" rel=\"noopener\">the glossary</a>.",
+      s: "Now", h: "#now", rel: [59, 3, 14] },
+    // 07 · Current role and dates. Source: #experience first item.
+    { k: ["what is your current role", "current role", "when did the role start", "start date", "since when", "how long have you been"],
+      a: "Assessment Lead at UK Management College since Jul 2026, in Manchester, hybrid. Before that, Assessment Support Coordinator at the same college, Feb 2025 to Jul 2026.",
+      s: "Experience", h: "#experience", rel: [11, 8, 0] },
+    // 08 · The BPP roles. Source: #experience, /notes/you-never-know-who-is-watching/.
+    { k: ["what did you do at bpp", "bpp", "student ambassador", "ambassador", "student voice", "voice representative"],
+      a: "Two at once: Student Ambassador at BPP University, Feb 2024 to Feb 2025, and Student Voice Representative with the BPP Students Association, Jul 2024 to Feb 2025. I took both to help others; what they actually built is <a href=\"/notes/you-never-know-who-is-watching/\" target=\"_blank\" rel=\"noopener\">Entry 07</a>.",
+      s: "Experience", h: "#experience", rel: [28, 11, 7] },
+    // 09 · Atom Services. Source: #experience.
+    { k: ["what did you do at atom", "atom services", "atom", "accounting associate", "ifrs", "accounts payable", "receivable", "content writer"],
+      a: "Accounting Associate at Atom Services, Jan 2019 to Dec 2021, remote: accounts payable and receivable, reconciliations, financial and cost accounting under IFRS, with long form content writing alongside. It is where reconcile before you report stopped being advice and became habit.",
+      s: "Experience", h: "#experience", rel: [13, 11, 18] },
+    // 10 · Skechers. Source: #experience.
+    { k: ["why a retail job", "skechers", "sales associate", "retail", "shop"],
+      a: "Sales Associate at Skechers in London, Sep 2022 to present: customer service and sales in a high volume retail environment, held alongside study and, later, full time work. It counts, and it is on the record.",
+      s: "Experience", h: "#experience", rel: [25, 11, 7] },
+    // 11 · The record of roles. Source: #experience.
+    { k: ["where have you worked", "worked", "experience", "career history", "work history", "previous roles", "employment", "jobs"],
+      a: "Five entries: Assessment Lead, and before that Assessment Support Coordinator, at UK Management College; Student Ambassador and Student Voice Representative at BPP; three years as an Accounting Associate with Atom Services; and Sales Associate at Skechers alongside it all. Finance first, then education, and the order matters.",
+      s: "Experience", h: "#experience", rel: [7, 9, 17] },
+    // 12 · The method. Source: #method.
+    { k: ["what is your method", "method", "how do you work", "do you work", "principles", "approach", "three rules", "philosophy"],
+      a: "Three rules, borrowed from audit: <b>reconcile before you report</b>, <b>evidence every decision</b>, and <b>build the audit trail as you go</b>. Check the figure against source before anyone sees it, trace every outcome to the regulation that produced it, and keep the record because the work was done properly the first time.",
+      s: "Method", h: "#method", rel: [13, 14, 15] },
+    // 13 · First principle. Source: #method, verbatim.
+    { k: ["what does reconcile mean", "reconcile before you report", "reconcile", "reconciling", "reconciliation", "reconcilation", "reconsile"],
+      a: "A figure that reaches a board, an examiner or a student record has already been checked against its source. Trust is built at the point of preparation, not defended after something breaks.",
+      s: "Method", h: "#method", rel: [14, 15, 12] },
+    // 14 · Second principle. Source: #method, verbatim.
+    { k: ["why evidence every decision", "evidence every decision", "evidence", "traceable", "trace back"],
+      a: "Every outcome should trace back to the regulation and the data that produced it. If a decision cannot be defended line by line against the right rulebook, it is not finished.",
+      s: "Method", h: "#method", rel: [15, 26, 13] },
+    // 15 · Third principle. Source: #method, verbatim.
+    { k: ["what about documentation", "build the audit trail", "audit trail as you go", "trail as you go", "documentation", "reconstruction", "paper trail"],
+      a: "Documentation written after the fact is reconstruction. The record should exist because the work was done properly the first time, not because somebody asked for it later.",
+      s: "Method", h: "#method", rel: [13, 14, 62] },
+    // 16 · Entry 01, and why any of it matters. Source: #quotepin, /notes/accuracy-is-an-equity-issue/.
+    { k: ["why does accuracy matter", "accuracy", "acuracy", "equity", "fairness", "fair process", "marking error", "who do errors land on"],
+      a: "A marking error does not land evenly. It lands hardest on the students with the least capacity to challenge it. Fair process is not separate from good process: it is the point of it, and the full argument is <a href=\"/notes/accuracy-is-an-equity-issue/\" target=\"_blank\" rel=\"noopener\">Entry 01</a>.",
+      s: "Journal", h: "#journal", rel: [12, 23, 3] },
+    // 17 · Education overview. Source: #education.
+    { k: ["where did you study", "did you study", "education", "degrees", "qualifications", "qualifcations", "studied", "academic background"],
+      a: "MSc Accounting and Finance (Merit) and an Advanced Diploma (Merit), both at BPP University. A PgC in Teaching and Learning in Professional and Higher Education is in progress at the University of Cumbria, and the foundations were laid at ICAP in Pakistan.",
+      s: "Education", h: "#education", rel: [18, 19, 20] },
+    // 18 · ACCA standing. Source: hero figures, #education.
+    { k: ["are you acca qualified", "acca", "qualified", "quallified", "accountant", "chartered", "papers", "exams", "finalist"],
+      a: "ACCA finalist: <b>10 of 13 papers</b> passed. Not yet a member, and I say finalist rather than qualified for exactly that reason.",
+      s: "Education", h: "#education", rel: [22, 17, 19] },
+    // 19 · The MSc. Source: #education item and exhibit caption.
+    { k: ["what about the msc", "msc", "masters", "master degree", "westminster", "graduation", "merit"],
+      a: "MSc Accounting and Finance at BPP University, May 2024 to Mar 2025, with Merit. Conferred at Westminster Abbey; the photograph is filed under <a href=\"#education\">Education</a> as an exhibit.",
+      s: "Education", h: "#education", rel: [17, 18, 20] },
+    // 20 · The PgC. Source: #education item and prose.
+    { k: ["why study teaching", "study teaching", "pgc", "pg cert", "postgraduate certificate", "cumbria", "pedagogy", "teaching and learning", "teaching"],
+      a: "A PgC in Teaching and Learning in Professional and Higher Education, at the University of Cumbria, Jan 2026 to Jan 2027, in progress. Assessment administration works better when the person running it understands assessment design, not just assessment processing.",
+      s: "Education", h: "#education", rel: [17, 19, 18] },
+    // 21 · The diploma and ICAP. Source: #education items.
+    { k: ["what about the diploma", "advanced diploma", "diploma", "icap", "certificate in accounting"],
+      a: "An Advanced Diploma in Accounting and Finance at BPP University, May 2022 to May 2024, with Merit. Before that, a Certificate in Accounting and Finance at ICAP, 2018 to 2021, in Pakistan, where the foundations were laid.",
+      s: "Education", h: "#education", rel: [22, 17, 31] },
+    // 22 · Entry 02, the restart. Source: /notes/starting-over-is-not-going-backwards/.
+    { k: ["why did you start over", "start over", "starting over", "started over", "restart", "restarted", "ca to acca", "moved to the uk", "career change", "2022", "entry 02"],
       a: "I began with CA in Pakistan, moved to the UK in 2022 and started again with ACCA. It felt like a setback and turned out to be a balance brought forward. The full story is <a href=\"/notes/starting-over-is-not-going-backwards/\" target=\"_blank\" rel=\"noopener\">Entry 02</a>.",
-      s: "Journal", h: "#journal" },
-    { k: ["excel", "skills", "tools", "spreadsheet", "data"],
-      a: "Advanced Excel used the way an auditor uses it: reconciliation, exception reporting and error detection, catching discrepancies before they reach a student record. Alongside it, marks processing, operational reporting and data integrity across multiple systems.",
-      s: "Now", h: "#now" },
-    { k: ["pgc", "teaching", "pedagogy", "why study teaching"],
-      a: "The PgC in Teaching and Learning is deliberate. Assessment administration works better when the person running it understands assessment design, not just assessment processing. Knowing why a rubric is built a certain way changes how you handle the edge cases it produces.",
-      s: "Education", h: "#education" },
-    { k: ["monogram", "logo", "mh", "mark", "favicon"],
+      s: "Journal", h: "#journal", rel: [18, 24, 17] },
+    // 23 · Journal overview. Source: #journal.
+    { k: ["what do you write about", "journal", "jorunal", "blog", "entries", "writing", "articles", "how many entries", "read"],
+      a: "Seven entries so far, from why accuracy is an equity issue to what starting over actually costs. They live in the <a href=\"#journal\">Journal</a>, and each opens in its own tab.",
+      s: "Journal", h: "#journal", rel: [16, 22, 24] },
+    // 24 · Entry 03. Source: /notes/the-person-you-are-becoming/.
+    { k: ["what did bourdieu teach you", "bourdieu", "bordieu", "the person you are becoming", "becoming", "wasted talent", "luxury", "taste", "entry 03"],
+      a: "Bourdieu showed that taste is a hierarchy rearranged the moment the rest of us begin to reach it, so the chase is designed never to end. The one arena where the rules cannot be rewritten without your consent is the person you are becoming: <a href=\"/notes/the-person-you-are-becoming/\" target=\"_blank\" rel=\"noopener\">Entry 03</a>.",
+      s: "Journal", h: "#journal", rel: [23, 27, 22] },
+    // 25 · Entry 04. Source: /notes/rest-is-not-a-reward/.
+    { k: ["is rest a reward", "rest is not a reward", "rest", "burnout", "breaks", "break", "holiday", "tired", "entry 04"],
+      a: "Three years of deadlines taught me that rest is not a reward you earn at the finish line. You need it to keep going, and my honest regret is not resting more. The longer version is <a href=\"/notes/rest-is-not-a-reward/\" target=\"_blank\" rel=\"noopener\">Entry 04</a>.",
+      s: "Journal", h: "#journal", rel: [29, 27, 23] },
+    // 26 · Entry 05. Source: /notes/the-wrong-rulebook/.
+    { k: ["what is the wrong rulebook", "the wrong rulebook", "wrong rulebook", "rulebook", "rule book", "entry 05"],
+      a: "The four regulation sets resemble each other just enough to be dangerous, and the costliest mistake is knowing one rulebook well and reaching for it everywhere. So the discipline is simple: never answer from memory. The full argument is <a href=\"/notes/the-wrong-rulebook/\" target=\"_blank\" rel=\"noopener\">Entry 05</a>.",
+      s: "Journal", h: "#journal", rel: [3, 12, 23] },
+    // 27 · Entry 06. Source: /notes/what-cannot-be-cured/.
+    { k: ["what cannot be cured", "endurance", "endure", "endured", "cured", "uncertainty", "entry 06"],
+      a: "Not every problem yields to effort; some situations remain unchanged after you have done everything you can. Endurance is not the absence of a plan, it is the plan: <a href=\"/notes/what-cannot-be-cured/\" target=\"_blank\" rel=\"noopener\">Entry 06</a>.",
+      s: "Journal", h: "#journal", rel: [25, 24, 23] },
+    // 28 · Entry 07. Source: /notes/you-never-know-who-is-watching/.
+    { k: ["who is watching", "you never know", "watching", "get involved", "involved", "volunteering", "volunteer", "entry 07"],
+      a: "Two student roles I took to help others turned out to build the person who does my job today. Show up, contribute, and do it anyway: <a href=\"/notes/you-never-know-who-is-watching/\" target=\"_blank\" rel=\"noopener\">Entry 07</a>.",
+      s: "Journal", h: "#journal", rel: [8, 23, 16] },
+    // 29 · Travel. Source: #elsewhere prose.
+    { k: ["where have you travelled", "travel", "travelled", "trips", "countries", "how many countries", "places", "abroad", "italy", "germany", "austria", "albania", "turkiye", "turkey", "gibraltar"],
+      a: "Italy twice over, Germany, Austria, Albania, Türkiye, Gibraltar, Pakistan whenever I can get back, and all four nations of the country I live in. At work I remove uncertainty. Away from the desk, none of it has to tie out.",
+      s: "Field notes", h: "#elsewhere", rel: [30, 31, 25] },
+    // 30 · The four nations. Source: #elsewhere prose, verbatim.
+    { k: ["what about the four nations", "four nations", "snowdonia", "peak district", "the lakes", "lake district", "scotland", "wales", "northern ireland", "edinburgh", "hiking", "boating", "walks"],
+      a: "All four nations at one time or another: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, New Year in London one year and Edinburgh the next. The spare weekends go to the country I live in.",
+      s: "Field notes", h: "#elsewhere", rel: [29, 32, 31] },
+    // 31 · Back home. Source: #elsewhere places, #education.
+    { k: ["where is back home", "back home", "pakistan"],
+      a: "Back home is Pakistan, whenever I can get back. It is also where the foundations were laid: the ICAP years, carried forward into ACCA as a balance brought forward.",
+      s: "Field notes", h: "#elsewhere", rel: [21, 29, 22] },
+    // 32 · Manchester. Source: hero label and ledger clock.
+    { k: ["where are you based", "based", "location", "manchester", "mancester", "where do you live", "live", "clock", "time", "timezone"],
+      a: "Manchester. The clock at the top of this page keeps Manchester time for every visitor, because that is where the books are kept.",
+      s: "The record", h: "#top", rel: [67, 33, 29] },
+    // 33 · Contact routes. Source: #contact.
+    { k: ["how do i reach you", "email", "get in touch", "touch", "message", "email address"],
+      a: "Email <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> or find me on <a href=\"https://www.linkedin.com/in/muhammadhamzarasheed/\" target=\"_blank\" rel=\"noopener\">LinkedIn</a>. I answer both.",
+      s: "Contact", h: "#contact", rel: [36, 39, 34] },
+    // 34 · Replies. Source: #contact heading and routes.
+    { k: ["will you reply", "reply", "respond", "response", "response time", "expect an answer"],
+      a: "Email and LinkedIn both reach me, and I answer both. Contact is headed open to connecting, and the routes are filed right under it.",
+      s: "Contact", h: "#contact", rel: [33, 35, 37] },
+    // 35 · Phone. Source: #contact routes, which list no number.
+    { k: ["can i call you", "phone", "number", "call", "mobile", "phone number", "whatsapp"],
+      a: "Email is the route from here: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>. If a call is needed, we can arrange one from there.",
+      s: "Contact", h: "#contact", rel: [33, 36, 34] },
+    // 36 · The CV. Source: #contact routes.
+    { k: ["can i see your cv", "cv", "curriculum vitae", "curiculum", "download cv", "download", "pdf"],
+      a: "Yes: <a href=\"/Muhammad-Hamza-CV.pdf\" target=\"_blank\" rel=\"noopener\">two pages, PDF</a>, filed under Contact. It opens in its own tab, so the record stays where you left it.",
+      s: "Contact", h: "#contact", rel: [33, 54, 37] },
+    // 37 · Hiring and collaboration. Source: #contact prose.
+    { k: ["are you open to opportunities", "hiring", "hire", "recruiter", "recruiting", "opportunity", "opportunities", "collaborate", "collaboration", "vacancy", "work together", "freelance", "open to work", "job for me", "a job for", "any jobs"],
+      a: "If you are hiring, or want to collaborate, I would like to hear about it: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>, with the outline. On file under Contact: higher education administration, quality assurance, and learning and teaching.",
+      s: "Contact", h: "#contact", rel: [38, 33, 36] },
+    // 38 · Interests. Source: #contact prose, verbatim.
+    { k: ["what are you interested in", "interests", "interested", "looking for", "quality assurance", "learning and teaching"],
+      a: "Higher education administration, quality assurance, and learning and teaching, and where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.",
+      s: "Contact", h: "#contact", rel: [37, 33, 0] },
+    // 39 · LinkedIn. Source: #contact routes, notes footers.
+    { k: ["are you on linkedin", "linkedin", "linked in", "lnkedin"],
+      a: "Yes: <a href=\"https://www.linkedin.com/in/muhammadhamzarasheed/\" target=\"_blank\" rel=\"noopener\">in/muhammadhamzarasheed</a>, linked under Contact. Every journal entry ends with a reply on LinkedIn link too, and that is the right place for a public conversation.",
+      s: "Contact", h: "#contact", rel: [33, 36, 23] },
+    // 40 · After hours. Source: /appendix/.
+    { k: ["what is after hours", "after hours", "appendix", "games", "fun", "doors", "what else", "everything else"],
+      a: "Six doors, a coin and a set of accounts: the audit trail, the calibration, six mind games, four career tools, the almanac and the glossary. All of it runs in your browser, and none of it asks who you are: <a href=\"/appendix/\" target=\"_blank\" rel=\"noopener\">After hours</a>.",
+      s: "After hours", h: "/appendix/", rel: [41, 46, 53] },
+    // 41 · The trail. Source: /appendix/ door A, /trail/.
+    { k: ["what is the audit trail", "the audit trail", "audit trail", "drive", "drivng", "car game", "ring road", "districts", "trail"],
+      a: "A brass car, a ring road, seven districts and a tally, each district mirroring a chapter of the homepage. Drive the record until it reconciles, then find the receipts: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
+      s: "The audit trail", h: "/trail/", rel: [42, 43, 40] },
+    // 42 · Trail controls. Source: /trail/ HUD, verbatim.
+    { k: ["how do i play the trail", "play the trail", "trail controls", "controls", "wasd", "drift", "how do i drive", "steering", "plaque"],
+      a: "Drive with WASD or the arrow keys, Space to drift. R resets the car, E opens a plaque, M is the map, Escape pauses; on a phone, drag the dial to drive. The keys are printed on <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the trail</a> itself.",
+      s: "The audit trail", h: "/trail/", rel: [43, 41, 40] },
+    // 43 · Trail reconciling and receipts. Source: /trail/ tallies.
+    { k: ["what are the receipts", "receipts", "reciepts", "how many receipts", "reconciling the trail", "15 receipts"],
+      a: "Each of the seven districts reconciles on your first drive into it, and the tally keeps the count; at seven, the record reconciles. Then there are <b>15 receipts</b> to find before every receipt is accounted for: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
+      s: "The audit trail", h: "/trail/", rel: [41, 42, 40] },
+    // 44 · The calibration. Source: /calibration/.
+    { k: ["what is the calibration", "calibration", "callibration", "calibrate", "instruments", "precision", "tolerance"],
+      a: "Five instruments of precision, five rounds each, scored out of 50. Precision is a practice, and practice slips quietly; <a href=\"/calibration/\" target=\"_blank\" rel=\"noopener\">the calibration</a> puts a figure on how far yours has slipped.",
+      s: "The calibration", h: "/calibration/", rel: [45, 46, 40] },
+    // 45 · The five instruments. Source: /calibration/ list.
+    { k: ["what are the five instruments", "five instruments", "the estimate", "re key", "rekey", "the moved entry", "moved entry", "the shade", "the interval"],
+      a: "The estimate, a stretch of time held from memory; the re-key, a reference entered exactly; the moved entry, two entries that trade places; the shade, a colour mixed again by eye; the interval, a tone found again by ear. Five rounds each, and bests stay on your device: <a href=\"/calibration/\" target=\"_blank\" rel=\"noopener\">the calibration</a>.",
+      s: "The calibration", h: "/calibration/", rel: [44, 46, 52] },
+    // 46 · The six games. Source: /mind/.
+    { k: ["what are the six games", "six games", "mind games", "something for your mind", "game", "puzzle", "arcade"],
+      a: "Six small games in brass on black: the Eye, Steady Hand, Snake, Lights out, Odometer and Data entry. No prizes, and your bests never leave your browser: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">something for your mind</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [49, 52, 44] },
+    // 47 · The Eye. Source: /mind/ game 01.
+    { k: ["what is the eye", "the eye", "judgement by eye", "by eye"],
+      a: "Five judgements made by eye: a midpoint, a centre, three seconds, a circle, ten seconds. You estimate, the page measures, and the gap is the score: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">the Eye</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [48, 46, 44] },
+    // 48 · Steady Hand. Source: /mind/ game 02.
+    { k: ["what is steady hand", "steady hand", "trace the wire", "wire"],
+      a: "Trace the wire from the brass pad to the ring without touching the edges of the channel. Three lives, and touches cost three seconds each: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">Steady Hand</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [47, 49, 46] },
+    // 49 · Snake. Source: /mind/ game 03.
+    { k: ["is there snake", "snake"],
+      a: "The old one, in brass. Arrow keys or WASD, swipe on a phone, and walls are walls: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">Snake</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [50, 51, 46] },
+    // 50 · Lights out. Source: /mind/ game 04.
+    { k: ["what is lights out", "lights out", "lights"],
+      a: "Press a cell and it flips with its four neighbours; put every light out in the fewest moves. A new board is set each day, the same board for everyone: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">Lights out</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [49, 52, 46] },
+    // 51 · Odometer. Source: /mind/ game 05.
+    { k: ["what is the odometer", "odometer", "odometre", "reels"],
+      a: "Three reels roll at different speeds. Stop them one at a time, left to right, and land the target reading; nearest digit counts against you: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">Odometer</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [52, 49, 46] },
+    // 52 · Data entry. Source: /mind/ game 06.
+    { k: ["what is data entry", "data entry", "typing", "typing test", "sixteen digits"],
+      a: "Sixteen digits, typed exactly as shown; the clock starts on your first keystroke and stops on the sixteenth. Only clean runs make the record, because speed without accuracy is noise: <a href=\"/mind/\" target=\"_blank\" rel=\"noopener\">Data entry</a>.",
+      s: "Something for your mind", h: "/mind/", rel: [47, 46, 45] },
+    // 53 · Career tools. Source: /career/.
+    { k: ["what are the career tools", "career tools", "something for your career", "job search", "job tools", "careers page", "career page"],
+      a: "Four tools: a CV builder that sets itself as you type, a sixteen point check, an interview drill and an application ledger. What you type never leaves your browser: <a href=\"/career/\" target=\"_blank\" rel=\"noopener\">something for your career</a>.",
+      s: "Something for your career", h: "/career/", rel: [54, 55, 57] },
+    // 54 · CV builder. Source: /career/ tool 01.
+    { k: ["what is the cv builder", "cv builder", "build a cv", "build my cv", "ats", "applicant tracking"],
+      a: "Type on the left and watch it set itself on the right: single column, standard headings, no tables and no graphics, which is exactly what applicant tracking systems parse cleanly. Print it, or take it to Word: <a href=\"/career/\" target=\"_blank\" rel=\"noopener\">the CV builder</a>.",
+      s: "Something for your career", h: "/career/", rel: [55, 36, 53] },
+    // 55 · CV check. Source: /career/ tool 02.
+    { k: ["what is the cv check", "cv check", "sixteen checks", "sixteen point check", "checklist"],
+      a: "Sixteen checks, in the order a reader meets them. The score is not the point; the unticked boxes are the point: <a href=\"/career/\" target=\"_blank\" rel=\"noopener\">the CV check</a>.",
+      s: "Something for your career", h: "/career/", rel: [54, 56, 53] },
+    // 56 · Interview drill. Source: /career/ tool 03.
+    { k: ["what is the interview drill", "interview drill", "interview", "star method", "star", "practice questions", "practise"],
+      a: "Draw a question from a bank of 30: one minute to think in silence, then two minutes to answer out loud, timed. The behavioural ones take STAR order: <a href=\"/career/\" target=\"_blank\" rel=\"noopener\">the interview drill</a>.",
+      s: "Something for your career", h: "/career/", rel: [57, 53, 55] },
+    // 57 · Application ledger. Source: /career/ tool 04.
+    { k: ["what is the application ledger", "application ledger", "applications", "track applications", "ledger"],
+      a: "Record every application the day you send it, and update the status when anything moves. A ledger beats a memory, and this one downloads as CSV: <a href=\"/career/\" target=\"_blank\" rel=\"noopener\">the application ledger</a>.",
+      s: "Something for your career", h: "/career/", rel: [56, 53, 54] },
+    // 58 · The almanac. Source: /appendix/ door E, /almanac/.
+    { k: ["what is the almanac", "almanac", "almanack", "today", "sunrise", "sunset", "moon", "iso week", "working days", "bank holidays"],
+      a: "Today, reconciled: day and week counts, the working days that remain, and the sun and moon over Manchester, computed on the page. No forecast service, nothing but arithmetic and your clock: <a href=\"/almanac/\" target=\"_blank\" rel=\"noopener\">the almanac</a>.",
+      s: "The almanac", h: "/almanac/", rel: [59, 60, 40] },
+    // 59 · The glossary. Source: /glossary/, 25 terms counted in its register.
+    { k: ["what is the glossary", "glossary", "glossery", "jargon", "definitions", "define", "plain english", "what does capped mean", "moderation", "deferral", "extenuating circumstances", "external examiner"],
+      a: "<b>25 terms</b> of assessment and accounting jargon in plain English, accurate first and dry second. One caution from the page itself: the rulebook that governs you is the one that counts: <a href=\"/glossary/\" target=\"_blank\" rel=\"noopener\">the glossary</a>.",
+      s: "The glossary", h: "/glossary/", rel: [6, 26, 58] },
+    // 60 · The tiebreaker. Source: /appendix/ door G, verbatim.
+    { k: ["how does the coin work", "tiebreaker", "coin", "flip a coin", "flip", "heads or tails", "decide for me"],
+      a: "For decisions that do not deserve a meeting: state the two options, flip, obey. Heads is the monogram, tails is the number, and you assign them before you flip, because the coin dislikes retrospective rules: <a href=\"/appendix/\" target=\"_blank\" rel=\"noopener\">the tiebreaker</a>.",
+      s: "After hours", h: "/appendix/", rel: [61, 40, 58] },
+    // 61 · The unaudited accounts. Source: /appendix/ door H.
+    { k: ["what are the unaudited accounts", "unaudited", "coffee", "socks", "joke", "funny", "snooze"],
+      a: "The one page where nothing is checked: <b>612 coffees</b> year to date, <b>31 socks</b> lost to the laundry, all presented without evidence and certified by absolutely nobody. The auditor's opinion is adverse; the subject nevertheless appears to function: <a href=\"/appendix/\" target=\"_blank\" rel=\"noopener\">the unaudited accounts</a>.",
+      s: "After hours", h: "/appendix/", rel: [60, 58, 40] },
+    // 62 · The artefact. Source: the page itself; described, never attributed.
+    { k: ["how was this site built", "site", "website", "built", "build", "did you build", "who built", "who made", "made", "maintain", "author", "hand built"],
+      a: "Kept by hand in plain HTML: one page for the record, a floor below it for after hours, no framework, and every figure reconciled before a release. The design performs the method, which is why the sections reconcile as you read them.",
+      s: "The record", h: "#top", rel: [63, 64, 65] },
+    // 63 · Dark by design. Source: the committed single theme, /mind/ blurb.
+    { k: ["why is the site dark", "dark", "dark mode", "light mode", "theme", "colours", "colors", "brass"],
+      a: "Dark by design: one committed theme, brass on black, so the page holds its own ground whatever your system is set to. There is no light mode, and that is a decision, not an omission.",
+      s: "The record", h: "#top", rel: [62, 66, 64] },
+    // 64 · Privacy. Source: /appendix/ and /career/ footers.
+    { k: ["do you use cookies", "cookies", "tracking", "privacy", "analytics", "gdpr", "data collection"],
+      a: "No cookies, no tracking, no sign up. The games and career tools keep bests and drafts in your own browser, and what you type never leaves it.",
+      s: "The record", h: "#top", rel: [62, 40, 63] },
+    // 65 · Finished. In the site's own terms.
+    { k: ["is the site finished", "finished", "complete", "roadmap", "what is next for the site"],
+      a: "A record is never finished. It is kept. New entries are filed when there is something worth filing.",
+      s: "The record", h: "#top", rel: [62, 23, 40] },
+    // 66 · The monogram. Source: nav crest, favicon.
+    { k: ["what is the monogram", "monogram", "logo", "mh", "favicon", "crest"],
       a: "The MH mark is drawn, not typed: three brass strokes where the M and the H share a stem. It is the favicon, the letterhead on the CV, and the crest at the top of this page.",
-      s: "The record", h: "#top" },
-    { k: ["site", "website", "built", "made", "how was this"],
-      a: "Hand built: one page, no framework, no cookies, no tracking. The design performs the method, which is why the sections reconcile as you read them.",
-      s: "The record", h: "#top" },
-    { k: ["rest", "burnout", "break", "holiday"],
-      a: "Three years of deadlines taught me that rest is not a reward you earn at the finish line. You need it to keep going. The longer version is <a href=\"/notes/rest-is-not-a-reward/\" target=\"_blank\" rel=\"noopener\">Entry 04</a>.",
-      s: "Journal", h: "#journal" },
-    { k: ["hello", "hi", "hey", "salaam", "assalam"],
+      s: "The record", h: "#top", rel: [62, 63, 36] },
+    // 67 · The conditions line. Source: hero conditions script.
+    { k: ["what is the conditions line", "conditions", "the weather here", "forecast", "temperature"],
+      a: "The conditions line under the clock reads Manchester's sky: keyless, cookieless, and the coordinates are Manchester's, not yours. If the reading fails, the line simply never appears.",
+      s: "The record", h: "#top", rel: [32, 58, 62] },
+    // 68 · Navigation. Source: footer hint, the palette.
+    { k: ["how do i navigate", "navigate", "palette", "command palette", "shortcut", "press slash", "keyboard"],
+      a: "Press <b>/</b> anywhere on this page, or Ctrl and K, and the palette opens: every section, entry and tool on one list. Type to filter, arrows to move, Enter to go.",
+      s: "The record", h: "#top", rel: [40, 62, 33] },
+    // 69 · Greetings. Source: office hours.
+    { k: ["hello", "hi", "hey", "salaam", "assalam", "salam", "good morning", "good afternoon", "good evening"],
       a: "Walaikum assalam, and welcome. Ask anything on the record: the role, the method, the qualifications, the writing, or how to get in touch.",
-      s: "Office hours", h: "#officehours" }
+      s: "Office hours", h: "#officehours", rel: [0, 12, 40] },
+    // 70 · Sign-off. Source: office hours; the held-open title is the tab's own.
+    { k: ["thanks", "thank you", "thankyou", "cheers", "goodbye", "bye"],
+      a: "Noted and filed. The record is held open, so come back any time; anything further, <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> reaches me.",
+      s: "Office hours", h: "#officehours", rel: [33, 23, 40] }
   ];
 
   var FALLBACK = "That one is not in the record yet, and I would rather say so than guess. The direct route works: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.<span class=\"src\">From the record: <a href=\"#contact\">Contact</a></span>";
 
+  // Filler words score nothing; phrases still match exactly at any
+  // length, so short keys like cv or game are caught by indexOf below.
+  var STOP = { about: 1, where: 1, which: 1, there: 1, their: 1, would: 1, could: 1, should: 1, doing: 1, really: 1, actually: 1 };
+
+  // A small synonym table, folded into matching on both sides, so a
+  // question about a job, a game or a resume lands on the entries
+  // written about work, play and the CV. Verbs of asking stay out of
+  // it: mapping write or essay onto the Journal made requests for
+  // essays read as questions about them.
+  var SYN = {
+    job: "work", role: "work", worked: "work",
+    game: "play", games: "play",
+    drive: "car", driv: "car",
+    blog: "journal",
+    study: "acca", studi: "acca", exam: "acca",
+    email: "contact", reach: "contact",
+    resume: "cv"
+  };
+
+  // Suffix folding: strip a trailing ing, ed, es or s when the stem
+  // keeps at least four letters, so marks meets mark and reconciling
+  // meets reconcil on both sides of the comparison.
+  function fold(w) {
+    var n = w.length;
+    if (n >= 7 && w.slice(-3) === "ing") { return w.slice(0, n - 3); }
+    if (n >= 6 && w.slice(-2) === "ed") { return w.slice(0, n - 2); }
+    if (n >= 6 && w.slice(-2) === "es") { return w.slice(0, n - 2); }
+    if (n >= 5 && w.charAt(n - 1) === "s") { return w.slice(0, n - 1); }
+    return w;
+  }
+  function canon(w) {
+    var f = fold(w);
+    return SYN[f] || SYN[w] || f;
+  }
+
+  // Edit distance of at most one, decided with a single early-exit
+  // walk: no table, no allocation, and lengths more than one apart
+  // never even start.
+  function dist1(a, b) {
+    if (a === b) { return true; }
+    var la = a.length, lb = b.length, t;
+    if (la > lb) { t = a; a = b; b = t; t = la; la = lb; lb = t; }
+    if (lb - la > 1) { return false; }
+    var i = 0, j = 0, edits = 0;
+    while (i < la && j < lb) {
+      if (a.charAt(i) === b.charAt(j)) { i += 1; j += 1; continue; }
+      if (edits) { return false; }
+      edits = 1;
+      if (la === lb) { i += 1; j += 1; } else { j += 1; }
+    }
+    return true;
+  }
+
+  // Folded keys are computed once at load, index-aligned with the raw
+  // keys, along with each entry's longer key words for the bounded
+  // single-edit pass. Nothing about the corpus is rebuilt per query.
+  (function () {
+    for (var i = 0; i < QA.length; i++) {
+      var item = QA[i], fk = [], fz = [], seen = {};
+      for (var j = 0; j < item.k.length; j++) {
+        var parts = item.k[j].split(" ");
+        for (var m = 0; m < parts.length; m++) {
+          parts[m] = canon(parts[m]);
+          if (parts[m].length >= 5 && !seen[parts[m]]) {
+            seen[parts[m]] = 1;
+            fz.push(parts[m]);
+          }
+        }
+        fk.push(parts.join(" "));
+      }
+      item.fk = fk;
+      item.fz = fz;
+    }
+  })();
+
+  // The follow-up chips: each entry's first key phrase reads as the
+  // question its chip shows, set with the register's own capitals.
+  var CAPS = { acca: "ACCA", msc: "MSc", pgc: "PgC", cv: "CV", bpp: "BPP", i: "I", bourdieu: "Bourdieu", linkedin: "LinkedIn", wasd: "WASD" };
+  function chipLabel(i) {
+    var parts = QA[i].k[0].split(" ");
+    for (var j = 0; j < parts.length; j++) {
+      if (CAPS[parts[j]]) { parts[j] = CAPS[parts[j]]; }
+    }
+    var t = parts.join(" ");
+    return t.charAt(0).toUpperCase() + t.slice(1) + "?";
+  }
+  function renderNext(item) {
+    if (!next) { return; }
+    next.innerHTML = "";
+    if (!item || !item.rel || !item.rel.length) { next.hidden = true; return; }
+    var lab = document.createElement("span");
+    lab.className = "nl";
+    lab.textContent = "Ask next";
+    next.appendChild(lab);
+    for (var i = 0; i < item.rel.length && i < 3; i++) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = chipLabel(item.rel[i]);
+      next.appendChild(b);
+    }
+    next.hidden = false;
+  }
+
   // The clerk consults the register before speaking: a short beat of
-  // brass dots, then the answer fades in. Reduced motion skips both
-  // the delay and the fade and simply states the answer.
+  // brass dots, then the answer fades in and the follow-ups appear
+  // with it, never during the beat. Reduced motion skips the delay
+  // and the fade and simply states the answer. The chips sit outside
+  // the live region, so nothing is announced twice.
   var pend = 0;
-  function present(html) {
-    if (RM) { ans.innerHTML = html; return; }
+  function present(html, item) {
+    if (RM) { ans.innerHTML = html; renderNext(item); return; }
     window.clearTimeout(pend);
     ans.classList.remove("in");
+    if (next) { next.hidden = true; }
     ans.innerHTML = "Checking the record<span class=\"dots\" aria-hidden=\"true\"><i></i><i></i><i></i></span>";
     pend = window.setTimeout(function () {
       ans.innerHTML = html;
       ans.classList.add("in");
+      renderNext(item);
     }, 300);
   }
 
   function answer(q) {
     q = (q || "").toLowerCase().replace(/[^a-z0-9\s,+]/g, " ").replace(/\s+/g, " ").trim();
     if (!q) {
-      present("Office hours are open. Ask anything that is on the record, or start with one of the questions above.");
+      present("Office hours are open. Ask anything that is on the record, or start with one of the questions above.", null);
       return;
     }
-    // Filler words score nothing; phrases still match exactly at any
-    // length, so short keys like cv or game are caught by indexOf above.
-    var STOP = { about: 1, where: 1, which: 1, there: 1, their: 1, would: 1, could: 1, should: 1, doing: 1, really: 1, actually: 1 };
-    var words = q.split(" ").filter(function (w) { return w.length > 4 && !STOP[w]; });
-    var best = null, bestScore = 0;
+    var raw = q.split(" ");
+    var fq = [];
+    var words = [];
+    for (var r = 0; r < raw.length; r++) {
+      var c = canon(raw[r]);
+      fq.push(c);
+      if (raw[r].length > 4 && !STOP[raw[r]]) { words.push(c); }
+    }
     // Word-boundary phrase matching: "about you" must not fire inside
-    // "about your". Both sides are padded so edges count as boundaries.
+    // "about your". Both sides are padded so edges count as boundaries,
+    // and each key scores once, on its raw or its folded form.
     var Q = " " + q + " ";
-    QA.forEach(function (item) {
+    var FQ = " " + fq.join(" ") + " ";
+    var best = null, bestScore = 0;
+    for (var e = 0; e < QA.length; e++) {
+      var item = QA[e];
       var pscore = 0, wscore = 0;
-      item.k.forEach(function (phrase) {
-        if (Q.indexOf(" " + phrase + " ") !== -1) { pscore += 3; }
-        else {
-          words.forEach(function (w) {
-            if ((" " + phrase + " ").indexOf(" " + w + " ") !== -1) { wscore += 1; }
-          });
+      for (var p = 0; p < item.k.length; p++) {
+        if (Q.indexOf(" " + item.k[p] + " ") !== -1 || FQ.indexOf(" " + item.fk[p] + " ") !== -1) {
+          pscore += 3;
+        } else {
+          for (var w = 0; w < words.length; w++) {
+            if ((" " + item.fk[p] + " ").indexOf(" " + words[w] + " ") !== -1) { wscore += 1; }
+          }
         }
-      });
+      }
       // Loose word overlap is capped so one word appearing in many key
       // phrases cannot outvote an exact phrase match elsewhere.
       var score = pscore + Math.min(wscore, 2);
       if (score > bestScore) { bestScore = score; best = item; }
-    });
+    }
+    // Single-edit forgiveness, only once exact and folded matching have
+    // found nothing worth saying: a query word of six letters or more,
+    // genuinely misspelt, within one edit of a key word answers as that
+    // key would. Identical words earned their score in the loose pass
+    // and are not counted twice, short words sit too close to their
+    // neighbours to forgive, and a genuinely unknown question still
+    // falls through.
+    if (bestScore < 2 && words.length) {
+      for (var e2 = 0; e2 < QA.length; e2++) {
+        var hits = 0, fz = QA[e2].fz;
+        for (var w2 = 0; w2 < words.length && hits < 2; w2++) {
+          if (words[w2].length < 6) { continue; }
+          for (var z = 0; z < fz.length; z++) {
+            if (words[w2] !== fz[z] && dist1(words[w2], fz[z])) { hits += 1; break; }
+          }
+        }
+        if (hits * 2 > bestScore) { bestScore = hits * 2; best = QA[e2]; }
+      }
+    }
     if (best && bestScore >= 2) {
-      present(best.a + "<span class=\"src\">From the record: <a href=\"" + best.h + "\">" + best.s + "</a></span>");
+      present(best.a + "<span class=\"src\">From the record: <a href=\"" + best.h + "\">" + best.s + "</a></span>", best);
     } else {
-      present(FALLBACK);
+      present(FALLBACK, null);
     }
   }
 
@@ -3150,6 +3524,14 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       answer(input.value);
     }
   });
+  if (next) {
+    next.addEventListener("click", function (e) {
+      if (e.target.tagName === "BUTTON") {
+        input.value = e.target.textContent;
+        answer(input.value);
+      }
+    });
+  }
 })();
 
 /* ---------- quick navigation palette ---------- */
