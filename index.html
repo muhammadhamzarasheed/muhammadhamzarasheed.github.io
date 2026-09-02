@@ -952,6 +952,34 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 
+/* ---------- the crossing ---------- */
+/* At wide viewports with a fine pointer the shelf stops scrolling in
+   its own box and crosses the page instead: #journal grows by exactly
+   the shelf's horizontal overflow, the heading pins for the duration,
+   and vertical scroll becomes sideways travel, one pixel for one
+   pixel. The script adds the class under the same gate as this query,
+   plus the reduced motion check; without the class nothing below
+   applies and the section renders exactly as the swipeable strip.
+   Padding goes to zero on the container so its content box equals
+   sticky height plus travel with no slack at either seam. The height
+   clause keeps short windows on the strip: below 40rem the centred
+   shell could not hold the whole shelf. */
+@media (min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine){
+  #journal.crossing{padding:0;}
+  #journal.crossing > .shell{
+    position:sticky;
+    top:0;
+    height:100vh;
+    height:100svh;
+    justify-content:center;
+  }
+  #journal.crossing .strip{
+    overflow:visible;
+    scroll-snap-type:none;
+    will-change:transform;
+  }
+}
+
 /* ---------- capability columns ---------- */
 .cols{
   display:grid;
@@ -2139,11 +2167,159 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     for (var ri = 0; ri < ids.length; ri++) { ruleOff(ri); }
   }
 
+  /* ---------- the crossing ---------- */
+  /* The journal shelf, driven by this same frame. When the gate below
+     matches, #journal grows by exactly the shelf's overflow, its shell
+     pins, and vertical scroll walks the shelf sideways one pixel for
+     one pixel. Everything is additive: a class, one inline height and
+     one transform, all removed cleanly when the gate stops matching,
+     so reduced motion, coarse pointers, narrow viewports and no JS
+     all keep the swipeable strip untouched. */
+  var journal = document.getElementById("journal");
+  var xTrack = journal ? journal.querySelector(".strip") : null;
+  var xSticky = journal ? journal.querySelector(".shell") : null;
+  var xLbl = journal ? journal.querySelector(".label") : null;
+  var xItems = xTrack ? [].slice.call(xTrack.querySelectorAll(".item")) : [];
+  var xmq = window.matchMedia("(min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine)");
+  var xReady = !!(journal && xTrack && xSticky && xLbl && xItems.length > 1 && !RM);
+  var xOn = false, xTravel = 0, xStickyH = 0, xStepW = 0;
+  var xTx = 0, xSkew = 0, xLastSkew = 0, xLastY = 0, xIdx = 0;
+  var xRel = [];
+  var xHome = xLbl ? xLbl.innerHTML : "";
+  var xTotal = String(xItems.length).padStart(2, "0");
+
+  function xlayout() {
+    xStickyH = xSticky.offsetHeight;
+    var tw = xTrack.scrollWidth - xTrack.clientWidth;
+    xTravel = tw > 0 ? tw : 0;
+    /* The whole exit seam: extra height equals horizontal travel
+       exactly, so the pin releases on the very pixel the last card
+       reaches its resting place. */
+    journal.style.height = xTravel > 0 ? (xStickyH + xTravel) + "px" : "";
+    /* Card geometry, measured once per layout, never per frame. Rect
+       differences cancel any transform already applied. */
+    var tr = xTrack.getBoundingClientRect();
+    for (var i = 0; i < xItems.length; i++) {
+      xRel[i] = xItems[i].getBoundingClientRect().left - tr.left;
+    }
+    xStepW = xRel[1] - xRel[0];
+  }
+  function xEnable() {
+    xOn = true;
+    journal.classList.add("crossing");
+    xTx = 0; xSkew = 0; xLastSkew = 0;
+    xLastY = window.scrollY;
+    xlayout();
+  }
+  function xDisable() {
+    xOn = false;
+    journal.classList.remove("crossing");
+    journal.style.height = "";
+    xTrack.style.transform = "";
+    xTx = 0; xSkew = 0; xLastSkew = 0;
+    if (xIdx !== 0) { xIdx = 0; xLbl.innerHTML = xHome; }
+  }
+  if (xReady) {
+    /* Crossing the breakpoint must re-run the frame even without a
+       resize event, for instance when a mouse is plugged in. */
+    if (xmq.addEventListener) { xmq.addEventListener("change", schedule); }
+    else if (xmq.addListener) { xmq.addListener(schedule); }
+    /* One tab stop, never an off-screen focus: focusing a card link
+       moves the page to the scroll position that walks that card
+       fully into view, because page scroll and shelf travel are the
+       same number here. */
+    xTrack.addEventListener("focusin", function (e) {
+      if (!xOn || xTravel <= 0 || !e.target.closest) { return; }
+      var it = e.target.closest(".item");
+      var i = it ? xItems.indexOf(it) : -1;
+      if (i < 0) { return; }
+      /* The hidden horizontal overflow is still scrollable by focus
+         revelation; park it first. The page glides on scroll-behavior
+         smooth, and any scroll write issued after the scrollTo below
+         would abort that glide before it moved a pixel. */
+      document.body.scrollLeft = 0;
+      document.documentElement.scrollLeft = 0;
+      /* The pull is for keyboard focus only: a plain click also lands
+         focus on the link, and moving the page mid press would drag
+         the card out from under its own click. Engines too old for
+         the selector keep the pull for every focus. */
+      try {
+        if (!e.target.matches(":focus-visible")) { return; }
+      } catch (err) {}
+      var d = xRel[i] - xRel[0];
+      if (d > xTravel) { d = xTravel; }
+      if (d < 0) { d = 0; }
+      var r = journal.getBoundingClientRect();
+      window.scrollTo({ top: window.scrollY + r.top + d, left: 0, behavior: "auto" });
+      schedule();
+    });
+    xTrack.addEventListener("keydown", function (e) {
+      if (!xOn || xTravel <= 0) { return; }
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") { return; }
+      e.preventDefault();
+      window.scrollBy({ top: e.key === "ArrowRight" ? xStepW : -xStepW, behavior: "auto" });
+    });
+  }
+
   var queued = false;
   var lastSeen = -1;
   var shown = window.matchMedia("(min-width:68rem)");
   function frame() {
     queued = false;
+    /* ---------- the crossing, driven ---------- */
+    if (xReady) {
+      if (xmq.matches !== xOn) { if (xOn) { xDisable(); } else { xEnable(); } }
+      if (xOn) {
+        /* Keep the travel honest against resizes and font swaps: if
+           the shelf's overflow or the sticky height moved, remeasure
+           and restate the container height before driving. */
+        var xtw = xTrack.scrollWidth - xTrack.clientWidth;
+        if (xtw < 0) { xtw = 0; }
+        if (xtw !== xTravel || xSticky.offsetHeight !== xStickyH) { xlayout(); }
+        if (xTravel > 0) {
+          var xr = journal.getBoundingClientRect();
+          var xp = -xr.top / xTravel;
+          if (xp < 0) { xp = 0; }
+          if (xp > 1) { xp = 1; }
+          var xPinned = xp > 0 && xp < 1;
+          /* Soft velocity skew: one shared lean, up to 1.2 degrees
+             into the direction of travel, decaying at rest. The scrub
+             itself stays direct. */
+          var xy = window.scrollY;
+          var xTgt = xPinned ? (xy - xLastY) * 0.05 : 0;
+          xLastY = xy;
+          if (xTgt > 1.2) { xTgt = 1.2; }
+          if (xTgt < -1.2) { xTgt = -1.2; }
+          xSkew += (xTgt - xSkew) * 0.22;
+          if (xTgt === 0 && xSkew < 0.02 && xSkew > -0.02) { xSkew = 0; }
+          var xtx = -xp * xTravel;
+          if (xtx !== xTx || xSkew !== xLastSkew) {
+            xTx = xtx;
+            xLastSkew = xSkew;
+            xTrack.style.transform = "translate3d(" + xtx.toFixed(2) + "px,0,0) skewX(" + xSkew.toFixed(3) + "deg)";
+          }
+          /* The counter: while pinned the eyebrow reads the current
+             entry, in the tally's own padStart language; unpinned,
+             the plain eyebrow returns. The index divides the travel
+             evenly, so each switch lands as the next card sweeps the
+             centre of the shelf, entry 01 at engagement and entry 07
+             exactly at arrival. Rewritten only when the number moves. */
+          if (xPinned) {
+            var xbi = 1 + Math.round(xp * (xItems.length - 1));
+            if (xIdx !== xbi) {
+              xIdx = xbi;
+              xLbl.innerHTML = "Entry <b>" + String(xIdx).padStart(2, "0") + "</b>/" + xTotal;
+            }
+          } else if (xIdx !== 0) {
+            xIdx = 0;
+            xLbl.innerHTML = xHome;
+          }
+          /* The lean settles after the wheel stops: keep the frame
+             alive only while there is skew left to decay. */
+          if (xSkew !== 0) { schedule(); }
+        }
+      }
+    }
     var wide = shown.matches;
     // Below 68rem the spine is display:none; once every section is
     // also ruled off there is nothing left to measure.
