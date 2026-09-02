@@ -917,6 +917,51 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 }
 .prior i{font-style:normal;font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--text-3);font-variant-numeric:tabular-nums;text-transform:uppercase;}
 
+/* ---------- exhibits ---------- */
+/* Photographs enter the record the way evidence does: framed in a
+   hairline on the raised ground, labelled as an exhibit above and
+   captioned below in the register's own hand. A whisper of a warm
+   grade settles each print against the void. Intrinsic width and
+   height ride on every img, so the frame reserves its space before
+   the print arrives and nothing below it shifts. */
+.exhibit{
+  margin:0;
+  width:100%;
+  max-width:20rem;
+  text-align:left;
+}
+.exhibit .exlabel{
+  margin:0 0 .6rem;
+  font-family:var(--mono);
+  font-size:.625rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.exhibit .plate{
+  padding:6px;
+  background:var(--raise);
+  border:1px solid var(--line-2);
+  border-radius:var(--r);
+}
+.exhibit img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:calc(var(--r) - 6px);
+  filter:saturate(.88);
+}
+.exhibit figcaption{
+  margin-top:.7rem;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.08em;
+  line-height:1.6;
+  color:var(--text-3);
+}
+/* Set inside a record entry, the exhibit follows the entry's copy. */
+.item .exhibit{margin-top:1.35rem;}
+
 /* ---------- journal strip ---------- */
 /* The journal reads as a shelf: cards in a horizontal scroll-snap
    strip, native scrolling doing all the work, arrow keys included
@@ -952,32 +997,68 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 
-/* ---------- the crossing ---------- */
-/* At wide viewports with a fine pointer the shelf stops scrolling in
-   its own box and crosses the page instead: #journal grows by exactly
-   the shelf's horizontal overflow, the heading pins for the duration,
-   and vertical scroll becomes sideways travel, one pixel for one
-   pixel. The script adds the class under the same gate as this query,
-   plus the reduced motion check; without the class nothing below
-   applies and the section renders exactly as the swipeable strip.
-   Padding goes to zero on the container so its content box equals
-   sticky height plus travel with no slack at either seam. The height
-   clause keeps short windows on the strip: below 40rem the centred
-   shell could not hold the whole shelf. */
+/* ---------- the crossings ---------- */
+/* At wide viewports with a fine pointer a shelf stops scrolling in
+   its own box and crosses the page instead: the section grows by
+   exactly the shelf's horizontal overflow, the heading pins for the
+   duration, and vertical scroll becomes sideways travel, one pixel
+   for one pixel. Two sections cross this way, the journal and the
+   experience record, and the script adds the class under the same
+   gate as this query, plus the reduced motion check; without the
+   class nothing below applies and each section renders exactly as it
+   does today. Padding goes to zero on the container so its content
+   box equals sticky height plus travel with no slack at either seam.
+   The height clause keeps short windows off the pin: below 40rem the
+   centred shell could not hold the whole shelf. */
 @media (min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine){
-  #journal.crossing{padding:0;}
-  #journal.crossing > .shell{
+  section.crossing{padding:0;}
+  section.crossing > .shell{
     position:sticky;
     top:0;
     height:100vh;
     height:100svh;
     justify-content:center;
   }
-  #journal.crossing .strip{
+  section.crossing .strip{
     overflow:visible;
     scroll-snap-type:none;
     will-change:transform;
   }
+  /* The experience record keeps its vertical ledger everywhere below
+     the gate; while crossing it restructures into a shelf of role
+     cards, same DOM, CSS only, in the journal cards' own language:
+     raised, hairline border, one radius. Flex order shelves the
+     roles oldest to newest, so the travel reads as time passing and
+     the pin releases flush on the present role. Role cards carry
+     more text than journal cards, so the pinned stack tightens its
+     gaps to keep the year counter clear of the fixed bar. */
+  #experience.crossing > .shell{gap:1rem;}
+  #experience.crossing .rule{margin-top:.75rem;}
+  #experience.crossing .record{
+    display:flex;
+    gap:1rem;
+    margin-top:1.25rem;
+    padding:.25rem;
+    will-change:transform;
+  }
+  #experience.crossing .item{
+    flex:0 0 auto;
+    display:block;
+    min-width:22rem;
+    max-width:26rem;
+    margin:0;
+    padding:1.5rem;
+    background:var(--raise);
+    border:1px solid var(--line);
+    border-radius:var(--r);
+  }
+  #experience.crossing .item:hover{background:var(--raise-2);}
+  #experience.crossing .item .meta{text-align:left;margin-top:1.1rem;}
+  #experience.crossing .item:nth-child(1){order:5;}
+  #experience.crossing .item:nth-child(2){order:3;}
+  #experience.crossing .item:nth-child(3){order:4;}
+  #experience.crossing .item:nth-child(4){order:1;}
+  #experience.crossing .item:nth-child(5){order:2;}
 }
 
 /* ---------- capability columns ---------- */
@@ -1166,6 +1247,26 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 @media (hover:hover){
   .reach a:hover{background:var(--raise-2);border-color:var(--brass);transform:translateY(-2px);}
   .reach a:hover i{color:var(--brass);}
+}
+/* The letterhead: the portrait sits beside the routes in the same
+   hairline frame, no label, no caption, the photograph a letter
+   carries rather than a profile card. Narrow viewports stack it
+   above the routes, the way a letterhead tops a page. */
+.letterhead{
+  margin-top:2.75rem;
+  width:100%;
+  max-width:34rem;
+  display:flex;
+  align-items:flex-start;
+  gap:1.5rem;
+  text-align:left;
+}
+.letterhead .exhibit{flex:0 0 88px;max-width:88px;}
+.letterhead .exhibit .plate{border-radius:.6rem;}
+.letterhead .exhibit img{border-radius:calc(.6rem - 6px);}
+.letterhead .reach{margin-top:0;flex:1;min-width:0;}
+@media (max-width:40rem){
+  .letterhead{flex-direction:column;}
 }
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
@@ -1570,6 +1671,12 @@ section h2{position:relative;}
       <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
       <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
 
+      <figure class="exhibit up d3">
+        <p class="exlabel">Exhibit</p>
+        <div class="plate"><img src="/images/event.jpg" alt="Muhammad Hamza seated at a professional event in a grey suit and burgundy tie" width="800" height="1200" loading="lazy" decoding="async"></div>
+        <figcaption>On duty at a sector event.</figcaption>
+      </figure>
+
       <dl class="now-figs up d3">
         <div class="fig"><dt><span class="odo" data-final="12000" data-comma="1">12,000</span>+</dt><dd>Students in scope</dd></div>
         <div class="fig"><dt>07</dt><dd>Programmes</dd></div>
@@ -1694,6 +1801,11 @@ section h2{position:relative;}
           <div>
             <h3>MSc Accounting and Finance</h3>
             <p class="who">BPP University</p>
+            <figure class="exhibit">
+              <p class="exlabel">Exhibit</p>
+              <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="1080" height="1440" loading="lazy" decoding="async"></div>
+              <figcaption>Westminster Abbey, the MSc conferred. BPP, Merit.</figcaption>
+            </figure>
           </div>
           <p class="meta"><b>May 2024 to Mar 2025</b>Merit</p>
         </article>
@@ -1854,10 +1966,15 @@ section h2{position:relative;}
         <div class="ans" id="hoursans" aria-live="polite">Office hours are open. Ask anything that is on the record, or start with one of the questions above.</div>
       </div>
 
-      <div class="reach up d4">
-        <a href="https://www.linkedin.com/in/muhammadhamzarasheed/" target="_blank" rel="noopener">LinkedIn <i>in/muhammadhamzarasheed</i></a>
-        <a href="mailto:hello@muhammadhamza.co.uk">Email <i>hello@muhammadhamza.co.uk</i></a>
-        <a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener">Curriculum Vitae <i>pdf, two pages</i></a>
+      <div class="letterhead up d4">
+        <figure class="exhibit">
+          <div class="plate"><img src="/images/portrait.jpg" alt="Muhammad Hamza" width="377" height="520" loading="lazy" decoding="async"></div>
+        </figure>
+        <div class="reach">
+          <a href="https://www.linkedin.com/in/muhammadhamzarasheed/" target="_blank" rel="noopener">LinkedIn <i>in/muhammadhamzarasheed</i></a>
+          <a href="mailto:hello@muhammadhamza.co.uk">Email <i>hello@muhammadhamza.co.uk</i></a>
+          <a href="/Muhammad-Hamza-CV.pdf" target="_blank" rel="noopener">Curriculum Vitae <i>pdf, two pages</i></a>
+        </div>
       </div>
       <div class="rule" aria-hidden="true"></div>
     </div>
@@ -2167,71 +2284,90 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     for (var ri = 0; ri < ids.length; ri++) { ruleOff(ri); }
   }
 
-  /* ---------- the crossing ---------- */
-  /* The journal shelf, driven by this same frame. When the gate below
-     matches, #journal grows by exactly the shelf's overflow, its shell
-     pins, and vertical scroll walks the shelf sideways one pixel for
-     one pixel. Everything is additive: a class, one inline height and
-     one transform, all removed cleanly when the gate stops matching,
-     so reduced motion, coarse pointers, narrow viewports and no JS
-     all keep the swipeable strip untouched. */
-  var journal = document.getElementById("journal");
-  var xTrack = journal ? journal.querySelector(".strip") : null;
-  var xSticky = journal ? journal.querySelector(".shell") : null;
-  var xLbl = journal ? journal.querySelector(".label") : null;
-  var xItems = xTrack ? [].slice.call(xTrack.querySelectorAll(".item")) : [];
+  /* ---------- the crossings ---------- */
+  /* Two shelves cross the page under one gate: the journal's entries
+     and the experience record. The machinery is shared. When the gate
+     below matches, a section grows by exactly its shelf's overflow,
+     its shell pins, and vertical scroll walks the shelf sideways one
+     pixel for one pixel. Everything is additive: a class, one inline
+     height and one transform, all removed cleanly when the gate stops
+     matching, so reduced motion, coarse pointers, narrow viewports
+     and no JS all keep the vertical layouts untouched. Each crossing
+     measures only its own section and is driven from the one shared
+     frame below; the two never touch each other's numbers. */
   var xmq = window.matchMedia("(min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine)");
-  var xReady = !!(journal && xTrack && xSticky && xLbl && xItems.length > 1 && !RM);
-  var xOn = false, xTravel = 0, xStickyH = 0, xStepW = 0;
-  var xTx = 0, xSkew = 0, xLastSkew = 0, xLastY = 0, xIdx = 0;
-  var xRel = [];
-  var xHome = xLbl ? xLbl.innerHTML : "";
-  var xTotal = String(xItems.length).padStart(2, "0");
+  var crossings = [];
 
-  function xlayout() {
-    xStickyH = xSticky.offsetHeight;
-    var tw = xTrack.scrollWidth - xTrack.clientWidth;
-    xTravel = tw > 0 ? tw : 0;
-    /* The whole exit seam: extra height equals horizontal travel
-       exactly, so the pin releases on the very pixel the last card
-       reaches its resting place. */
-    journal.style.height = xTravel > 0 ? (xStickyH + xTravel) + "px" : "";
-    /* Card geometry, measured once per layout, never per frame. Rect
-       differences cancel any transform already applied. */
-    var tr = xTrack.getBoundingClientRect();
-    for (var i = 0; i < xItems.length; i++) {
-      xRel[i] = xItems[i].getBoundingClientRect().left - tr.left;
+  function initCrossing(section, opts) {
+    var track = opts.strip;
+    var sticky = section ? section.querySelector(".shell") : null;
+    var lbl = section ? section.querySelector(".label") : null;
+    var items = track ? [].slice.call(track.querySelectorAll(".item")) : [];
+    if (!(section && track && sticky && lbl && items.length > 1) || RM) { return null; }
+
+    var c = {
+      on: false, travel: 0, stickyH: 0, stepW: 0, min: 0,
+      tx: 0, skew: 0, lastSkew: 0, lastY: 0, idx: 0,
+      rel: [], home: lbl.innerHTML
+    };
+
+    function layout() {
+      c.stickyH = sticky.offsetHeight;
+      var tw = track.scrollWidth - track.clientWidth;
+      c.travel = tw > 0 ? tw : 0;
+      /* The whole exit seam: extra height equals horizontal travel
+         exactly, so the pin releases on the very pixel the last card
+         reaches its resting place. */
+      section.style.height = c.travel > 0 ? (c.stickyH + c.travel) + "px" : "";
+      /* Card geometry, measured once per layout, never per frame. Rect
+         differences cancel any transform already applied; the smallest
+         offset is kept separately because flex order may shelve cards
+         out of source order. */
+      var tr = track.getBoundingClientRect();
+      for (var i = 0; i < items.length; i++) {
+        c.rel[i] = items[i].getBoundingClientRect().left - tr.left;
+        if (i === 0 || c.rel[i] < c.min) { c.min = c.rel[i]; }
+      }
+      c.stepW = opts.pitch(c.rel);
+      if (opts.onlayout) { opts.onlayout(c.rel); }
     }
-    xStepW = xRel[1] - xRel[0];
-  }
-  function xEnable() {
-    xOn = true;
-    journal.classList.add("crossing");
-    xTx = 0; xSkew = 0; xLastSkew = 0;
-    xLastY = window.scrollY;
-    xlayout();
-  }
-  function xDisable() {
-    xOn = false;
-    journal.classList.remove("crossing");
-    journal.style.height = "";
-    xTrack.style.transform = "";
-    xTx = 0; xSkew = 0; xLastSkew = 0;
-    if (xIdx !== 0) { xIdx = 0; xLbl.innerHTML = xHome; }
-  }
-  if (xReady) {
-    /* Crossing the breakpoint must re-run the frame even without a
-       resize event, for instance when a mouse is plugged in. */
-    if (xmq.addEventListener) { xmq.addEventListener("change", schedule); }
-    else if (xmq.addListener) { xmq.addListener(schedule); }
+    function enable() {
+      c.on = true;
+      section.classList.add("crossing");
+      /* A shelf that only exists while crossing claims its single tab
+         stop here and hands it back on release; the journal's strip
+         carries its own in the markup. */
+      if (opts.region) {
+        track.tabIndex = 0;
+        track.setAttribute("role", "region");
+        track.setAttribute("aria-label", opts.region);
+      }
+      c.tx = 0; c.skew = 0; c.lastSkew = 0;
+      c.lastY = window.scrollY;
+      layout();
+    }
+    function disable() {
+      c.on = false;
+      section.classList.remove("crossing");
+      section.style.height = "";
+      track.style.transform = "";
+      if (opts.region) {
+        track.removeAttribute("tabindex");
+        track.removeAttribute("role");
+        track.removeAttribute("aria-label");
+      }
+      c.tx = 0; c.skew = 0; c.lastSkew = 0;
+      if (c.idx !== 0) { c.idx = 0; lbl.innerHTML = c.home; }
+    }
+
     /* One tab stop, never an off-screen focus: focusing a card link
        moves the page to the scroll position that walks that card
        fully into view, because page scroll and shelf travel are the
        same number here. */
-    xTrack.addEventListener("focusin", function (e) {
-      if (!xOn || xTravel <= 0 || !e.target.closest) { return; }
+    track.addEventListener("focusin", function (e) {
+      if (!c.on || c.travel <= 0 || !e.target.closest) { return; }
       var it = e.target.closest(".item");
-      var i = it ? xItems.indexOf(it) : -1;
+      var i = it ? items.indexOf(it) : -1;
       if (i < 0) { return; }
       /* The hidden horizontal overflow is still scrollable by focus
          revelation; park it first. The page glides on scroll-behavior
@@ -2246,19 +2382,133 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       try {
         if (!e.target.matches(":focus-visible")) { return; }
       } catch (err) {}
-      var d = xRel[i] - xRel[0];
-      if (d > xTravel) { d = xTravel; }
+      var d = c.rel[i] - c.min;
+      if (d > c.travel) { d = c.travel; }
       if (d < 0) { d = 0; }
-      var r = journal.getBoundingClientRect();
+      var r = section.getBoundingClientRect();
       window.scrollTo({ top: window.scrollY + r.top + d, left: 0, behavior: "auto" });
       schedule();
     });
-    xTrack.addEventListener("keydown", function (e) {
-      if (!xOn || xTravel <= 0) { return; }
+    track.addEventListener("keydown", function (e) {
+      if (!c.on || c.travel <= 0) { return; }
       if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") { return; }
       e.preventDefault();
-      window.scrollBy({ top: e.key === "ArrowRight" ? xStepW : -xStepW, behavior: "auto" });
+      window.scrollBy({ top: e.key === "ArrowRight" ? c.stepW : -c.stepW, behavior: "auto" });
     });
+
+    c.drive = function () {
+      if (xmq.matches !== c.on) { if (c.on) { disable(); } else { enable(); } }
+      if (!c.on) { return; }
+      /* Keep the travel honest against resizes and font swaps: if
+         the shelf's overflow or the sticky height moved, remeasure
+         and restate the container height before driving. */
+      var tw = track.scrollWidth - track.clientWidth;
+      if (tw < 0) { tw = 0; }
+      if (tw !== c.travel || sticky.offsetHeight !== c.stickyH) { layout(); }
+      if (c.travel <= 0) { return; }
+      var r = section.getBoundingClientRect();
+      var p = -r.top / c.travel;
+      if (p < 0) { p = 0; }
+      if (p > 1) { p = 1; }
+      var pinned = p > 0 && p < 1;
+      /* Soft velocity skew: one shared lean, up to 1.2 degrees into
+         the direction of travel, decaying at rest. The scrub itself
+         stays direct. */
+      var y = window.scrollY;
+      var tgt = pinned ? (y - c.lastY) * 0.05 : 0;
+      c.lastY = y;
+      if (tgt > 1.2) { tgt = 1.2; }
+      if (tgt < -1.2) { tgt = -1.2; }
+      c.skew += (tgt - c.skew) * 0.22;
+      if (tgt === 0 && c.skew < 0.02 && c.skew > -0.02) { c.skew = 0; }
+      var tx = -p * c.travel;
+      if (tx !== c.tx || c.skew !== c.lastSkew) {
+        c.tx = tx;
+        c.lastSkew = c.skew;
+        track.style.transform = "translate3d(" + tx.toFixed(2) + "px,0,0) skewX(" + c.skew.toFixed(3) + "deg)";
+      }
+      /* The counter: while pinned the eyebrow reads the section's own
+         measure of progress, the entry number for the journal, the
+         year for the record; unpinned, the plain eyebrow returns. The
+         index divides the travel evenly, so each switch lands as the
+         next card sweeps the centre of the shelf, the first card at
+         engagement and the last exactly at arrival. Rewritten only
+         when the number moves. */
+      if (pinned) {
+        var bi = 1 + Math.round(p * (items.length - 1));
+        if (c.idx !== bi) {
+          c.idx = bi;
+          lbl.innerHTML = opts.eyebrow(bi, items.length);
+        }
+      } else if (c.idx !== 0) {
+        c.idx = 0;
+        lbl.innerHTML = c.home;
+      }
+      /* The lean settles after the wheel stops: keep the frame alive
+         only while there is skew left to decay. */
+      if (c.skew !== 0) { schedule(); }
+    };
+    return c;
+  }
+
+  var journal = document.getElementById("journal");
+  var jc = initCrossing(journal, {
+    strip: journal ? journal.querySelector(".strip") : null,
+    /* Journal cards share one width, so a neighbour gap is the pitch. */
+    pitch: function (rel) { return rel[1] - rel[0]; },
+    eyebrow: function (i, n) {
+      return "Entry <b>" + String(i).padStart(2, "0") + "</b>/" + String(n).padStart(2, "0");
+    }
+  });
+  if (jc) { crossings.push(jc); }
+
+  /* The experience shelf travels the timeline: while pinned the
+     eyebrow reads the year of the role crossing the centre, oldest
+     on the left, the present role landing flush at release. The year
+     register is read once from each entry's own date line, never per
+     frame; eras re-sorts it to shelf order at layout, because flex
+     order shelves the roles chronologically while the record keeps
+     newest first for every other reader. */
+  var exper = document.getElementById("experience");
+  var eTrack = exper ? exper.querySelector(".record") : null;
+  var years = [];
+  var eras = [];
+  if (eTrack) {
+    [].slice.call(eTrack.querySelectorAll(".item")).forEach(function (it) {
+      var meta = it.querySelector(".meta");
+      var m = (meta ? meta.textContent : it.textContent).match(/\d{4}/);
+      years.push(m ? m[0] : "");
+    });
+  }
+  var ec = initCrossing(exper, {
+    strip: eTrack,
+    region: "Experience roles, scroll list",
+    /* Role cards clamp to one width too, but flex order parts them
+       from source order, so the pitch is the shelf's span divided by
+       its gaps. */
+    pitch: function (rel) {
+      var lo = rel[0], hi = rel[0];
+      for (var i = 1; i < rel.length; i++) {
+        if (rel[i] < lo) { lo = rel[i]; }
+        if (rel[i] > hi) { hi = rel[i]; }
+      }
+      return (hi - lo) / (rel.length - 1);
+    },
+    onlayout: function (rel) {
+      var order = [];
+      for (var i = 0; i < rel.length; i++) { order.push(i); }
+      order.sort(function (a, b) { return rel[a] - rel[b]; });
+      for (var j = 0; j < order.length; j++) { eras[j] = years[order[j]]; }
+    },
+    eyebrow: function (i) { return "As at <b>" + eras[i - 1] + "</b>"; }
+  });
+  if (ec) { crossings.push(ec); }
+
+  if (crossings.length) {
+    /* Crossing the breakpoint must re-run the frame even without a
+       resize event, for instance when a mouse is plugged in. */
+    if (xmq.addEventListener) { xmq.addEventListener("change", schedule); }
+    else if (xmq.addListener) { xmq.addListener(schedule); }
   }
 
   var queued = false;
@@ -2266,60 +2516,8 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var shown = window.matchMedia("(min-width:68rem)");
   function frame() {
     queued = false;
-    /* ---------- the crossing, driven ---------- */
-    if (xReady) {
-      if (xmq.matches !== xOn) { if (xOn) { xDisable(); } else { xEnable(); } }
-      if (xOn) {
-        /* Keep the travel honest against resizes and font swaps: if
-           the shelf's overflow or the sticky height moved, remeasure
-           and restate the container height before driving. */
-        var xtw = xTrack.scrollWidth - xTrack.clientWidth;
-        if (xtw < 0) { xtw = 0; }
-        if (xtw !== xTravel || xSticky.offsetHeight !== xStickyH) { xlayout(); }
-        if (xTravel > 0) {
-          var xr = journal.getBoundingClientRect();
-          var xp = -xr.top / xTravel;
-          if (xp < 0) { xp = 0; }
-          if (xp > 1) { xp = 1; }
-          var xPinned = xp > 0 && xp < 1;
-          /* Soft velocity skew: one shared lean, up to 1.2 degrees
-             into the direction of travel, decaying at rest. The scrub
-             itself stays direct. */
-          var xy = window.scrollY;
-          var xTgt = xPinned ? (xy - xLastY) * 0.05 : 0;
-          xLastY = xy;
-          if (xTgt > 1.2) { xTgt = 1.2; }
-          if (xTgt < -1.2) { xTgt = -1.2; }
-          xSkew += (xTgt - xSkew) * 0.22;
-          if (xTgt === 0 && xSkew < 0.02 && xSkew > -0.02) { xSkew = 0; }
-          var xtx = -xp * xTravel;
-          if (xtx !== xTx || xSkew !== xLastSkew) {
-            xTx = xtx;
-            xLastSkew = xSkew;
-            xTrack.style.transform = "translate3d(" + xtx.toFixed(2) + "px,0,0) skewX(" + xSkew.toFixed(3) + "deg)";
-          }
-          /* The counter: while pinned the eyebrow reads the current
-             entry, in the tally's own padStart language; unpinned,
-             the plain eyebrow returns. The index divides the travel
-             evenly, so each switch lands as the next card sweeps the
-             centre of the shelf, entry 01 at engagement and entry 07
-             exactly at arrival. Rewritten only when the number moves. */
-          if (xPinned) {
-            var xbi = 1 + Math.round(xp * (xItems.length - 1));
-            if (xIdx !== xbi) {
-              xIdx = xbi;
-              xLbl.innerHTML = "Entry <b>" + String(xIdx).padStart(2, "0") + "</b>/" + xTotal;
-            }
-          } else if (xIdx !== 0) {
-            xIdx = 0;
-            xLbl.innerHTML = xHome;
-          }
-          /* The lean settles after the wheel stops: keep the frame
-             alive only while there is skew left to decay. */
-          if (xSkew !== 0) { schedule(); }
-        }
-      }
-    }
+    /* ---------- the crossings, driven ---------- */
+    for (var ci = 0; ci < crossings.length; ci++) { crossings[ci].drive(); }
     var wide = shown.matches;
     // Below 68rem the spine is display:none; once every section is
     // also ruled off there is nothing left to measure.
