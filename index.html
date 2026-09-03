@@ -1272,16 +1272,21 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   width:100%;
   max-width:34rem;
   display:flex;
-  align-items:flex-start;
+  align-items:stretch;
   gap:1.5rem;
   text-align:left;
 }
-.letterhead .exhibit{flex:0 0 88px;max-width:88px;}
-.letterhead .exhibit .plate{border-radius:.6rem;}
-.letterhead .exhibit img{border-radius:calc(.6rem - 6px);}
+/* The portrait holds the full height of the routes beside it, a
+   proper letterhead column rather than a thumbnail perched on one;
+   object-fit keeps the face framed whatever the stack's height. */
+.letterhead .exhibit{flex:0 0 11rem;max-width:11rem;display:flex;}
+.letterhead .exhibit .plate{border-radius:.6rem;display:flex;flex:1;}
+.letterhead .exhibit img{border-radius:calc(.6rem - 6px);height:100%;object-fit:cover;object-position:50% 20%;flex:1;}
 .letterhead .reach{margin-top:0;flex:1;min-width:0;}
 @media (max-width:40rem){
-  .letterhead{flex-direction:column;}
+  .letterhead{flex-direction:column;align-items:flex-start;}
+  .letterhead .exhibit{flex:0 0 auto;max-width:7rem;}
+  .letterhead .exhibit img{height:auto;}
 }
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
