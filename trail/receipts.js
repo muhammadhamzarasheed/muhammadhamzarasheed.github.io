@@ -7,18 +7,18 @@
 const SPOTS = [
   { x: 60.4, z: 29.1 },     /* on the ring, between 01 and 02 */
   { x: 14.9, z: 65.3 },     /* on the ring, between 02 and 03 */
-  { x: -41.8, z: 52.4 },    /* on the ring, between 03 and 04 */
-  { x: -67.0, z: 0.0 },     /* on the ring, opposite the spawn */
-  { x: -41.8, z: -52.4 },   /* on the ring, between 05 and 06 */
-  { x: 14.9, z: -65.3 },    /* on the ring, between 06 and 07 */
-  { x: 60.4, z: -29.1 },    /* on the ring, between 07 and 01 */
+  { x: -25.6, z: 61.9 },    /* on the ring, between 03 and 04 */
+  { x: -61.9, z: 25.6 },    /* on the ring, between 04 and 05 */
+  { x: -61.9, z: -25.6 },   /* on the ring, between 05 and 06 */
+  { x: 14.9, z: -65.3 },    /* on the ring, between 07 and 08 */
+  { x: 60.4, z: -29.1 },    /* on the ring, between 08 and 01 */
   { x: 56.0, z: 2.0 },      /* inner apron, short of district 01 */
   { x: 30.0, z: -14.0 },    /* off the spawn apron */
   { x: 10.0, z: -10.0 },    /* by the centre lockup's approach */
   { x: 0.0, z: 38.0 },      /* inner field, north */
   { x: -6.0, z: -30.0 },    /* inner field, south */
-  { x: -48.7, z: 61.0 },    /* outer verge, on the 03 to 04 arc */
-  { x: 17.4, z: -76.0 },    /* outer verge, on the 06 to 07 arc */
+  { x: -51.9, z: 64.8 },    /* outer verge, on the 03 to 04 arc */
+  { x: 17.4, z: -76.0 },    /* outer verge, on the 07 to 08 arc */
   { x: -47.0, z: 22.2 },    /* inner field, toward 04 */
 ];
 

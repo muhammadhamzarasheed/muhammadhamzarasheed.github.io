@@ -998,6 +998,40 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 
+/* ---------- research shelf ---------- */
+/* Four small tiles, an offprint's own masthead in miniature: the
+   paper number, the running head, the subtitle in italic serif, then
+   the date and length on one mono line. Narrower than the journal's
+   cards, so more of the shelf shows at once; the same scroll-snap
+   strip carries the narrow behaviour, the same crossing carries the
+   wide one. */
+.sub{
+  margin:.7rem 0 0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:1.0625rem;
+  line-height:1.5;
+  color:var(--text-2);
+}
+#research .meta{margin:.9rem 0 0;}
+.paperlink{
+  display:inline-block;
+  margin-top:1rem;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--brass);
+  padding-bottom:3px;
+  border-bottom:1px solid transparent;
+  transition:border-color .25s ease;
+}
+.paperlink:hover{border-bottom-color:var(--brass);}
+@media (min-width:40rem){
+  #research .strip .item{min-width:16rem;max-width:18rem;padding:1.5rem 1.35rem;}
+}
+
 /* ---------- the crossings ---------- */
 /* At wide viewports with a fine pointer a shelf stops scrolling in
    its own box and crosses the page instead: the section grows by
@@ -1587,8 +1621,8 @@ section h2{position:relative;}
       <li><a href="#education">Education</a></li>
       <li><a href="#journal">Journal</a></li>
       <li><a href="#elsewhere">Field notes</a></li>
+      <li><a href="#research">Research</a></li>
       <li><a href="#contact">Contact</a></li>
-      <li><a href="/papers/" target="_blank" rel="noopener">Research</a></li>
       <li><a href="/appendix/" target="_blank" rel="noopener">After hours</a></li>
     </ul>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
@@ -1602,14 +1636,14 @@ section h2{position:relative;}
   <a href="#education">Education</a>
   <a href="#journal">Journal</a>
   <a href="#elsewhere">Field notes</a>
+  <a href="#research">Research</a>
   <a href="#contact">Contact</a>
-  <a href="/papers/" target="_blank" rel="noopener">Research</a>
   <a href="/appendix/" target="_blank" rel="noopener">After hours</a>
 </div>
 
 <aside class="spine" id="spine" aria-label="Reading progress">
   <div class="rail" id="rail"><div class="fill" id="fill"></div></div>
-  <span class="tally stamp" id="tally"><b>00</b>/07 reconciled</span>
+  <span class="tally stamp" id="tally"><b>00</b>/08 reconciled</span>
 </aside>
 
 <main id="top">
@@ -1964,9 +1998,57 @@ section h2{position:relative;}
     </div>
   </section>
 
+  <section id="research" style="padding-top:0;">
+    <div class="shell mid">
+      <p class="label up stamp"><b>07</b> &middot; Research</p>
+      <h2 class="up d1">Four working papers, read on screen.</h2>
+      <p class="prose up d2">Four working papers, each sole authored and under review at SSRN. They are readable on this site while the review runs, not for citation, quotation or reproduction without permission, and the complete set sits in <a href="/papers/" target="_blank" rel="noopener">the full index</a>.</p>
+
+      <div class="record strip" role="region" tabindex="0" aria-label="Research papers, scroll list">
+        <article class="item up">
+          <div>
+            <p class="who">Paper 01</p>
+            <h3>Integration or compression?</h3>
+            <p class="sub">A Document Analysis of ACCA-Embedded Master's Programmes in UK Higher Education</p>
+            <p class="meta">2 September 2026 &middot; 22 pages</p>
+            <a class="paperlink" href="/papers/acca-embedded-masters/">Read on screen</a>
+          </div>
+        </article>
+        <article class="item up">
+          <div>
+            <p class="who">Paper 02</p>
+            <h3>Accountability and reliance</h3>
+            <p class="sub">An Audit-Standards Perspective on Higher Education in England</p>
+            <p class="meta">2 September 2026 &middot; 19 pages</p>
+            <a class="paperlink" href="/papers/reliance-in-partnership-assessment/">Read on screen</a>
+          </div>
+        </article>
+        <article class="item up">
+          <div>
+            <p class="who">Paper 03</p>
+            <h3>Convergence without equivalence</h3>
+            <p class="sub">UK Sustainability Reporting Standards, the Amended CSRD and the Revised ESRS after the 2026 Simplification Package</p>
+            <p class="meta">2 September 2026 &middot; 20 pages</p>
+            <a class="paperlink" href="/papers/convergence-without-equivalence/">Read on screen</a>
+          </div>
+        </article>
+        <article class="item up">
+          <div>
+            <p class="who">Paper 04</p>
+            <h3>From feedback delivery to feedback use</h3>
+            <p class="sub">A Critical Review with Implications for Accounting Education</p>
+            <p class="meta">3 September 2026 &middot; 21 pages</p>
+            <a class="paperlink" href="/papers/feedback-delivery-to-feedback-use/">Read on screen</a>
+          </div>
+        </article>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <section id="contact">
     <div class="shell mid">
-      <p class="label up stamp"><b>07</b> &middot; Contact</p>
+      <p class="label up stamp"><b>08</b> &middot; Contact</p>
       <h2 class="up d1">Open to connecting.</h2>
       <p class="prose up d2">I am interested in higher education administration, quality assurance, and learning and teaching, and in where financial reporting and academic governance borrow from each other. If any of that is your world, get in touch.</p>
 
@@ -2025,6 +2107,7 @@ section h2{position:relative;}
       <li role="option" id="palopt-4" aria-selected="false"><a href="#education" tabindex="-1">Education <i>section</i></a></li>
       <li role="option" id="palopt-12" aria-selected="false"><a href="#journal" tabindex="-1">Journal <i>section</i></a></li>
       <li role="option" id="palopt-5" aria-selected="false"><a href="#elsewhere" tabindex="-1">Field notes <i>section</i></a></li>
+      <li role="option" id="palopt-32" aria-selected="false"><a href="#research" tabindex="-1">Research <i>section</i></a></li>
       <li role="option" id="palopt-6" aria-selected="false"><a href="#contact" tabindex="-1">Contact <i>section</i></a></li>
       <li role="option" id="palopt-10" aria-selected="false"><a href="/notes/accuracy-is-an-equity-issue/" target="_blank" rel="noopener" tabindex="-1">Accuracy is an equity issue <i>entry</i></a></li>
       <li role="option" id="palopt-13" aria-selected="false"><a href="/notes/starting-over-is-not-going-backwards/" target="_blank" rel="noopener" tabindex="-1">Starting over is not going backwards <i>entry</i></a></li>
@@ -2044,7 +2127,7 @@ section h2{position:relative;}
       <li role="option" id="palopt-27" aria-selected="false"><a href="/glossary/" target="_blank" rel="noopener" tabindex="-1">The glossary <i>plain english</i></a></li>
       <li role="option" id="palopt-29" aria-selected="false"><a href="/trail/" target="_blank" rel="noopener" tabindex="-1">The audit trail <i>drive</i></a></li>
       <li role="option" id="palopt-30" aria-selected="false"><a href="/calibration/" target="_blank" rel="noopener" tabindex="-1">The calibration <i>precision</i></a></li>
-      <li role="option" id="palopt-31" aria-selected="false"><a href="/papers/" target="_blank" rel="noopener" tabindex="-1">Research <i>working papers</i></a></li>
+      <li role="option" id="palopt-31" aria-selected="false"><a href="/papers/" target="_blank" rel="noopener" tabindex="-1">The working papers <i>index</i></a></li>
     </ul>
   </div>
 </div>
@@ -2252,8 +2335,8 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var tally = document.getElementById("tally");
   if (!spine || !rail) { return; }
 
-  var ids = ["method", "now", "experience", "education", "journal", "elsewhere", "contact"];
-  var names = ["Method", "Now", "Experience", "Education", "Journal", "Field notes", "Contact"];
+  var ids = ["method", "now", "experience", "education", "journal", "elsewhere", "research", "contact"];
+  var names = ["Method", "Now", "Experience", "Education", "Journal", "Field notes", "Research", "Contact"];
   var sections = ids.map(function (id) { return document.getElementById(id); });
   var nodes = ids.map(function (id, i) {
     var b = document.createElement("button");
@@ -2528,6 +2611,19 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
   if (ec) { crossings.push(ec); }
 
+  /* The research shelf crosses the same way as the journal: equal
+     width cards, the eyebrow counting papers against the shelf's own
+     total while pinned. */
+  var research = document.getElementById("research");
+  var rc = initCrossing(research, {
+    strip: research ? research.querySelector(".strip") : null,
+    pitch: function (rel) { return rel[1] - rel[0]; },
+    eyebrow: function (i, n) {
+      return "Paper <b>" + String(i).padStart(2, "0") + "</b>/" + String(n).padStart(2, "0");
+    }
+  });
+  if (rc) { crossings.push(rc); }
+
   if (crossings.length) {
     /* Crossing the breakpoint must re-run the frame even without a
        resize event, for instance when a mouse is plugged in. */
@@ -2738,7 +2834,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
      once; every timing runs off the rAF clock the field already keeps.
      Fine pointers only: a touch screen never rests a pointer. */
   var FINE = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-  var FIGS = ["10/13", "12,000", "2019", "07/07", "hello@"];
+  var FIGS = ["10/13", "12,000", "2019", "08/08", "hello@"];
   var figIdx = 0;
   var slot = { on: false, text: "", x: 0, y: 0, born: 0 };
   var coolUntil = 0;
@@ -3215,7 +3311,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       s: "After hours", h: "/appendix/", rel: [41, 46, 53] },
     // 41 · The trail. Source: /appendix/ door A, /trail/.
     { k: ["what is the audit trail", "the audit trail", "audit trail", "drive", "drivng", "car game", "ring road", "districts", "trail"],
-      a: "A brass car, a ring road, seven districts and a tally, each district mirroring a chapter of the homepage. Drive the record until it reconciles, then find the receipts: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
+      a: "A brass car, a ring road, eight districts and a tally, each district mirroring a chapter of the homepage. Drive the record until it reconciles, then find the receipts: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
       s: "The audit trail", h: "/trail/", rel: [42, 43, 40] },
     // 42 · Trail controls. Source: /trail/ HUD, verbatim.
     { k: ["how do i play the trail", "play the trail", "trail controls", "controls", "wasd", "drift", "how do i drive", "steering", "plaque"],
@@ -3223,7 +3319,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       s: "The audit trail", h: "/trail/", rel: [43, 41, 40] },
     // 43 · Trail reconciling and receipts. Source: /trail/ tallies.
     { k: ["what are the receipts", "receipts", "reciepts", "how many receipts", "reconciling the trail", "15 receipts"],
-      a: "Each of the seven districts reconciles on your first drive into it, and the tally keeps the count; at seven, the record reconciles. Then there are <b>15 receipts</b> to find before every receipt is accounted for: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
+      a: "Each of the eight districts reconciles on your first drive into it, and the tally keeps the count; at eight, the record reconciles. Then there are <b>15 receipts</b> to find before every receipt is accounted for: <a href=\"/trail/\" target=\"_blank\" rel=\"noopener\">the audit trail</a>.",
       s: "The audit trail", h: "/trail/", rel: [41, 42, 40] },
     // 44 · The calibration. Source: /calibration/.
     { k: ["what is the calibration", "calibration", "callibration", "calibrate", "instruments", "precision", "tolerance"],

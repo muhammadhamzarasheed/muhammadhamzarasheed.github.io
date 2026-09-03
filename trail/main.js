@@ -6,7 +6,7 @@
    Each module in ./districts/ exports:
 
      id      string, stable slug, e.g. "d03-experience"
-     index   number 1 to 7, the district's place along the loop
+     index   number 1 to 8, the district's place along the loop
      title   string, exactly the homepage section title
      anchor  string, the homepage anchor, e.g. "#experience"
      build(ctx)       called once at boot, after the world exists
@@ -66,9 +66,10 @@ import * as d03 from "./districts/d03-experience.js";
 import * as d04 from "./districts/d04-education.js";
 import * as d05 from "./districts/d05-journal.js";
 import * as d06 from "./districts/d06-field-notes.js";
-import * as d07 from "./districts/d07-contact.js";
+import * as d07 from "./districts/d07-research.js";
+import * as d08 from "./districts/d08-contact.js";
 
-const DISTRICTS = [d01, d02, d03, d04, d05, d06, d07];
+const DISTRICTS = [d01, d02, d03, d04, d05, d06, d07, d08];
 
 const FIXED_STEP = 1 / 60;
 const MAX_SUBSTEPS = 3;
@@ -250,9 +251,9 @@ async function boot() {
   receipts = initReceipts(THREE, scene, onReceipt, reduceMotion);
 
   /* Lay the districts out on their stations and wire the tally: the
-     first entry into each reconciles it; all seven countersign. A
+     first entry into each reconciles it; all eight countersign. A
      first reconciliation fountains brass figures from the station and
-     pulses the tally; the seventh bursts around the centre monogram. */
+     pulses the tally; the eighth bursts around the centre monogram. */
   for (const mod of DISTRICTS) {
     const station = LAYOUT[mod.index - 1];
     const ctx = makeCtx(station);
@@ -266,7 +267,7 @@ async function boot() {
         effects.glyphBurst(station.x, station.z, 24, false);
         hud.pulseTally();
       }
-      if (total === 7) {
+      if (total === 8) {
         if (first) effects.glyphBurst(0, 0, 40, true);
         hud.countersign();
       }

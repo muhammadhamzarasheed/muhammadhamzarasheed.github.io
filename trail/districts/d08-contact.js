@@ -1,11 +1,11 @@
-/* 07 / Contact. The quietest district by design. A desk with an in
+/* 08 / Contact. The quietest district by design. A desk with an in
    tray, the address laid in brass on the ground, a plaque that opens
    a letter, and a finishing line across the trail just past the desk.
    The words come from the record: the email on #contact, and the
    countersign that closes the footer. */
 
-export const id = "d07-contact";
-export const index = 7;
+export const id = "d08-contact";
+export const index = 8;
 export const title = "Contact";
 export const anchor = "#contact";
 
@@ -30,7 +30,7 @@ export function build(ctx) {
   const READ = Math.PI / 4;
 
   /* Eyebrow on the approach, clear of the kerb. */
-  const eyebrow = helpers.floorText("07 / Contact", 1.3, { colour: "brass" });
+  const eyebrow = helpers.floorText("08 / Contact", 1.3, { colour: "brass" });
   const eb = at(11, -8);
   eyebrow.position.set(eb.x, 0, eb.z);
   eyebrow.rotation.y = READ;
