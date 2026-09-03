@@ -601,15 +601,17 @@ h1{
 .band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .band .shell{
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:1fr 1fr;
 }
-/* Stacked on narrow screens the divider has to be horizontal, or every
-   figure below the first carries a stray vertical rule. */
-.fig{padding:2.25rem 1.75rem;text-align:center;border-top:1px solid var(--line);}
-.fig:first-child{border-top:0;}
+/* Two by two on narrow screens, so the figures read as one card of
+   accounts rather than a tall column: a hairline between the pairs
+   and one under the first row. Four across from 48rem. */
+.fig{padding:1.75rem 1rem;text-align:center;border-top:1px solid var(--line);}
+.fig:nth-child(-n+2){border-top:0;}
+.fig:nth-child(even){border-left:1px solid var(--line);}
 @media (min-width:48rem){
   .band .shell{grid-template-columns:repeat(4,1fr);}
-  .fig{border-top:0;border-left:1px solid var(--line);}
+  .fig{padding:2.25rem 1.75rem;border-top:0;border-left:1px solid var(--line);}
   .fig:first-child{border-left:0;}
 }
 .fig dt{
@@ -636,12 +638,35 @@ h1{
   width:100%;
   margin-top:clamp(2.25rem,4vw,3rem);
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:1fr 1fr;
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
 @media (min-width:48rem){
   .now-figs{grid-template-columns:repeat(4,1fr);}
+}
+
+/* ---------- the docket ---------- */
+/* In the Now chapter the exhibit and the six responsibilities share a
+   row at wide widths: the photograph on the left holds the full height
+   of the tiles stacked two across on the right, the way a docket
+   clips a print to the papers it belongs with. Below 64rem the docket
+   dissolves and both blocks keep their vertical places. */
+.docket{display:contents;}
+@media (min-width:64rem){
+  .docket{
+    display:grid;
+    grid-template-columns:18rem minmax(0,1fr);
+    gap:1.25rem;
+    align-items:stretch;
+    width:100%;
+    margin-top:clamp(2.75rem,5vw,4rem);
+    text-align:left;
+  }
+  .docket .tiles{margin-top:0;grid-template-columns:1fr 1fr;}
+  .docket .exhibit{max-width:none;display:flex;flex-direction:column;}
+  .docket .exhibit .plate{flex:1;display:flex;}
+  .docket .exhibit img{flex:1;height:100%;object-fit:cover;object-position:50% 18%;}
 }
 
 /* ---------- sections ---------- */
@@ -659,6 +684,32 @@ h2{
 .prose{margin:0;max-width:60ch;color:var(--text-2);font-size:1.0625rem;line-height:1.72;}
 .prose + .prose{margin-top:1.15rem;}
 .mid .prose{max-width:56ch;}
+/* Centred paragraphs run to a dozen ragged lines on a phone, so below
+   40rem the body copy sets left under its centred heading, the way a
+   letter sits under its letterhead. */
+@media (max-width:40rem){
+  .mid .prose{text-align:left;width:100%;}
+}
+
+/* ---------- carried forward ---------- */
+/* Every chapter closes the way a ledger page does: the balance is
+   carried forward, and the line names the next chapter by number so
+   the reader always knows what follows the rule. Set right, in the
+   register's own hand, one tab stop and one hover. */
+.cf{
+  margin:-.5rem 0 0;
+  align-self:flex-end;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.cf a{display:inline-block;padding:.3rem 0;transition:color .25s ease;}
+.cf b{font-weight:400;color:var(--brass);}
+@media (hover:hover){
+  .cf a:hover{color:var(--text);}
+}
 
 /* ---------- principles ---------- */
 .principles{
@@ -960,8 +1011,17 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   line-height:1.6;
   color:var(--text-3);
 }
-/* Set inside a record entry, the exhibit follows the entry's copy. */
+/* Set inside a record entry, the exhibit follows the entry's copy on a
+   narrow screen. From 48rem the entry widens its margin column and the
+   print sits there under the dates, pasted into the ledger's margin
+   rather than left under the title with an empty column beside it. */
 .item .exhibit{margin-top:1.35rem;}
+@media (min-width:48rem){
+  .item.exhibited{grid-template-columns:minmax(0,1fr) 16rem;row-gap:1rem;}
+  .item.exhibited > div{grid-row:1 / 3;}
+  .item.exhibited .meta{grid-column:2;}
+  .item.exhibited .exhibit{grid-column:2;grid-row:2;max-width:16rem;justify-self:end;margin-top:0;}
+}
 
 /* ---------- journal strip ---------- */
 /* The journal reads as a shelf: cards in a horizontal scroll-snap
@@ -1107,6 +1167,20 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 @media (min-width:46rem){.cols{grid-template-columns:1fr 1fr;}}
 .cols h3{margin:0 0 .7rem;font-family:var(--mono);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);font-weight:400;}
 .cols p{margin:0;font-size:.9375rem;line-height:1.68;color:var(--text-2);}
+/* Field notes: the lead paragraph stays centred as the chapter's
+   prose; the two reflections sit side by side as labelled notes, set
+   left and a size smaller, so the page reads as notes rather than a
+   wall of centred text; the last line signs off in the serif. */
+.cols.notes{margin-top:clamp(1.25rem,3vw,2rem);}
+.signoff{
+  margin:.25rem 0 0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:1.35rem;
+  line-height:1.4;
+  color:var(--text-2);
+}
 
 /* ---------- places ---------- */
 .places{margin:clamp(2.5rem,5vw,3.5rem) 0 0;width:100%;text-align:left;}
@@ -1605,7 +1679,7 @@ section h2{position:relative;}
   .h2tick path{stroke-dashoffset:0;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
-#research .orcid{text-align:left;margin-top:1.4rem;}
+#research .orcid{align-self:flex-start;text-align:left;margin-top:1.4rem;}
 #research .orcid a{color:inherit;}
 </style>
 </head>
@@ -1706,6 +1780,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#now">Carried forward <b>02</b> &middot; Now</a></p>
     </div>
   </section>
 
@@ -1729,18 +1804,19 @@ section h2{position:relative;}
       <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
       <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
 
-      <figure class="exhibit up d3">
-        <p class="exlabel">Exhibit</p>
-        <div class="plate"><img src="/images/event.jpg" alt="Muhammad Hamza seated at a professional event in a grey suit and burgundy tie" width="800" height="1200" loading="lazy" decoding="async"></div>
-        <figcaption>On duty at a sector event.</figcaption>
-      </figure>
-
       <dl class="now-figs up d3">
         <div class="fig"><dt><span class="odo" data-final="12000" data-comma="1">12,000</span>+</dt><dd>Students in scope</dd></div>
         <div class="fig"><dt>07</dt><dd>Programmes</dd></div>
         <div class="fig"><dt>06</dt><dd>Campuses</dd></div>
         <div class="fig"><dt>04</dt><dd>Partner universities</dd></div>
       </dl>
+
+      <div class="docket">
+      <figure class="exhibit up d3">
+        <p class="exlabel">Exhibit</p>
+        <div class="plate"><img src="/images/event.jpg" alt="Muhammad Hamza seated at a professional event in a grey suit and burgundy tie" width="800" height="1200" loading="lazy" decoding="async"></div>
+        <figcaption>On duty at a sector event.</figcaption>
+      </figure>
 
       <div class="tiles" id="tiles">
         <article class="tile up"><div class="tin">
@@ -1768,7 +1844,9 @@ section h2{position:relative;}
           <p>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</p>
         </div></article>
       </div>
+      </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#experience">Carried forward <b>03</b> &middot; Experience</a></p>
     </div>
   </section>
 
@@ -1831,6 +1909,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#education">Carried forward <b>04</b> &middot; Education</a></p>
     </div>
   </section>
 
@@ -1855,17 +1934,17 @@ section h2{position:relative;}
           </div>
           <p class="meta"><b>Dec 2024 to Dec 2026</b>Part qualified, 10 of 13</p>
         </article>
-        <article class="item up">
+        <article class="item exhibited up">
           <div>
             <h3>MSc Accounting and Finance</h3>
             <p class="who">BPP University</p>
-            <figure class="exhibit">
-              <p class="exlabel">Exhibit</p>
-              <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="1080" height="1440" loading="lazy" decoding="async"></div>
-              <figcaption>Westminster Abbey, the MSc conferred. BPP, Merit.</figcaption>
-            </figure>
           </div>
           <p class="meta"><b>May 2024 to Mar 2025</b>Merit</p>
+          <figure class="exhibit">
+            <p class="exlabel">Exhibit</p>
+            <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="800" height="1067" loading="lazy" decoding="async"></div>
+            <figcaption>Westminster Abbey, the MSc conferred. BPP, Merit.</figcaption>
+          </figure>
         </article>
         <article class="item up">
           <div>
@@ -1902,6 +1981,7 @@ section h2{position:relative;}
         </div>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#journal">Carried forward <b>05</b> &middot; Journal</a></p>
     </div>
   </section>
 
@@ -1970,6 +2050,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#elsewhere">Carried forward <b>06</b> &middot; Field notes</a></p>
     </div>
   </section>
 
@@ -1978,9 +2059,17 @@ section h2{position:relative;}
       <p class="label up stamp"><b>06</b> &middot; Field notes</p>
       <h2 class="up d1">The part I do not try to control.</h2>
       <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. Pakistan whenever I can get back. And the country I live in gets the spare weekends: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, all four nations at one time or another, New Year in London one year and Edinburgh the next. None of it had to tie out.</p>
-      <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
-      <p class="prose up d2">It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
-      <p class="prose up d2">The rest, que sera, sera.</p>
+      <div class="cols notes">
+        <div class="up">
+          <h3>The correction</h3>
+          <p>Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
+        </div>
+        <div class="up d1">
+          <h3>The wrong side of the counter</h3>
+          <p>It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
+        </div>
+      </div>
+      <p class="signoff up d2">The rest, que sera, sera.</p>
 
       <dl class="places">
         <div class="grp up">
@@ -1997,6 +2086,7 @@ section h2{position:relative;}
         </div>
       </dl>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#research">Carried forward <b>07</b> &middot; Research</a></p>
     </div>
   </section>
 
@@ -2052,6 +2142,7 @@ section h2{position:relative;}
       </div>
       <p class="meta orcid">ORCID <a href="https://orcid.org/0009-0005-3366-2603" target="_blank" rel="noopener">0009-0005-3366-2603</a></p>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#contact">Carried forward <b>08</b> &middot; Contact</a></p>
     </div>
   </section>
 
@@ -3439,12 +3530,12 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       a: "Noted and filed. The record is held open, so come back any time; anything further, <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> reaches me.",
       s: "Office hours", h: "#officehours", rel: [33, 23, 40] },
     // 71 · The working papers. Source: /papers/, four entries counted in its manifest.
-    { k: ["have you published any research", "research", "working papers", "working paper", "your papers", "any papers", "ssrn", "published", "publications", "publication", "under review", "academic research", "scholarship"],
-      a: "<b>Four working papers</b>, each sole authored and under review at SSRN: on ACCA-embedded master's programmes, reliance in partnership assessment, UK and EU sustainability reporting, and feedback use in accounting education. They are read on screen while the review runs: <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the working papers</a>.",
+    { k: ["have you published any research", "research", "working papers", "working paper", "your papers", "any papers", "ssrn", "published", "publications", "publication", "under review", "posted on ssrn", "doi", "academic research", "scholarship"],
+      a: "<b>Four working papers</b>, each sole authored. Two are posted on SSRN under a CC BY-NC-ND licence: <a href=\"https://doi.org/10.2139/ssrn.7396918\" target=\"_blank\" rel=\"noopener\">Integration or compression?</a> on ACCA-embedded master's programmes, and <a href=\"https://doi.org/10.2139/ssrn.7396980\" target=\"_blank\" rel=\"noopener\">Convergence without equivalence</a> on UK and EU sustainability reporting. Two are under review: Accountability and reliance, on partnership assessment, and From feedback delivery to feedback use, on accounting education. All four are read on screen: <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the working papers</a>.",
       s: "Working papers", h: "/papers/", rel: [72, 23, 40] },
     // 72 · Citing the papers. Source: /papers/ lede and the reader notice, verbatim.
     { k: ["can i cite your papers", "cite", "citation", "cite your paper", "cite your work", "quotation", "reproduce", "reproduction", "full text", "request the full text", "copy of the paper", "download the paper", "pdf of the paper"],
-      a: "Not yet: while they are under review the papers are read on screen and are not for citation, quotation or reproduction without permission. The full text is available by request to <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
+      a: "The two posted papers can be cited from their SSRN pages, which are the version of record: <a href=\"https://doi.org/10.2139/ssrn.7396918\" target=\"_blank\" rel=\"noopener\">Integration or compression?</a> and <a href=\"https://doi.org/10.2139/ssrn.7396980\" target=\"_blank\" rel=\"noopener\">Convergence without equivalence</a>. The two under review are read on screen and are not for citation, quotation or reproduction without permission while the review runs; their full text is available by request to <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
       s: "Working papers", h: "/papers/", rel: [71, 33, 40] }
   ];
 
@@ -3780,7 +3871,10 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!e || typeof e.views !== "number" || typeof e.downloads !== "number" || !e.asAt) { return; }
       var d = new Date(e.asAt + "T00:00:00");
       var when = isNaN(d) ? e.asAt : d.getDate() + " " + months[d.getMonth()];
-      el.textContent = "As at " + when + ": " + e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads";
+      el.textContent = "";
+      el.appendChild(document.createTextNode(e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads"));
+      el.appendChild(document.createElement("br"));
+      el.appendChild(document.createTextNode("SSRN figures as at " + when));
       el.hidden = false;
     });
   }).catch(function () {});
