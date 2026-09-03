@@ -526,6 +526,7 @@ h1{
 .chk{
   display:flex;
   align-items:flex-start;
+  text-align:left;
   gap:.8rem;
   font-family:var(--mono);
   font-size:.9375rem;
@@ -602,7 +603,7 @@ h1{
 .band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .band .shell{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
 }
 /* Two by two on narrow screens, so the figures read as one card of
    accounts rather than a tall column: a hairline between the pairs
@@ -624,6 +625,10 @@ h1{
   color:var(--brass);
   line-height:1;
 }
+@media (max-width:24rem){
+  .fig{padding:1.5rem .5rem;}
+  .fig dt{font-size:1.5rem;}
+}
 .fig dd{
   margin:.85rem 0 0;
   font-size:.8125rem;
@@ -639,7 +644,7 @@ h1{
   width:100%;
   margin-top:clamp(2.25rem,4vw,3rem);
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
@@ -836,9 +841,10 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 .quotepin.still .q .w{color:var(--text);}
 .quotepin.still .q p.turn .w{color:var(--brass);}
 .js .quotepin.still .qclose{opacity:1;transform:none;}
-/* Short viewports cannot fit the pinned quote: fall back to the same
-   static treatment rather than clipping it mid scroll. */
-@media (max-height:640px){
+/* Short viewports cannot fit the pinned quote, and neither can a phone
+   once the statement runs to a dozen lines: both fall back to the same
+   static treatment rather than clipping the closing lines mid scroll. */
+@media (max-height:640px),(max-width:40rem){
   .quotepin{height:auto;padding:clamp(5rem,11vw,9rem) 0;}
   .qsticky{position:static;min-height:0;padding:0;}
   .q .w{color:var(--text);}
@@ -849,7 +855,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 /* ---------- tiles ---------- */
 .tiles{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(min(17.5rem,100%),1fr));
   gap:1rem;
   margin-top:clamp(2.75rem,5vw,4rem);
   text-align:left;
@@ -930,6 +936,19 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 .item:last-child{border-bottom:1px solid var(--line);}
+/* Stacked on a phone the dates follow the title and the institution,
+   where a reader scanning a record looks for them, rather than
+   trailing the description: the entry's inner box dissolves into the
+   grid and the pieces take their reading order. */
+@media (max-width:47.99rem){
+  .item > div{display:contents;}
+  .item h3{order:1;}
+  .item .who{order:2;}
+  .item .meta{order:3;margin-top:.1rem;}
+  .item .note{order:4;}
+  .item .prior{order:5;}
+  .item .exhibit{order:6;}
+}
 @media (min-width:48rem){
   .item{grid-template-columns:minmax(0,1fr) 12rem;gap:2.5rem;align-items:start;}
   .item .meta{text-align:right;}
@@ -1287,6 +1306,16 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   transition:border-color .25s ease,color .25s ease;
 }
 .chips button:hover{border-color:var(--brass);color:var(--text);}
+/* Fingers get taller targets than pointers, and an input at 16px so
+   iOS does not zoom the page on focus. */
+@media (pointer:coarse){
+  .chips button{padding:.55rem .85rem;}
+  .cf a{padding:.6rem 0;}
+  .grp dd span{padding:.45rem .8rem;}
+}
+@media (max-width:48rem){
+  .hours input{font-size:1rem;}
+}
 .ans{
   margin-top:1.1rem;
   padding:1.1rem 1.2rem;
