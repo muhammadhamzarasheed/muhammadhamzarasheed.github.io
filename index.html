@@ -50,7 +50,8 @@
     "addressCountry": "GB"
   },
   "sameAs": [
-    "https://www.linkedin.com/in/muhammadhamzarasheed/"
+    "https://www.linkedin.com/in/muhammadhamzarasheed/",
+    "https://orcid.org/0009-0005-3366-2603"
   ]
 }
 </script>
@@ -1525,6 +1526,11 @@ footer .label a:hover{color:var(--brass);}
    with a faint glow, drying to ink over 450ms. The spans only exist
    when motion is allowed, so no gate is needed on the start state;
    words stay unbreakable so the line wraps whole. */
+/* Until the fonts are in and the splitter has run, the name is held
+   back entirely: otherwise it fades in set in the fallback face, blinks
+   out, and is written again. The class is set synchronously by the
+   script that will split it, and lifted by a timer as a safety net. */
+.js .hero h1.pending{visibility:hidden;}
 .js .hero h1 .word{display:inline-block;white-space:nowrap;}
 .js .hero h1 .c{
   visibility:hidden;
@@ -1668,6 +1674,31 @@ section h2{position:relative;}
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*){animation-duration:.001ms !important;}
+}
+
+/* ---------- print ---------- */
+/* On paper the ledger is a plain record: every reveal shown, every
+   pin released, the shelves stacked, the instruments and the chrome
+   left on screen where they belong. */
+@media print{
+  .nav,.menu,.spine,.field,.glow,.cue,.pal,.burger,.hours,.cf,.hint,.wx,.skip,body::after{display:none !important;}
+  .js .up,.js h2 .w,.js .qclose,.js .hero h1 .c,.js .grp.up dd span{opacity:1 !important;transform:none !important;visibility:visible !important;}
+  .js .hero h1.pending{visibility:visible !important;}
+  .js .hero h1 .nib{display:none !important;}
+  .js .rule{transform:none !important;}
+  .q .w{color:inherit !important;}
+  .hero{min-height:0 !important;padding:2rem 0 !important;}
+  .quotepin{height:auto !important;}
+  .qsticky{position:static !important;height:auto !important;}
+  section.crossing{height:auto !important;padding:2rem 0 !important;}
+  section.crossing > .shell{position:static !important;height:auto !important;}
+  section.crossing .strip,section.crossing .record{transform:none !important;display:block !important;}
+  .strip{display:block !important;overflow:visible !important;}
+  .strip .item,#experience.crossing .item{max-width:none !important;min-width:0 !important;margin:0 0 1rem !important;}
+  .letterhead{display:block !important;}
+  .letterhead .exhibit{max-width:9rem !important;margin-bottom:1rem;}
+  a{color:inherit !important;}
+  .reach a::after{content:" " attr(href);font-family:var(--mono);font-size:.7rem;}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -2157,7 +2188,7 @@ section h2{position:relative;}
         <h3>Ask about the work.</h3>
         <p class="brief">Type a question, or start with one below. Every answer comes straight from the record and names its source, so nothing here is a guess.</p>
         <form id="hoursform">
-          <input id="hoursq" type="text" placeholder="e.g. what do you actually do?" autocomplete="off" spellcheck="false" aria-label="Ask a question about Muhammad Hamza">
+          <input id="hoursq" type="text" maxlength="200" placeholder="e.g. what do you actually do?" autocomplete="off" spellcheck="false" aria-label="Ask a question about Muhammad Hamza">
           <button type="submit">Ask</button>
         </form>
         <div class="chips" id="hourschips">
@@ -2303,6 +2334,30 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
 })();
 
+/* ---------- shelves that have stacked ---------- */
+/* Below 40rem the journal and research shelves are plain vertical
+   lists, so they hand back the tab stop and region role they only
+   need while they scroll sideways. */
+(function () {
+  var strips = [].slice.call(document.querySelectorAll(".strip[role=region]"));
+  if (!strips.length || !window.matchMedia) { return; }
+  var mq = window.matchMedia("(min-width:40rem)");
+  function apply() {
+    strips.forEach(function (el) {
+      if (mq.matches) {
+        el.setAttribute("role", "region");
+        el.tabIndex = 0;
+      } else {
+        el.removeAttribute("role");
+        el.removeAttribute("tabindex");
+      }
+    });
+  }
+  apply();
+  if (mq.addEventListener) { mq.addEventListener("change", apply); }
+  else if (mq.addListener) { mq.addListener(apply); }
+})();
+
 /* ---------- mobile menu ---------- */
 (function () {
   var burger = document.getElementById("burger");
@@ -2329,7 +2384,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.addEventListener("keydown", function (e) {
     var open = burger.getAttribute("aria-expanded") === "true";
     if (!open) { return; }
-    if (e.key === "Escape") { set(false); return; }
+    if (e.key === "Escape") { set(false); burger.focus(); return; }
     // The open menu is an opaque overlay: keep Tab inside it.
     if (e.key === "Tab") {
       var focusables = [burger].concat([].slice.call(menu.querySelectorAll("a")));
@@ -2377,7 +2432,11 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (RM || !document.fonts || !document.fonts.ready) { return; }
   var h1 = document.querySelector(".hero h1");
   if (!h1) { return; }
+  h1.classList.add("pending");
+  var safety = window.setTimeout(function () { h1.classList.remove("pending"); }, 2500);
   document.fonts.ready.then(function () {
+    window.clearTimeout(safety);
+    h1.classList.remove("pending");
     var text = h1.textContent;
     h1.setAttribute("aria-label", text);
     var wrap = document.createElement("span");
@@ -3129,9 +3188,9 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   };
   function put(cur) {
     var sky = MAP[cur.weather_code];
+    if (!sky || typeof cur.temperature_2m !== "number") { return; }
     var t = Math.round(cur.temperature_2m);
-    var w = Math.round(cur.wind_speed_10m);
-    if (!sky || isNaN(t)) { return; }
+    var w = typeof cur.wind_speed_10m === "number" ? Math.round(cur.wind_speed_10m) : NaN;
     document.getElementById("wxtext").textContent =
       sky + " · " + t + "°C" + (isNaN(w) ? "" : " · wind " + w + " mph");
     el.hidden = false;
