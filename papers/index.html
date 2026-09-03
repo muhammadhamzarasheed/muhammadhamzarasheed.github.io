@@ -228,6 +228,7 @@ h1 .sub,h2 .sub{display:block;font-family:var(--serif,"Instrument Serif",Georgia
         <h2><a href="/papers/acca-embedded-masters/">Professional Integration or Credential Compression? <span class="sub">A Document Analysis of ACCA-Embedded Master’s Programmes in UK Higher Education</span></a></h2>
         <p class="date">Working paper, 2 September 2026</p>
         <p class="status">Working paper &middot; Posted on SSRN &middot; DOI 10.2139/ssrn.7396918 &middot; 22 pages &middot; <a href="https://doi.org/10.2139/ssrn.7396918" target="_blank" rel="noopener">Read on SSRN</a></p>
+        <p class="status stats" data-slug="acca-embedded-masters" hidden></p>
       </div>
     </article>
     <article class="paper" id="reliance-in-partnership-assessment">
@@ -252,6 +253,7 @@ h1 .sub,h2 .sub{display:block;font-family:var(--serif,"Instrument Serif",Georgia
         <h2><a href="/papers/convergence-without-equivalence/">Convergence Without Equivalence: <span class="sub">UK Sustainability Reporting Standards, the Amended CSRD and the Revised ESRS after the 2026 Simplification Package</span></a></h2>
         <p class="date">Working paper. Regulatory position as at 2 September 2026.</p>
         <p class="status">Working paper &middot; Posted on SSRN &middot; DOI 10.2139/ssrn.7396980 &middot; 20 pages &middot; <a href="https://doi.org/10.2139/ssrn.7396980" target="_blank" rel="noopener">Read on SSRN</a></p>
+        <p class="status stats" data-slug="convergence-without-equivalence" hidden></p>
       </div>
     </article>
     <article class="paper" id="feedback-delivery-to-feedback-use">
@@ -277,5 +279,23 @@ h1 .sub,h2 .sub{display:block;font-family:var(--serif,"Instrument Serif",Georgia
   </div>
 </footer>
 
+<script>
+(function () {
+  var lines = [].slice.call(document.querySelectorAll(".stats[data-slug]"));
+  if (!lines.length || !window.fetch) { return; }
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  fetch("/papers/stats.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
+    if (!data) { return; }
+    lines.forEach(function (el) {
+      var e = data[el.getAttribute("data-slug")];
+      if (!e || typeof e.views !== "number" || typeof e.downloads !== "number" || !e.asAt) { return; }
+      var d = new Date(e.asAt + "T00:00:00");
+      var when = isNaN(d) ? e.asAt : d.getDate() + " " + months[d.getMonth()];
+      el.textContent = "As at " + when + ": " + e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads";
+      el.hidden = false;
+    });
+  }).catch(function () {});
+})();
+</script>
 </body>
 </html>

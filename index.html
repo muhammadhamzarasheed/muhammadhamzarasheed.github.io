@@ -2014,6 +2014,7 @@ section h2{position:relative;}
             <p class="sub">A Document Analysis of ACCA-Embedded Master's Programmes in UK Higher Education</p>
             <p class="meta">2 September 2026 &middot; 22 pages</p>
             <p class="meta">Posted on SSRN &middot; DOI 10.2139/ssrn.7396918</p>
+            <p class="meta stats" data-slug="acca-embedded-masters" hidden></p>
             <a class="paperlink" href="https://doi.org/10.2139/ssrn.7396918" target="_blank" rel="noopener">Read on SSRN</a>
           </div>
         </article>
@@ -2024,6 +2025,7 @@ section h2{position:relative;}
             <p class="sub">UK Sustainability Reporting Standards, the Amended CSRD and the Revised ESRS after the 2026 Simplification Package</p>
             <p class="meta">2 September 2026 &middot; 20 pages</p>
             <p class="meta">Posted on SSRN &middot; DOI 10.2139/ssrn.7396980</p>
+            <p class="meta stats" data-slug="convergence-without-equivalence" hidden></p>
             <a class="paperlink" href="https://doi.org/10.2139/ssrn.7396980" target="_blank" rel="noopener">Read on SSRN</a>
           </div>
         </article>
@@ -3762,6 +3764,27 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   io.observe(mark);
 })();
 
+
+/* ---------- the SSRN figures ---------- */
+/* Views and downloads for the posted papers, read from a small ledger
+   file the site keeps at /papers/stats.json, each entry dated. Absent
+   file, absent line: the card says nothing rather than guessing. */
+(function () {
+  var lines = [].slice.call(document.querySelectorAll("#research .stats[data-slug]"));
+  if (!lines.length || !window.fetch) { return; }
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  fetch("/papers/stats.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
+    if (!data) { return; }
+    lines.forEach(function (el) {
+      var e = data[el.getAttribute("data-slug")];
+      if (!e || typeof e.views !== "number" || typeof e.downloads !== "number" || !e.asAt) { return; }
+      var d = new Date(e.asAt + "T00:00:00");
+      var when = isNaN(d) ? e.asAt : d.getDate() + " " + months[d.getMonth()];
+      el.textContent = "As at " + when + ": " + e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads";
+      el.hidden = false;
+    });
+  }).catch(function () {});
+})();
 </script>
 
 </body>
