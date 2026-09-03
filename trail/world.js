@@ -23,15 +23,16 @@ export const GREY = 0x7B858C;
 export const LAMP = 0xFFD9A6;        /* lamplight amber, faint and warm */
 
 /* ---------- geography ---------- */
-/* A closed ring road. Seven stations sit evenly along it, roughly 60
+/* A closed ring road. Eight stations sit evenly along it, roughly 53
    units apart, each with a generous plot on the outside of the kerb.
    At a station, forward along the trail is (sin angle, 0, cos angle)
    and outward from the loop centre is (cos angle, 0, -sin angle). */
 export const ROAD_RADIUS = 67;
 export const ROAD_WIDTH = 8;
+export const STATION_COUNT = 8;
 
-export const LAYOUT = Array.from({ length: 7 }, (unused, k) => {
-  const th = (k * Math.PI * 2) / 7;
+export const LAYOUT = Array.from({ length: STATION_COUNT }, (unused, k) => {
+  const th = (k * Math.PI * 2) / STATION_COUNT;
   return {
     x: ROAD_RADIUS * Math.cos(th),
     z: ROAD_RADIUS * Math.sin(th),

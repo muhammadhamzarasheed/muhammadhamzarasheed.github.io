@@ -62,7 +62,7 @@ function restoreFocus(el) {
 
 /* First entry into a district settles it: the tally ticks over once,
    the eyebrow toast shows on every entry. Returns how many of the
-   seven districts are reconciled so far. */
+   eight districts are reconciled so far. */
 export function reconcile(index, title) {
   if (!done.has(index)) {
     done.add(index);
@@ -123,7 +123,7 @@ export function hideLinkPrompt() {
   if (els.link) els.link.hidden = true;
 }
 
-/* 07/07: the mark countersigns the page, drawn stroke by stroke by a
+/* 08/08: the mark countersigns the page, drawn stroke by stroke by a
    plain CSS dashoffset transition. */
 export function countersign() {
   if (signed || !els.cs) return;
@@ -183,7 +183,7 @@ export function veilDone() {
 
 /* ---------- routing slip minimap ----------
    A little card in the corner reading like a routing slip: the loop as
-   a brass hairline, seven numbered station ticks, the monogram at the
+   a brass hairline, eight numbered station ticks, the monogram at the
    centre, and the car as a brass arrow. North stays fixed; the drawing
    is diagram true to world coordinates, +x right and +z down. */
 
@@ -295,7 +295,7 @@ export function updateMap(state) {
   }
   c.stroke();
 
-  /* Seven station ticks and their figures, 01 to 07: grey until the
+  /* Eight station ticks and their figures, 01 to 08: grey until the
      district reconciles, then brass and filled. */
   const fs = map.fs;
   const tick = Math.max(2.5, size * 0.018);
