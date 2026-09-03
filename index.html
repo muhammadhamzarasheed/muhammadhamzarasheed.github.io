@@ -3648,15 +3648,6 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   io.observe(mark);
 })();
 
-/* ---------- the record is held open ---------- */
-/* Stepping away does not close the books: the tab says so, and the
-   original title returns with the reader. */
-(function () {
-  var title = document.title;
-  document.addEventListener("visibilitychange", function () {
-    document.title = document.hidden ? "The record is held open" : title;
-  });
-})();
 </script>
 
 </body>
