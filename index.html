@@ -1588,6 +1588,7 @@ section h2{position:relative;}
       <li><a href="#journal">Journal</a></li>
       <li><a href="#elsewhere">Field notes</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="/papers/" target="_blank" rel="noopener">Research</a></li>
       <li><a href="/appendix/" target="_blank" rel="noopener">After hours</a></li>
     </ul>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i></button>
@@ -1602,6 +1603,7 @@ section h2{position:relative;}
   <a href="#journal">Journal</a>
   <a href="#elsewhere">Field notes</a>
   <a href="#contact">Contact</a>
+  <a href="/papers/" target="_blank" rel="noopener">Research</a>
   <a href="/appendix/" target="_blank" rel="noopener">After hours</a>
 </div>
 
@@ -2042,6 +2044,7 @@ section h2{position:relative;}
       <li role="option" id="palopt-27" aria-selected="false"><a href="/glossary/" target="_blank" rel="noopener" tabindex="-1">The glossary <i>plain english</i></a></li>
       <li role="option" id="palopt-29" aria-selected="false"><a href="/trail/" target="_blank" rel="noopener" tabindex="-1">The audit trail <i>drive</i></a></li>
       <li role="option" id="palopt-30" aria-selected="false"><a href="/calibration/" target="_blank" rel="noopener" tabindex="-1">The calibration <i>precision</i></a></li>
+      <li role="option" id="palopt-31" aria-selected="false"><a href="/papers/" target="_blank" rel="noopener" tabindex="-1">Research <i>working papers</i></a></li>
     </ul>
   </div>
 </div>
@@ -3329,7 +3332,15 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // 70 · Sign-off. Source: office hours; the held-open title is the tab's own.
     { k: ["thanks", "thank you", "thankyou", "cheers", "goodbye", "bye"],
       a: "Noted and filed. The record is held open, so come back any time; anything further, <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> reaches me.",
-      s: "Office hours", h: "#officehours", rel: [33, 23, 40] }
+      s: "Office hours", h: "#officehours", rel: [33, 23, 40] },
+    // 71 · The working papers. Source: /papers/, four entries counted in its manifest.
+    { k: ["have you published any research", "research", "working papers", "working paper", "your papers", "any papers", "ssrn", "published", "publications", "publication", "under review", "academic research", "scholarship"],
+      a: "<b>Four working papers</b>, each sole authored and under review at SSRN: on ACCA-embedded master's programmes, reliance in partnership assessment, UK and EU sustainability reporting, and feedback use in accounting education. They are read on screen while the review runs: <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the working papers</a>.",
+      s: "Working papers", h: "/papers/", rel: [72, 23, 40] },
+    // 72 · Citing the papers. Source: /papers/ lede and the reader notice, verbatim.
+    { k: ["can i cite your papers", "cite", "citation", "cite your paper", "cite your work", "quotation", "reproduce", "reproduction", "full text", "request the full text", "copy of the paper", "download the paper", "pdf of the paper"],
+      a: "Not yet: while they are under review the papers are read on screen and are not for citation, quotation or reproduction without permission. The full text is available by request to <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
+      s: "Working papers", h: "/papers/", rel: [71, 33, 40] }
   ];
 
   var FALLBACK = "That one is not in the record yet, and I would rather say so than guess. The direct route works: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.<span class=\"src\">From the record: <a href=\"#contact\">Contact</a></span>";
