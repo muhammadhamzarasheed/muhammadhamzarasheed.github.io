@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research &middot; Muhammad Hamza</title>
+<meta name="description" content="Four working papers by Muhammad Hamza, under review at SSRN and readable on screen. Not for citation without permission; full text by request.">
+<meta name="theme-color" content="#0A0B0C">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://muhammadhamza.co.uk/papers/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Muhammad Hamza">
+<meta property="og:title" content="Research">
+<meta property="og:description" content="Four working papers by Muhammad Hamza, under review at SSRN and readable on screen. Not for citation without permission; full text by request.">
+<meta property="og:url" content="https://muhammadhamza.co.uk/papers/">
+<meta property="og:image" content="https://muhammadhamza.co.uk/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Muhammad Hamza's monogram in brass on a dark ground.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Research">
+<meta name="twitter:description" content="Four working papers by Muhammad Hamza, under review at SSRN and readable on screen. Not for citation without permission; full text by request.">
+<meta name="twitter:image" content="https://muhammadhamza.co.uk/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --void:#0A0B0C;
+  --raise:#121415;
+  --line:#22262A;
+  --line-2:#333A3F;
+  --text:#EDEAE4;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --brass-soft:rgba(201,170,124,.14);
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scrollbar-width:thin;scrollbar-color:var(--line-2) var(--void);}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  padding-top:4.25rem;
+}
+::selection{background:var(--brass-soft);color:var(--text);}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px;}
+.bar{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(10,11,12,.8);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.bar .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,2.5rem);
+  height:4.25rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.5rem;
+}
+.sig{display:flex;align-items:center;font-size:.9375rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;}
+.sig span{color:var(--brass);}
+.mark{height:1.1rem;width:auto;color:var(--brass);flex:none;margin-right:.55rem;}
+.bar a.back{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);transition:color .25s ease;}
+.bar a.back:hover{color:var(--brass);}
+article{
+  max-width:44rem;
+  margin:0 auto;
+  padding:clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,2.5rem) 3rem;
+}
+.label{
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.label b{color:var(--brass);font-weight:400;}
+h1{
+  margin:.9rem 0 0;
+  font-size:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  text-wrap:balance;
+}
+.byline{
+  margin:1.4rem 0 0;
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  color:var(--text-3);
+}
+.byline b{color:var(--text-2);font-weight:400;}
+hr{border:0;border-top:1px solid var(--line);margin:2.5rem 0;}
+footer{border-top:1px solid var(--line);margin-top:3.5rem;}
+footer .in{
+  max-width:44rem;
+  margin:0 auto;
+  padding:2.25rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+footer a{transition:color .25s ease;}
+footer a:hover{color:var(--brass);}
+p.lede{color:var(--text-2);max-width:58ch;margin:0;}
+p.lede em{font-family:var(--serif);font-style:italic;font-size:1.06em;color:var(--brass);}
+p.lede a{color:var(--text);border-bottom:1px solid var(--line-2);transition:color .25s ease,border-color .25s ease;}
+p.lede a:hover{color:var(--brass);border-color:var(--brass);}
+
+/* ---------- the papers ---------- */
+/* Each paper is a card on the raised ground: the first page framed as
+   an exhibit at a modest width, the title, the date line in the
+   register's hand, the abstract in full and a status line. Intrinsic
+   width and height ride on every thumbnail, so nothing shifts. */
+.papers{display:grid;gap:1.1rem;margin-top:2.6rem;}
+.paper{
+  display:grid;
+  grid-template-columns:8.5rem minmax(0,1fr);
+  gap:1.6rem;
+  align-items:start;
+  padding:1.5rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+  transition:border-color .25s ease;
+}
+.paper:hover{border-color:var(--line-2);}
+.paper .exhibit{margin:0;width:100%;max-width:8.5rem;}
+.paper .plate{
+  padding:5px;
+  background:var(--void);
+  border:1px solid var(--line-2);
+  border-radius:.6rem;
+  transition:border-color .25s ease;
+}
+.paper .plate:hover{border-color:var(--brass);}
+.paper .plate a{display:block;}
+.paper .plate img{display:block;width:100%;height:auto;border-radius:calc(.6rem - 5px);filter:saturate(.88);}
+.paper .exlabel{margin:.6rem 0 0;font-family:var(--mono);font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);}
+.paper h2{margin:.5rem 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-.015em;line-height:1.3;text-wrap:balance;}
+.paper h2 a{transition:color .25s ease;}
+.paper h2 a:hover{color:var(--brass);}
+.paper .date{margin:.8rem 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;line-height:1.7;color:var(--text-3);}
+.paper .abstract{margin:1.1rem 0 0;color:var(--text-2);font-size:.95rem;line-height:1.7;}
+.paper .status{margin:1.2rem 0 0;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;line-height:1.7;color:var(--text-3);}
+.paper .status a{color:var(--brass);border-bottom:1px solid transparent;transition:border-color .25s ease;}
+.paper .status a:hover{border-color:var(--brass);}
+@media (max-width:40rem){
+  .paper{grid-template-columns:1fr;gap:1.2rem;}
+  .paper .exhibit{max-width:7rem;}
+}
+
+/* ---------- turning the page ---------- */
+/* Cross-document view transitions: the whole site is one ledger, and
+   moving between its pages reads as a page being turned in front of
+   the reader. Old page slips 2% left as it fades, new page follows in
+   from the right, 240ms, eased. The bar monogram carries the name
+   "mark" (the only element on this page allowed to), so the signature
+   morphs between pages while the sheet turns. Browsers without the
+   API skip the unknown at-rule and pseudo-elements and simply
+   navigate; reduced motion collapses both the choreography and the
+   default crossfade to an instant swap. */
+@view-transition{navigation:auto;}
+.sig .mark{view-transition-name:mark;}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation:240ms ease both turn-out;}
+  ::view-transition-new(root){animation:240ms ease both turn-in;}
+  @keyframes turn-out{to{opacity:0;transform:translateX(-2%);}}
+  @keyframes turn-in{from{opacity:0;transform:translateX(2%);}}
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){animation-duration:.001ms !important;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="in">
+    <a class="sig" href="/"><svg class="mark" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza<span>.</span></a>
+    <a class="back" href="/appendix/">The appendix</a>
+  </div>
+</nav>
+
+<main>
+<article>
+  <p class="label"><b>Research</b> &middot; working papers under review at SSRN</p>
+  <h1>Research</h1>
+  <p class="byline">Four papers &middot; sole authored &middot; read on screen</p>
+  <hr>
+  <p class="lede">Four working papers, each sole authored and each under review at SSRN. They are readable here <em>on screen</em>, in full, and are not for citation, quotation or reproduction without permission while the review runs. The full text is available <em>by request</em> to <a href="mailto:hello@muhammadhamza.co.uk">hello@muhammadhamza.co.uk</a>.</p>
+
+  <div class="papers">
+    <article class="paper" id="acca-embedded-masters">
+      <figure class="exhibit">
+        <div class="plate"><a href="/papers/acca-embedded-masters/" tabindex="-1" aria-hidden="true"><img src="/papers/p/acca-embedded-masters/thumb.jpg" alt="" width="520" height="672" loading="lazy" decoding="async"></a></div>
+        <figcaption class="exlabel">Exhibit 01</figcaption>
+      </figure>
+      <div class="body">
+        <p class="label"><b>01</b> &middot; Working paper</p>
+        <h2><a href="/papers/acca-embedded-masters/">Professional Integration or Credential Compression? A Document Analysis of ACCA-Embedded Master’s Programmes in UK Higher Education</a></h2>
+        <p class="date">Working paper, 2 September 2026</p>
+        <p class="abstract">UK universities increasingly connect postgraduate accounting awards to professional study, but the labels used for these arrangements obscure important structural differences. This paper reports a document analysis of the complete set of seven UK programmes listed by the Association of Chartered Certified Accountants (ACCA) as embedded master’s programmes on 2 September 2026. Provider course pages, one published curriculum record, ACCA’s framework documents and the Quality Assurance Agency’s qualifications framework and 2025 Accounting Subject Benchmark Statement were coded for entry requirements, credit volume, duration, curriculum, assessment, research components and claims about professional recognition. Three findings stand out. First, an ACCA-embedded master’s is not an integrated master’s in the qualifications-framework sense and does not confer exemptions from ACCA Strategic Professional examinations; it is a postgraduate award whose curriculum prepares students to sit those examinations in parallel. Second, the seven programmes implement embedding through materially different designs: examination-synchronised routes, project-bearing hybrid routes, a configurable dual-route award and a recognition-of-prior-learning articulation route. Every programme includes a named independent research or project component on at least one route; the sole exception is one specialised route within a single award. Third, public disclosure is uneven. Only two providers state total credit, only two state a research component’s credit value, and the distinction between academic credit, professional exemption and examination preparation is rarely presented in one place. The paper contributes a terminology-led typology and argues that the central quality issue is not whether professional content is present at Level 7, but whether Level 7 inquiry, assessment and recognition are made legible alongside it. It proposes a public disclosure standard and a research agenda for student-level outcome studies.</p>
+        <p class="status">Working paper &middot; Under review at SSRN &middot; 22 pages &middot; <a href="/papers/acca-embedded-masters/">Read on screen</a></p>
+      </div>
+    </article>
+    <article class="paper" id="reliance-in-partnership-assessment">
+      <figure class="exhibit">
+        <div class="plate"><a href="/papers/reliance-in-partnership-assessment/" tabindex="-1" aria-hidden="true"><img src="/papers/p/reliance-in-partnership-assessment/thumb.jpg" alt="" width="520" height="672" loading="lazy" decoding="async"></a></div>
+        <figcaption class="exlabel">Exhibit 02</figcaption>
+      </figure>
+      <div class="body">
+        <p class="label"><b>02</b> &middot; Working paper</p>
+        <h2><a href="/papers/reliance-in-partnership-assessment/">Accountability and Reliance in Partnership Assessment: An Audit-Standards Perspective on Higher Education in England</a></h2>
+        <p class="date">Working paper. First draft 15 July 2026. This version, with all sources verified, 2 September 2026.</p>
+        <p class="abstract">This conceptual paper examines whether reasoning developed in professional auditing can clarify the basis on which higher education providers rely on work undertaken through educational partnerships. It compares selected requirements of ISA (UK) 600 with the Office for Students’ conditions B4 and E10, the E10 minimum content requirements for a subcontracting information source, and the 2024 UK Quality Code with its 2025 advice on partnerships. The comparison is functional rather than an assertion that educational assessment constitutes an audit engagement. The texts already address several common concerns: responsibility, competence, access to information, monitoring and review. Their different purposes and regulatory status make a simple gap score inappropriate, and the paper explains why. It instead proposes a claim-specific reliance record: a concise explanation linking a defined assessmentgovernance claim to its criteria, evidence, review, limitations and decision. This is an analytical design proposal, not an observed institutional practice or an additional regulatory requirement. Its potential contribution is greater clarity about what evidence supports a particular conclusion, not a presumption that more documentation improves educational quality. Important limits concern the difference between producing assessment judgements and independently assuring them, the plurality of educational purposes, and the rights of individual students. The paper identifies questions for subsequent research without assessing any institution, partnership or individual.</p>
+        <p class="status">Working paper &middot; Under review at SSRN &middot; 19 pages &middot; <a href="/papers/reliance-in-partnership-assessment/">Read on screen</a></p>
+      </div>
+    </article>
+    <article class="paper" id="convergence-without-equivalence">
+      <figure class="exhibit">
+        <div class="plate"><a href="/papers/convergence-without-equivalence/" tabindex="-1" aria-hidden="true"><img src="/papers/p/convergence-without-equivalence/thumb.jpg" alt="" width="520" height="672" loading="lazy" decoding="async"></a></div>
+        <figcaption class="exlabel">Exhibit 03</figcaption>
+      </figure>
+      <div class="body">
+        <p class="label"><b>03</b> &middot; Working paper</p>
+        <h2><a href="/papers/convergence-without-equivalence/">Convergence Without Equivalence: UK Sustainability Reporting Standards, the Amended CSRD and the Revised ESRS after the 2026 Simplification Package</a></h2>
+        <p class="date">Working paper. Regulatory position as at 2 September 2026.</p>
+        <p class="abstract">In the first seven months of 2026 the United Kingdom and the European Union each reset the legal architecture of corporate sustainability reporting. The UK published final UK Sustainability Reporting Standards S1 and S2, endorsed from the ISSB’s IFRS S1 and S2, and the Financial Conduct Authority consulted on replacing its TCFD-aligned listing rules with UK SRSbased requirements from 1 January 2027. The EU enacted Directive (EU) 2026/470, which narrowed the Corporate Sustainability Reporting Directive to undertakings exceeding both 1,000 employees and 450 million euro turnover, introduced a value-chain cap and removed the pathway to reasonable assurance; and on 3 July 2026 the European Commission adopted revised European Sustainability Reporting Standards that cut mandatory datapoints by 61 percent. This paper uses comparative regulatory document analysis to ask whether these changes bring the two regimes closer together. It separates four layers that are routinely conflated: the disclosure standard, the rule that determines who must report, the reporting infrastructure of location, assurance and digital filing, and the mechanism of enforcement. The analysis finds strong convergence at the first layer, particularly for financially material climate disclosure, and persistent divergence at the other three. UK SRS remains an investor-focused baseline whose mandatory application was still at proposal stage at the cut-off date. The amended CSRD remains a statutory regime built on double materiality, management-report location, mandatory limited assurance and digital mark-up, with a scope defined by size rather than listing. The 2024 IFRS Foundation and EFRAG interoperability guidance allows a dual reporter to reuse evidence and narrative; it does not allow one compliance conclusion to stand for the other. The paper proposes that convergence be assessed by the reusability of controlled evidence across regimes, sets out a shared-evidence, separate-conclusions model for dual reporters, and identifies the six points at which a separate conclusion is still required.</p>
+        <p class="status">Working paper &middot; Under review at SSRN &middot; 20 pages &middot; <a href="/papers/convergence-without-equivalence/">Read on screen</a></p>
+      </div>
+    </article>
+    <article class="paper" id="feedback-delivery-to-feedback-use">
+      <figure class="exhibit">
+        <div class="plate"><a href="/papers/feedback-delivery-to-feedback-use/" tabindex="-1" aria-hidden="true"><img src="/papers/p/feedback-delivery-to-feedback-use/thumb.jpg" alt="" width="520" height="672" loading="lazy" decoding="async"></a></div>
+        <figcaption class="exlabel">Exhibit 04</figcaption>
+      </figure>
+      <div class="body">
+        <p class="label"><b>04</b> &middot; Working paper</p>
+        <h2><a href="/papers/feedback-delivery-to-feedback-use/">From Feedback Delivery to Feedback Use: A Critical Review with Implications for Accounting Education</a></h2>
+        <p class="date">Working paper, 3 September 2026</p>
+        <p class="abstract">Evidence that assessment comments have been returned is not, by itself, evidence that students have used them or learned from them. This distinction is established in feedback scholarship, but it creates a practical problem for educators deciding what an evaluation can reasonably claim. This critical review brings selected higher education feedback research into dialogue with accounting education studies and public UK quality guidance. A purposive, publicly accessible literature base is used to distinguish four objects of evaluation: provision of feedback information, opportunity to engage with it, enactment of a response, and subsequent learning. The analysis examines the inferential limits of turnaround measures, satisfaction surveys, records of engagement, revisions and assessment performance. Accounting-related studies illustrate why favourable student experiences and improvements in learning must be reported separately. A proposed claim-evidence framework connects these distinctions to hypothetical numerical, interpretive and collaborative accounting tasks. The framework is neither a validated instrument nor a universal sequence of learning; it accommodates feedback generated through comparison without teacher comments. The paper contributes a bounded synthesis and an applied evaluation approach, not a new theory of feedback or evidence about any particular provider. It concludes that proportionate evaluation should match evidence to the claim being made while preserving student agency and acknowledging uncertainty.</p>
+        <p class="status">Working paper &middot; Under review at SSRN &middot; 21 pages &middot; <a href="/papers/feedback-delivery-to-feedback-use/">Read on screen</a></p>
+      </div>
+    </article>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="in">
+    <p class="label"><a href="/">Back to the record</a></p>
+    <p class="label"><a href="/appendix/">After hours</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

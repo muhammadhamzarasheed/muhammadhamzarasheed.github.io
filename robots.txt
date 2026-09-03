@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /papers/p/
 
 Sitemap: https://muhammadhamza.co.uk/sitemap.xml
