@@ -1096,7 +1096,11 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 }
 .paperlink:hover{border-bottom-color:var(--brass);}
 @media (min-width:40rem){
-  #research .strip .item{min-width:16rem;max-width:18rem;padding:1.5rem 1.35rem;}
+  #research .strip .item{min-width:16rem;max-width:18rem;padding:1.5rem 1.35rem;display:flex;align-items:stretch;}
+  /* The cards stretch to a common height, so the read link is pushed to
+     the foot of each one and the four sit on a single line. */
+  #research .strip .item > div{display:flex;flex-direction:column;flex:1 1 auto;width:100%;}
+  #research .strip .item .paperlink{margin-top:auto;}
 }
 
 /* ---------- the crossings ---------- */
@@ -1123,7 +1127,11 @@ a.qlink:hover{border-bottom-color:var(--brass);}
        centres in what is left of it rather than sliding its eyebrow
        under the glass. */
     padding-top:4.25rem;
+    /* Centred while it fits. When a stack is taller than the window the
+       safe keyword holds its top edge under the bar instead of pushing
+       the eyebrow and the heading off the screen. */
     justify-content:center;
+    justify-content:safe center;
   }
   section.crossing .strip{
     overflow:visible;
@@ -1139,6 +1147,9 @@ a.qlink:hover{border-bottom-color:var(--brass);}
      more text than journal cards, so the pinned stack tightens its
      gaps to keep the year counter clear of the fixed bar. */
   section.crossing .cf{display:none;}
+  #research.crossing > .shell{gap:1rem;}
+  #research.crossing .record{margin-top:1.25rem;}
+  #research.crossing .rule{margin-top:1rem;}
   #experience.crossing > .shell{gap:1rem;}
   #experience.crossing .rule{margin-top:.75rem;}
   #experience.crossing .record{
@@ -1186,6 +1197,8 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 .cols.notes{margin-top:clamp(1.25rem,3vw,2rem);}
 .signoff{
   margin:.25rem 0 0;
+  align-self:flex-end;
+  text-align:right;
   font-family:var(--serif);
   font-style:italic;
   font-weight:400;
@@ -2632,8 +2645,30 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       c.stepW = opts.pitch(c.rel);
       if (opts.onlayout) { opts.onlayout(c.rel); }
     }
+    /* The pinned shell is one viewport tall, so a stack that does not
+       fit it would lose its head or its foot for the whole crossing.
+       The class is applied, the shell measured at its natural height,
+       and the crossing abandoned if the stack is taller than the
+       window: that chapter keeps the ordinary shelf instead. */
+    function natural() {
+      var prev = section.style.height;
+      section.style.height = "";
+      sticky.style.height = "auto";
+      var h = sticky.scrollHeight;
+      sticky.style.height = "";
+      section.style.height = prev;
+      return h;
+    }
+    function fits() {
+      section.classList.add("crossing");
+      if (natural() <= window.innerHeight) { return true; }
+      section.classList.remove("crossing");
+      return false;
+    }
     function enable() {
+      if (!fits()) { return; }
       c.on = true;
+      c.vh = window.innerHeight;
       section.classList.add("crossing");
       /* A shelf that only exists while crossing claims its single tab
          stop here and hands it back on release; the journal's strip
@@ -2646,6 +2681,10 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       c.tx = 0; c.skew = 0; c.lastSkew = 0;
       c.lastY = window.scrollY;
       layout();
+      /* A shelf whose cards already fit the page has nothing to walk
+         sideways. Pinning it would hold a full viewport still for no
+         motion at all, so the chapter keeps its ordinary layout. */
+      if (c.travel <= 0) { disable(); }
     }
     function disable() {
       c.on = false;
@@ -2697,8 +2736,22 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollBy({ top: e.key === "ArrowRight" ? c.stepW : -c.stepW, behavior: "auto" });
     });
 
+    c.recheck = function () {
+      if (c.on) {
+        if (natural() > window.innerHeight) { disable(); }
+      } else if (xmq.matches) {
+        enable();
+      }
+    };
+
     c.drive = function () {
       if (xmq.matches !== c.on) { if (c.on) { disable(); } else { enable(); } }
+      /* A window that has grown may now hold a stack that did not fit
+         before; one that has shrunk may no longer hold this one. */
+      if (c.on && window.innerHeight !== c.vh) {
+        c.vh = window.innerHeight;
+        if (natural() > window.innerHeight) { disable(); return; }
+      }
       if (!c.on) { return; }
       /* Keep the travel honest against resizes and font swaps: if
          the shelf's overflow or the sticky height moved, remeasure
@@ -2706,7 +2759,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       var tw = track.scrollWidth - track.clientWidth;
       if (tw < 0) { tw = 0; }
       if (tw !== c.travel || sticky.offsetHeight !== c.stickyH) { layout(); }
-      if (c.travel <= 0) { return; }
+      if (c.travel <= 0) { disable(); return; }
       var r = section.getBoundingClientRect();
       var p = -r.top / c.travel;
       if (p < 0) { p = 0; }
@@ -2823,6 +2876,15 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
        resize event, for instance when a mouse is plugged in. */
     if (xmq.addEventListener) { xmq.addEventListener("change", schedule); }
     else if (xmq.addListener) { xmq.addListener(schedule); }
+    /* The first fit test runs in the fallback face, which sets shorter
+       than the real one. Once the fonts are in, every chapter is asked
+       again whether its stack still fits the window. */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        for (var i = 0; i < crossings.length; i++) { crossings[i].recheck(); }
+        schedule();
+      });
+    }
   }
 
   var queued = false;
