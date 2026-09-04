@@ -654,9 +654,11 @@ h1{
 
 /* ---------- the docket ---------- */
 /* In the Now chapter the exhibit and the six responsibilities share a
-   row at wide widths: the photograph on the left holds the full height
-   of the tiles stacked two across on the right, the way a docket
-   clips a print to the papers it belongs with. Below 64rem the docket
+   row at wide widths: the photograph clipped to the left of the tiles
+   stacked two across, the way a docket clips a print to the papers it
+   belongs with. The print keeps its own proportion and ends where it
+   ends, shorter than the tiles beside it; stretching it to match them
+   would crop a third of the picture away. Below 64rem the docket
    dissolves and both blocks keep their vertical places. */
 .docket{display:contents;}
 @media (min-width:64rem){
@@ -664,15 +666,13 @@ h1{
     display:grid;
     grid-template-columns:18rem minmax(0,1fr);
     gap:1.25rem;
-    align-items:stretch;
+    align-items:start;
     width:100%;
     margin-top:clamp(2.75rem,5vw,4rem);
     text-align:left;
   }
   .docket .tiles{margin-top:0;grid-template-columns:1fr 1fr;}
-  .docket .exhibit{max-width:none;display:flex;flex-direction:column;}
-  .docket .exhibit .plate{flex:1;display:flex;}
-  .docket .exhibit img{flex:1;height:100%;object-fit:cover;object-position:50% 18%;}
+  .docket .exhibit{max-width:none;}
 }
 
 /* ---------- sections ---------- */
@@ -1100,7 +1100,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   /* The cards stretch to a common height, so the read link is pushed to
      the foot of each one and the four sit on a single line. */
   #research .strip .item > div{display:flex;flex-direction:column;flex:1 1 auto;width:100%;}
-  #research .strip .item .paperlink{margin-top:auto;}
+  #research .strip .item .paperlink{margin-top:auto;align-self:flex-start;}
 }
 
 /* ---------- the crossings ---------- */
