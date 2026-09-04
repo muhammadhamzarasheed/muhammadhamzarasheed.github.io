@@ -11,8 +11,9 @@ export const index = 7;
 export const title = "Research";
 export const anchor = "#research";
 
-/* The four working papers, running heads exactly as the papers carry
-   them; each links to its reader under /papers/. */
+/* The four working papers in the order the record keeps them, posted
+   pair first, running heads exactly as the papers carry them; each
+   links to its reader under /papers/. */
 const PAPERS = [
   {
     slug: "acca-embedded-masters",
@@ -20,14 +21,14 @@ const PAPERS = [
     line: "A document analysis of ACCA-embedded master's programmes",
   },
   {
-    slug: "reliance-in-partnership-assessment",
-    head: "Accountability and reliance",
-    line: "An audit-standards perspective on higher education",
-  },
-  {
     slug: "convergence-without-equivalence",
     head: "Convergence without equivalence",
     line: "UK sustainability reporting standards, the amended CSRD",
+  },
+  {
+    slug: "reliance-in-partnership-assessment",
+    head: "Accountability and reliance",
+    line: "An audit-standards perspective on higher education",
   },
   {
     slug: "feedback-delivery-to-feedback-use",

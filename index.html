@@ -50,7 +50,8 @@
     "addressCountry": "GB"
   },
   "sameAs": [
-    "https://www.linkedin.com/in/muhammadhamzarasheed/"
+    "https://www.linkedin.com/in/muhammadhamzarasheed/",
+    "https://orcid.org/0009-0005-3366-2603"
   ]
 }
 </script>
@@ -525,6 +526,7 @@ h1{
 .chk{
   display:flex;
   align-items:flex-start;
+  text-align:left;
   gap:.8rem;
   font-family:var(--mono);
   font-size:.9375rem;
@@ -601,15 +603,17 @@ h1{
 .band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .band .shell{
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
 }
-/* Stacked on narrow screens the divider has to be horizontal, or every
-   figure below the first carries a stray vertical rule. */
-.fig{padding:2.25rem 1.75rem;text-align:center;border-top:1px solid var(--line);}
-.fig:first-child{border-top:0;}
+/* Two by two on narrow screens, so the figures read as one card of
+   accounts rather than a tall column: a hairline between the pairs
+   and one under the first row. Four across from 48rem. */
+.fig{padding:1.75rem 1rem;text-align:center;border-top:1px solid var(--line);}
+.fig:nth-child(-n+2){border-top:0;}
+.fig:nth-child(even){border-left:1px solid var(--line);}
 @media (min-width:48rem){
   .band .shell{grid-template-columns:repeat(4,1fr);}
-  .fig{border-top:0;border-left:1px solid var(--line);}
+  .fig{padding:2.25rem 1.75rem;border-top:0;border-left:1px solid var(--line);}
   .fig:first-child{border-left:0;}
 }
 .fig dt{
@@ -620,6 +624,10 @@ h1{
   letter-spacing:-.03em;
   color:var(--brass);
   line-height:1;
+}
+@media (max-width:24rem){
+  .fig{padding:1.5rem .5rem;}
+  .fig dt{font-size:1.5rem;}
 }
 .fig dd{
   margin:.85rem 0 0;
@@ -636,12 +644,35 @@ h1{
   width:100%;
   margin-top:clamp(2.25rem,4vw,3rem);
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
 @media (min-width:48rem){
   .now-figs{grid-template-columns:repeat(4,1fr);}
+}
+
+/* ---------- the docket ---------- */
+/* In the Now chapter the exhibit and the six responsibilities share a
+   row at wide widths: the photograph on the left holds the full height
+   of the tiles stacked two across on the right, the way a docket
+   clips a print to the papers it belongs with. Below 64rem the docket
+   dissolves and both blocks keep their vertical places. */
+.docket{display:contents;}
+@media (min-width:64rem){
+  .docket{
+    display:grid;
+    grid-template-columns:18rem minmax(0,1fr);
+    gap:1.25rem;
+    align-items:stretch;
+    width:100%;
+    margin-top:clamp(2.75rem,5vw,4rem);
+    text-align:left;
+  }
+  .docket .tiles{margin-top:0;grid-template-columns:1fr 1fr;}
+  .docket .exhibit{max-width:none;display:flex;flex-direction:column;}
+  .docket .exhibit .plate{flex:1;display:flex;}
+  .docket .exhibit img{flex:1;height:100%;object-fit:cover;object-position:50% 18%;}
 }
 
 /* ---------- sections ---------- */
@@ -659,6 +690,32 @@ h2{
 .prose{margin:0;max-width:60ch;color:var(--text-2);font-size:1.0625rem;line-height:1.72;}
 .prose + .prose{margin-top:1.15rem;}
 .mid .prose{max-width:56ch;}
+/* Centred paragraphs run to a dozen ragged lines on a phone, so below
+   40rem the body copy sets left under its centred heading, the way a
+   letter sits under its letterhead. */
+@media (max-width:40rem){
+  .mid .prose{text-align:left;width:100%;}
+}
+
+/* ---------- carried forward ---------- */
+/* Every chapter closes the way a ledger page does: the balance is
+   carried forward, and the line names the next chapter by number so
+   the reader always knows what follows the rule. Set right, in the
+   register's own hand, one tab stop and one hover. */
+.cf{
+  margin:-.5rem 0 0;
+  align-self:flex-end;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.cf a{display:inline-block;padding:.3rem 0;transition:color .25s ease;}
+.cf b{font-weight:400;color:var(--brass);}
+@media (hover:hover){
+  .cf a:hover{color:var(--text);}
+}
 
 /* ---------- principles ---------- */
 .principles{
@@ -784,9 +841,10 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 .quotepin.still .q .w{color:var(--text);}
 .quotepin.still .q p.turn .w{color:var(--brass);}
 .js .quotepin.still .qclose{opacity:1;transform:none;}
-/* Short viewports cannot fit the pinned quote: fall back to the same
-   static treatment rather than clipping it mid scroll. */
-@media (max-height:640px){
+/* Short viewports cannot fit the pinned quote, and neither can a phone
+   once the statement runs to a dozen lines: both fall back to the same
+   static treatment rather than clipping the closing lines mid scroll. */
+@media (max-height:640px),(max-width:40rem){
   .quotepin{height:auto;padding:clamp(5rem,11vw,9rem) 0;}
   .qsticky{position:static;min-height:0;padding:0;}
   .q .w{color:var(--text);}
@@ -797,7 +855,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 /* ---------- tiles ---------- */
 .tiles{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(17.5rem,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(min(17.5rem,100%),1fr));
   gap:1rem;
   margin-top:clamp(2.75rem,5vw,4rem);
   text-align:left;
@@ -960,8 +1018,17 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   line-height:1.6;
   color:var(--text-3);
 }
-/* Set inside a record entry, the exhibit follows the entry's copy. */
+/* Set inside a record entry, the exhibit follows the entry's copy on a
+   narrow screen. From 48rem the entry widens its margin column and the
+   print sits there under the dates, pasted into the ledger's margin
+   rather than left under the title with an empty column beside it. */
 .item .exhibit{margin-top:1.35rem;}
+@media (min-width:48rem){
+  .item.exhibited{row-gap:1rem;}
+  .item.exhibited > div{grid-row:1 / 3;}
+  .item.exhibited .meta{grid-column:2;}
+  .item.exhibited .exhibit{grid-column:2;grid-row:2;max-width:12rem;justify-self:end;margin-top:0;}
+}
 
 /* ---------- journal strip ---------- */
 /* The journal reads as a shelf: cards in a horizontal scroll-snap
@@ -1045,13 +1112,17 @@ a.qlink:hover{border-bottom-color:var(--brass);}
    box equals sticky height plus travel with no slack at either seam.
    The height clause keeps short windows off the pin: below 40rem the
    centred shell could not hold the whole shelf. */
-@media (min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine){
+@media (min-width:64rem) and (min-height:44rem) and (hover:hover) and (pointer:fine){
   section.crossing{padding:0;}
   section.crossing > .shell{
     position:sticky;
     top:0;
     height:100vh;
     height:100svh;
+    /* The fixed bar owns the top of the window, so the pinned stack
+       centres in what is left of it rather than sliding its eyebrow
+       under the glass. */
+    padding-top:4.25rem;
     justify-content:center;
   }
   section.crossing .strip{
@@ -1067,6 +1138,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
      the pin releases flush on the present role. Role cards carry
      more text than journal cards, so the pinned stack tightens its
      gaps to keep the year counter clear of the fixed bar. */
+  section.crossing .cf{display:none;}
   #experience.crossing > .shell{gap:1rem;}
   #experience.crossing .rule{margin-top:.75rem;}
   #experience.crossing .record{
@@ -1107,6 +1179,20 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 @media (min-width:46rem){.cols{grid-template-columns:1fr 1fr;}}
 .cols h3{margin:0 0 .7rem;font-family:var(--mono);font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);font-weight:400;}
 .cols p{margin:0;font-size:.9375rem;line-height:1.68;color:var(--text-2);}
+/* Field notes: the lead paragraph stays centred as the chapter's
+   prose; the two reflections sit side by side as labelled notes, set
+   left and a size smaller, so the page reads as notes rather than a
+   wall of centred text; the last line signs off in the serif. */
+.cols.notes{margin-top:clamp(1.25rem,3vw,2rem);}
+.signoff{
+  margin:.25rem 0 0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:1.35rem;
+  line-height:1.4;
+  color:var(--text-2);
+}
 
 /* ---------- places ---------- */
 .places{margin:clamp(2.5rem,5vw,3.5rem) 0 0;width:100%;text-align:left;}
@@ -1212,6 +1298,16 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   transition:border-color .25s ease,color .25s ease;
 }
 .chips button:hover{border-color:var(--brass);color:var(--text);}
+/* Fingers get taller targets than pointers, and an input at 16px so
+   iOS does not zoom the page on focus. */
+@media (pointer:coarse){
+  .chips button{padding:.55rem .85rem;}
+  .cf a{padding:.6rem 0;}
+  .grp dd span{padding:.45rem .8rem;}
+}
+@media (max-width:48rem){
+  .hours input{font-size:1rem;}
+}
 .ans{
   margin-top:1.1rem;
   padding:1.1rem 1.2rem;
@@ -1223,7 +1319,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-2);
 }
 .ans b{color:var(--text);font-weight:600;}
-.ans a{color:var(--brass);border-bottom:1px solid transparent;transition:border-color .25s ease;}
+.ans a{color:var(--brass);border-bottom:1px solid rgba(201,170,124,.6);transition:border-color .25s ease;}
 .ans a:hover{border-bottom-color:var(--brass);}
 .ans .src{
   display:block;
@@ -1325,8 +1421,8 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
 footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:baseline;}
-footer .label a{transition:color .25s ease;}
-footer .label a:hover{color:var(--brass);}
+footer .label a{border-bottom:1px solid rgba(201,170,124,.6);transition:color .25s ease,border-color .25s ease;}
+footer .label a:hover{color:var(--brass);border-color:var(--brass);}
 /* The monogram signs the page off: three strokes drawn in order once
    the reader reaches the footer, once per load. Same dashoffset trick
    as the hero crest, fired by a class instead of a keyframe. Start
@@ -1451,6 +1547,11 @@ footer .label a:hover{color:var(--brass);}
    with a faint glow, drying to ink over 450ms. The spans only exist
    when motion is allowed, so no gate is needed on the start state;
    words stay unbreakable so the line wraps whole. */
+/* Until the fonts are in and the splitter has run, the name is held
+   back entirely: otherwise it fades in set in the fallback face, blinks
+   out, and is written again. The class is set synchronously by the
+   script that will split it, and lifted by a timer as a safety net. */
+.js .hero h1.pending{opacity:0;}
 .js .hero h1 .word{display:inline-block;white-space:nowrap;}
 .js .hero h1 .c{
   visibility:hidden;
@@ -1596,6 +1697,42 @@ section h2{position:relative;}
   ::view-transition-new(*){animation-duration:.001ms !important;}
 }
 
+/* ---------- print ---------- */
+/* On paper the ledger is a plain record: every reveal shown, every
+   pin released, the shelves stacked, the instruments and the chrome
+   left on screen where they belong. */
+@media print{
+  /* The screen's ground is dark and printers drop backgrounds, so the
+     whole page is repainted in ink on paper before anything else. */
+  html,body{background:#fff !important;color:#111 !important;}
+  h1,h2,h3,.q,.q .w,.ans b,.item h3,.tile h3,.principle h3{color:#111 !important;}
+  .prose,.creed,.note,.tile p,.principle p,.cols p,.qclose,.sub,.signoff{color:#222 !important;}
+  .label,.meta,.who,.exlabel,figcaption,.grp dt,.grp dd span,.cols h3,.chk{color:#444 !important;}
+  /* The name is written in brass on screen, letter by letter; on paper
+     it is simply the name, whole and in ink. */
+  .js .hero h1 .c,.js .hero h1 .c.ink{color:#111 !important;text-shadow:none !important;}
+  .rule,.item,.principle,.grp,.band,.now-figs,.creedbox,footer,.exhibit .plate,.prior li{border-color:#bbb !important;}
+  .fig dt,.q p.turn .w,.label b,.paperlink{color:#6b5836 !important;}
+  .tile,.item,.prior li,.exhibit .plate,.reach a{background:transparent !important;}
+  .nav,.menu,.spine,.field,.glow,.cue,.pal,.burger,.hours,.cf,.hint,.wx,.skip,body::after{display:none !important;}
+  .js .up,.js h2 .w,.js .qclose,.js .hero h1 .c,.js .grp.up dd span{opacity:1 !important;transform:none !important;visibility:visible !important;}
+  .js .hero h1.pending{visibility:visible !important;}
+  .js .hero h1 .nib{display:none !important;}
+  .js .rule{transform:none !important;}
+  .q .w{color:inherit !important;}
+  .hero{min-height:0 !important;padding:2rem 0 !important;}
+  .quotepin{height:auto !important;}
+  .qsticky{position:static !important;height:auto !important;}
+  section.crossing{height:auto !important;padding:2rem 0 !important;}
+  section.crossing > .shell{position:static !important;height:auto !important;}
+  section.crossing .strip,section.crossing .record{transform:none !important;display:block !important;}
+  .strip{display:block !important;overflow:visible !important;}
+  .strip .item,#experience.crossing .item{max-width:none !important;min-width:0 !important;margin:0 0 1rem !important;}
+  .letterhead{display:block !important;}
+  .letterhead .exhibit{max-width:9rem !important;margin-bottom:1rem;}
+  a{color:inherit !important;text-decoration:none !important;border:0 !important;}
+}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .js .up{opacity:1;transform:none;}
@@ -1605,8 +1742,9 @@ section h2{position:relative;}
   .h2tick path{stroke-dashoffset:0;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
-#research .orcid{text-align:left;margin-top:1.4rem;}
-#research .orcid a{color:inherit;}
+#research .orcid{align-self:flex-start;text-align:left;margin-top:1.4rem;}
+#research .orcid a{color:inherit;border-bottom:1px solid rgba(201,170,124,.6);padding-bottom:1px;transition:border-color .25s ease;}
+#research .orcid a:hover{border-bottom-color:var(--brass);}
 </style>
 </head>
 <body>
@@ -1706,6 +1844,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#now">Carried forward <b>02</b> &middot; Now</a></p>
     </div>
   </section>
 
@@ -1729,18 +1868,19 @@ section h2{position:relative;}
       <h2 class="up d1">Decisions that have to survive a board, an auditor or an appeal.</h2>
       <p class="prose up d2">As Assessment Lead at UK Management College I own assessment operations and regulatory compliance across programmes delivered with four validating partner universities. Four partners means four regulation sets, four assessment calendars and four sets of reporting requirements running at once, which makes it a good stress test of the method: getting it right the first time is the job.</p>
 
-      <figure class="exhibit up d3">
-        <p class="exlabel">Exhibit</p>
-        <div class="plate"><img src="/images/event.jpg" alt="Muhammad Hamza seated at a professional event in a grey suit and burgundy tie" width="800" height="1200" loading="lazy" decoding="async"></div>
-        <figcaption>On duty at a sector event.</figcaption>
-      </figure>
-
       <dl class="now-figs up d3">
         <div class="fig"><dt><span class="odo" data-final="12000" data-comma="1">12,000</span>+</dt><dd>Students in scope</dd></div>
         <div class="fig"><dt>07</dt><dd>Programmes</dd></div>
         <div class="fig"><dt>06</dt><dd>Campuses</dd></div>
         <div class="fig"><dt>04</dt><dd>Partner universities</dd></div>
       </dl>
+
+      <div class="docket">
+      <figure class="exhibit up d3">
+        <p class="exlabel">Exhibit</p>
+        <div class="plate"><img src="/images/event.jpg" alt="Muhammad Hamza seated at a professional event in a grey suit and burgundy tie" width="800" height="1200" loading="lazy" decoding="async"></div>
+        <figcaption>On duty at a sector event.</figcaption>
+      </figure>
 
       <div class="tiles" id="tiles">
         <article class="tile up"><div class="tin">
@@ -1768,7 +1908,9 @@ section h2{position:relative;}
           <p>Working across academic teams, personal tutors and partner university contacts to keep outcomes accurate and on time.</p>
         </div></article>
       </div>
+      </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#experience">Carried forward <b>03</b> &middot; Experience</a></p>
     </div>
   </section>
 
@@ -1831,6 +1973,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#education">Carried forward <b>04</b> &middot; Education</a></p>
     </div>
   </section>
 
@@ -1855,17 +1998,17 @@ section h2{position:relative;}
           </div>
           <p class="meta"><b>Dec 2024 to Dec 2026</b>Part qualified, 10 of 13</p>
         </article>
-        <article class="item up">
+        <article class="item exhibited up">
           <div>
             <h3>MSc Accounting and Finance</h3>
             <p class="who">BPP University</p>
-            <figure class="exhibit">
-              <p class="exlabel">Exhibit</p>
-              <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="1080" height="1440" loading="lazy" decoding="async"></div>
-              <figcaption>Westminster Abbey, the MSc conferred. BPP, Merit.</figcaption>
-            </figure>
           </div>
           <p class="meta"><b>May 2024 to Mar 2025</b>Merit</p>
+          <figure class="exhibit">
+            <p class="exlabel">Exhibit</p>
+            <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="800" height="1066" loading="lazy" decoding="async"></div>
+            <figcaption>Westminster Abbey, the MSc conferred.</figcaption>
+          </figure>
         </article>
         <article class="item up">
           <div>
@@ -1902,6 +2045,7 @@ section h2{position:relative;}
         </div>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#journal">Carried forward <b>05</b> &middot; Journal</a></p>
     </div>
   </section>
 
@@ -1970,6 +2114,7 @@ section h2{position:relative;}
         </article>
       </div>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#elsewhere">Carried forward <b>06</b> &middot; Field notes</a></p>
     </div>
   </section>
 
@@ -1978,9 +2123,17 @@ section h2{position:relative;}
       <p class="label up stamp"><b>06</b> &middot; Field notes</p>
       <h2 class="up d1">The part I do not try to control.</h2>
       <p class="prose up d2">At work I am paid to remove uncertainty: reconcile it, evidence it, close the gap before anyone else finds it. Away from the desk I do the opposite. Italy twice over, Germany, Austria, Albania, T&uuml;rkiye, Gibraltar. Pakistan whenever I can get back. And the country I live in gets the spare weekends: hiking and boating in Snowdonia, long walks in the Peak District and the Lakes, all four nations at one time or another, New Year in London one year and Edinburgh the next. None of it had to tie out.</p>
-      <p class="prose up d2">Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
-      <p class="prose up d2">It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
-      <p class="prose up d2">The rest, que sera, sera.</p>
+      <div class="cols notes">
+        <div class="up">
+          <h3>The correction</h3>
+          <p>Travelling is a useful correction for anyone who works inside rules. Every country is a different rulebook, and the error is always the same one: assuming the procedure you already know is the procedure that applies here. That is my job description too, and the quickest way to get a decision wrong is to be confident about the wrong rulebook.</p>
+        </div>
+        <div class="up d1">
+          <h3>The wrong side of the counter</h3>
+          <p>It also puts you back on the wrong side of a system. Every arrival makes you the person who does not know how this works, while everyone around you finds it obvious. Someone is always in that position in assessment: a student who does not know that a deadline can be extended, or that a regulation has a clause written for exactly their circumstances. Having felt it recently is a good argument for writing the process down plainly.</p>
+        </div>
+      </div>
+      <p class="signoff up d2">The rest, que sera, sera.</p>
 
       <dl class="places">
         <div class="grp up">
@@ -1997,13 +2150,14 @@ section h2{position:relative;}
         </div>
       </dl>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#research">Carried forward <b>07</b> &middot; Research</a></p>
     </div>
   </section>
 
   <section id="research" style="padding-top:0;">
     <div class="shell mid">
       <p class="label up stamp"><b>07</b> &middot; Research</p>
-      <h2 class="up d1">Four working papers, read on screen.</h2>
+      <h2 class="up d1">Four working papers, on the record.</h2>
       <p class="prose up d2">Four sole-authored working papers on assessment governance, professional accreditation and regulatory reporting, using public sources only. Two are posted on SSRN under a CC BY-NC-ND licence and two are under review. The SSRN page is the version of record for each.</p>
 
       <div class="record strip" role="region" tabindex="0" aria-label="Research papers, scroll list">
@@ -2052,6 +2206,7 @@ section h2{position:relative;}
       </div>
       <p class="meta orcid">ORCID <a href="https://orcid.org/0009-0005-3366-2603" target="_blank" rel="noopener">0009-0005-3366-2603</a></p>
       <div class="rule" aria-hidden="true"></div>
+      <p class="cf up"><a href="#contact">Carried forward <b>08</b> &middot; Contact</a></p>
     </div>
   </section>
 
@@ -2066,7 +2221,7 @@ section h2{position:relative;}
         <h3>Ask about the work.</h3>
         <p class="brief">Type a question, or start with one below. Every answer comes straight from the record and names its source, so nothing here is a guess.</p>
         <form id="hoursform">
-          <input id="hoursq" type="text" placeholder="e.g. what do you actually do?" autocomplete="off" spellcheck="false" aria-label="Ask a question about Muhammad Hamza">
+          <input id="hoursq" type="text" maxlength="200" placeholder="e.g. what do you actually do?" autocomplete="off" spellcheck="false" aria-label="Ask a question about Muhammad Hamza">
           <button type="submit">Ask</button>
         </form>
         <div class="chips" id="hourschips">
@@ -2099,7 +2254,7 @@ section h2{position:relative;}
 <footer>
   <div class="shell">
     <p class="label lockup"><svg class="mark" id="countersign" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza</p>
-    <p class="label hint">Press <kbd>/</kbd> to navigate</p>
+    <p class="label hint">Press <kbd>/</kbd> or <kbd id="palchord">Ctrl K</kbd> to navigate</p>
     <p class="label"><a href="/appendix/" target="_blank" rel="noopener">After hours</a></p>
     <p class="label">Reconcile before you report</p>
   </div>
@@ -2212,6 +2367,30 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   });
 })();
 
+/* ---------- shelves that have stacked ---------- */
+/* Below 40rem the journal and research shelves are plain vertical
+   lists, so they hand back the tab stop and region role they only
+   need while they scroll sideways. */
+(function () {
+  var strips = [].slice.call(document.querySelectorAll(".strip[role=region]"));
+  if (!strips.length || !window.matchMedia) { return; }
+  var mq = window.matchMedia("(min-width:40rem)");
+  function apply() {
+    strips.forEach(function (el) {
+      if (mq.matches) {
+        el.setAttribute("role", "region");
+        el.tabIndex = 0;
+      } else {
+        el.removeAttribute("role");
+        el.removeAttribute("tabindex");
+      }
+    });
+  }
+  apply();
+  if (mq.addEventListener) { mq.addEventListener("change", apply); }
+  else if (mq.addListener) { mq.addListener(apply); }
+})();
+
 /* ---------- mobile menu ---------- */
 (function () {
   var burger = document.getElementById("burger");
@@ -2238,7 +2417,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.addEventListener("keydown", function (e) {
     var open = burger.getAttribute("aria-expanded") === "true";
     if (!open) { return; }
-    if (e.key === "Escape") { set(false); return; }
+    if (e.key === "Escape") { set(false); burger.focus(); return; }
     // The open menu is an opaque overlay: keep Tab inside it.
     if (e.key === "Tab") {
       var focusables = [burger].concat([].slice.call(menu.querySelectorAll("a")));
@@ -2286,7 +2465,11 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (RM || !document.fonts || !document.fonts.ready) { return; }
   var h1 = document.querySelector(".hero h1");
   if (!h1) { return; }
+  h1.classList.add("pending");
+  var safety = window.setTimeout(function () { h1.classList.remove("pending"); }, 2500);
   document.fonts.ready.then(function () {
+    window.clearTimeout(safety);
+    h1.classList.remove("pending");
     var text = h1.textContent;
     h1.setAttribute("aria-label", text);
     var wrap = document.createElement("span");
@@ -2408,10 +2591,12 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
      pixel for one pixel. Everything is additive: a class, one inline
      height and one transform, all removed cleanly when the gate stops
      matching, so reduced motion, coarse pointers, narrow viewports
-     and no JS all keep the vertical layouts untouched. Each crossing
+     and no JS all keep the vertical layouts untouched. The height clause
+   is 44rem because the pinned stack needs the room: at 40rem it
+   overflowed its own shell and carried the eyebrow off the top. Each crossing
      measures only its own section and is driven from the one shared
      frame below; the two never touch each other's numbers. */
-  var xmq = window.matchMedia("(min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine)");
+  var xmq = window.matchMedia("(min-width:64rem) and (min-height:44rem) and (hover:hover) and (pointer:fine)");
   var crossings = [];
 
   function initCrossing(section, opts) {
@@ -3038,9 +3223,9 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   };
   function put(cur) {
     var sky = MAP[cur.weather_code];
+    if (!sky || typeof cur.temperature_2m !== "number") { return; }
     var t = Math.round(cur.temperature_2m);
-    var w = Math.round(cur.wind_speed_10m);
-    if (!sky || isNaN(t)) { return; }
+    var w = typeof cur.wind_speed_10m === "number" ? Math.round(cur.wind_speed_10m) : NaN;
     document.getElementById("wxtext").textContent =
       sky + " · " + t + "°C" + (isNaN(w) ? "" : " · wind " + w + " mph");
     el.hidden = false;
@@ -3439,12 +3624,12 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       a: "Noted and filed. The record is held open, so come back any time; anything further, <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a> reaches me.",
       s: "Office hours", h: "#officehours", rel: [33, 23, 40] },
     // 71 · The working papers. Source: /papers/, four entries counted in its manifest.
-    { k: ["have you published any research", "research", "working papers", "working paper", "your papers", "any papers", "ssrn", "published", "publications", "publication", "under review", "academic research", "scholarship"],
-      a: "<b>Four working papers</b>, each sole authored and under review at SSRN: on ACCA-embedded master's programmes, reliance in partnership assessment, UK and EU sustainability reporting, and feedback use in accounting education. They are read on screen while the review runs: <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the working papers</a>.",
+    { k: ["have you published any research", "research", "working papers", "working paper", "your papers", "any papers", "ssrn", "published", "publications", "publication", "under review", "posted on ssrn", "doi", "academic research", "scholarship"],
+      a: "<b>Four working papers</b>, each sole authored. Two are posted on SSRN under a CC BY-NC-ND licence: <a href=\"https://doi.org/10.2139/ssrn.7396918\" target=\"_blank\" rel=\"noopener\">Integration or compression?</a> on ACCA-embedded master's programmes, and <a href=\"https://doi.org/10.2139/ssrn.7396980\" target=\"_blank\" rel=\"noopener\">Convergence without equivalence</a> on UK and EU sustainability reporting. Two are under review: Accountability and reliance, on partnership assessment, and From feedback delivery to feedback use, on accounting education. All four are read on screen: <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the working papers</a>.",
       s: "Working papers", h: "/papers/", rel: [72, 23, 40] },
     // 72 · Citing the papers. Source: /papers/ lede and the reader notice, verbatim.
     { k: ["can i cite your papers", "cite", "citation", "cite your paper", "cite your work", "quotation", "reproduce", "reproduction", "full text", "request the full text", "copy of the paper", "download the paper", "pdf of the paper"],
-      a: "Not yet: while they are under review the papers are read on screen and are not for citation, quotation or reproduction without permission. The full text is available by request to <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
+      a: "The two posted papers can be cited from their SSRN pages, which are the version of record: <a href=\"https://doi.org/10.2139/ssrn.7396918\" target=\"_blank\" rel=\"noopener\">Integration or compression?</a> and <a href=\"https://doi.org/10.2139/ssrn.7396980\" target=\"_blank\" rel=\"noopener\">Convergence without equivalence</a>. The two under review are read on screen and are not for citation, quotation or reproduction without permission while the review runs; their full text is available by request to <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
       s: "Working papers", h: "/papers/", rel: [71, 33, 40] }
   ];
 
@@ -3664,6 +3849,10 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var rows = [].slice.call(list.querySelectorAll("li"));
   var count = document.getElementById("palcount");
   var last = null;
+  /* The pane stays in the tree for 220ms while it fades, so open state
+     is held here rather than read back off the hidden attribute. */
+  var isOpen = false;
+  var hideTimer = null;
 
   function visible() {
     return rows.filter(function (r) { return !r.classList.contains("hide"); });
@@ -3683,6 +3872,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     }
   }
   function open() {
+    if (hideTimer) { window.clearTimeout(hideTimer); hideTimer = null; }
     last = document.activeElement;
     pal.hidden = false;
     input.value = "";
@@ -3696,13 +3886,19 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // still visibility:hidden, and a deferred frame is not guaranteed.
     void pal.offsetWidth;
     pal.classList.add("open");
+    isOpen = true;
     input.focus();
   }
   function shut() {
+    isOpen = false;
     pal.classList.remove("open");
     input.setAttribute("aria-expanded", "false");
-    window.setTimeout(function () { pal.hidden = true; }, 220);
-    if (last && last.focus) { last.focus(); }
+    hideTimer = window.setTimeout(function () { pal.hidden = true; hideTimer = null; }, 220);
+    /* Focus must leave with the pane. Where it came from the body, there
+       is nothing to hand it back to, so the field is blurred rather than
+       left holding the keyboard inside a pane nobody can see. */
+    if (last && last.focus && last !== document.body) { last.focus(); }
+    else if (input.blur) { input.blur(); }
   }
   function filter() {
     var q = input.value.trim().toLowerCase();
@@ -3717,8 +3913,9 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
   document.addEventListener("keydown", function (e) {
-    var typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
-    if (!pal.hidden) {
+    var ae = document.activeElement;
+    var typing = /^(INPUT|TEXTAREA)$/.test((ae && ae.tagName) || "");
+    if (isOpen) {
       if (e.key === "Escape") { e.preventDefault(); shut(); return; }
       // The dialog claims aria-modal, so Tab must not walk out of it.
       if (e.key === "Tab") { e.preventDefault(); input.focus(); return; }
@@ -3733,7 +3930,11 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       }
       return;
     }
-    if ((e.key === "/" && !typing) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")) {
+    /* A bare slash belongs to whatever is taking typed characters. Any
+       other focus keeps the shortcut, so a keyboard reader partway down
+       the page can still open the palette from wherever they are. */
+    var held = !!(typing || (ae && ae.isContentEditable));
+    if ((e.key === "/" && !held) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")) {
       e.preventDefault();
       open();
     }
@@ -3743,6 +3944,14 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (e.target === pal) { shut(); }
     if (e.target.closest("a")) { shut(); }
   });
+})();
+
+/* ---------- the chord, in the reader's own idiom ---------- */
+(function () {
+  var k = document.getElementById("palchord");
+  if (!k) { return; }
+  var mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || "");
+  if (mac) { k.textContent = "\u2318 K"; }
 })();
 
 /* ---------- footer countersign ---------- */
@@ -3780,7 +3989,10 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!e || typeof e.views !== "number" || typeof e.downloads !== "number" || !e.asAt) { return; }
       var d = new Date(e.asAt + "T00:00:00");
       var when = isNaN(d) ? e.asAt : d.getDate() + " " + months[d.getMonth()];
-      el.textContent = "As at " + when + ": " + e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads";
+      el.textContent = "";
+      el.appendChild(document.createTextNode(e.views.toLocaleString("en-GB") + " views \u00B7 " + e.downloads.toLocaleString("en-GB") + " downloads"));
+      el.appendChild(document.createElement("br"));
+      el.appendChild(document.createTextNode("SSRN figures as at " + when));
       el.hidden = false;
     });
   }).catch(function () {});

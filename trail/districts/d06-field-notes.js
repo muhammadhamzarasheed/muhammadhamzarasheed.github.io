@@ -159,7 +159,7 @@ export function build(ctx) {
 
   /* ---------- plaques, pointing outward ---------- */
   ctx.addLink(px(10, 18), pz(10, 18), "Something for your mind", "/mind/");
-  ctx.addLink(px(10, -18), pz(10, -18), "The appendix", "/appendix/");
+  ctx.addLink(px(10, -18), pz(10, -18), "After hours", "/appendix/");
 
   /* ---------- reconciliation of the play corner ---------- */
   /* A prop that has sat still away from home for eight seconds
