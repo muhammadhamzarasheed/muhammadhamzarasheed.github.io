@@ -511,7 +511,10 @@ h1 .sub,h2 .sub{display:block;font-family:var(--serif,"Instrument Serif",Georgia
 
   // A page sits at the top when it clears the bar and the pinned notice.
   function offset() {
-    return (bar ? bar.offsetHeight : 0) + (notice ? notice.offsetHeight : 0) + 16;
+    /* The notice only takes space at the top while it is actually
+       pinned there; below 40rem it scrolls away with the page. */
+    var pinned = notice && /^(sticky|fixed)$/.test(window.getComputedStyle(notice).position);
+    return (bar ? bar.offsetHeight : 0) + (pinned ? notice.offsetHeight : 0) + 16;
   }
   function nextPage() {
     var off = offset();

@@ -1112,13 +1112,17 @@ a.qlink:hover{border-bottom-color:var(--brass);}
    box equals sticky height plus travel with no slack at either seam.
    The height clause keeps short windows off the pin: below 40rem the
    centred shell could not hold the whole shelf. */
-@media (min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine){
+@media (min-width:64rem) and (min-height:44rem) and (hover:hover) and (pointer:fine){
   section.crossing{padding:0;}
   section.crossing > .shell{
     position:sticky;
     top:0;
     height:100vh;
     height:100svh;
+    /* The fixed bar owns the top of the window, so the pinned stack
+       centres in what is left of it rather than sliding its eyebrow
+       under the glass. */
+    padding-top:4.25rem;
     justify-content:center;
   }
   section.crossing .strip{
@@ -1134,6 +1138,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
      the pin releases flush on the present role. Role cards carry
      more text than journal cards, so the pinned stack tightens its
      gaps to keep the year counter clear of the fixed bar. */
+  section.crossing .cf{display:none;}
   #experience.crossing > .shell{gap:1rem;}
   #experience.crossing .rule{margin-top:.75rem;}
   #experience.crossing .record{
@@ -2586,10 +2591,12 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
      pixel for one pixel. Everything is additive: a class, one inline
      height and one transform, all removed cleanly when the gate stops
      matching, so reduced motion, coarse pointers, narrow viewports
-     and no JS all keep the vertical layouts untouched. Each crossing
+     and no JS all keep the vertical layouts untouched. The height clause
+   is 44rem because the pinned stack needs the room: at 40rem it
+   overflowed its own shell and carried the eyebrow off the top. Each crossing
      measures only its own section and is driven from the one shared
      frame below; the two never touch each other's numbers. */
-  var xmq = window.matchMedia("(min-width:64rem) and (min-height:40rem) and (hover:hover) and (pointer:fine)");
+  var xmq = window.matchMedia("(min-width:64rem) and (min-height:44rem) and (hover:hover) and (pointer:fine)");
   var crossings = [];
 
   function initCrossing(section, opts) {
