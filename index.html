@@ -1327,7 +1327,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-2);
 }
 .ans b{color:var(--text);font-weight:600;}
-.ans a{color:var(--brass);border-bottom:1px solid transparent;transition:border-color .25s ease;}
+.ans a{color:var(--brass);border-bottom:1px solid rgba(201,170,124,.45);transition:border-color .25s ease;}
 .ans a:hover{border-bottom-color:var(--brass);}
 .ans .src{
   display:block;
@@ -1429,8 +1429,8 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
 footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:baseline;}
-footer .label a{transition:color .25s ease;}
-footer .label a:hover{color:var(--brass);}
+footer .label a{border-bottom:1px solid var(--line-2);transition:color .25s ease,border-color .25s ease;}
+footer .label a:hover{color:var(--brass);border-color:var(--brass);}
 /* The monogram signs the page off: three strokes drawn in order once
    the reader reaches the footer, once per load. Same dashoffset trick
    as the hero crest, fired by a class instead of a keyframe. Start
@@ -1740,7 +1740,8 @@ section h2{position:relative;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 #research .orcid{align-self:flex-start;text-align:left;margin-top:1.4rem;}
-#research .orcid a{color:inherit;}
+#research .orcid a{color:inherit;border-bottom:1px solid rgba(201,170,124,.45);padding-bottom:1px;transition:border-color .25s ease;}
+#research .orcid a:hover{border-bottom-color:var(--brass);}
 </style>
 </head>
 <body>
@@ -2002,7 +2003,7 @@ section h2{position:relative;}
           <p class="meta"><b>May 2024 to Mar 2025</b>Merit</p>
           <figure class="exhibit">
             <p class="exlabel">Exhibit</p>
-            <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="800" height="1067" loading="lazy" decoding="async"></div>
+            <div class="plate"><img src="/images/graduation.jpg" alt="Muhammad Hamza in graduation cap and gown before Westminster Abbey at dusk" width="800" height="1066" loading="lazy" decoding="async"></div>
             <figcaption>Westminster Abbey, the MSc conferred. BPP, Merit.</figcaption>
           </figure>
         </article>
@@ -2250,7 +2251,7 @@ section h2{position:relative;}
 <footer>
   <div class="shell">
     <p class="label lockup"><svg class="mark" id="countersign" viewBox="8 15 48 34" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg>Muhammad Hamza</p>
-    <p class="label hint">Press <kbd>/</kbd> to navigate</p>
+    <p class="label hint">Press <kbd>/</kbd> or <kbd id="palchord">Ctrl K</kbd> to navigate</p>
     <p class="label"><a href="/appendix/" target="_blank" rel="noopener">After hours</a></p>
     <p class="label">Reconcile before you report</p>
   </div>
@@ -3843,6 +3844,10 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var rows = [].slice.call(list.querySelectorAll("li"));
   var count = document.getElementById("palcount");
   var last = null;
+  /* The pane stays in the tree for 220ms while it fades, so open state
+     is held here rather than read back off the hidden attribute. */
+  var isOpen = false;
+  var hideTimer = null;
 
   function visible() {
     return rows.filter(function (r) { return !r.classList.contains("hide"); });
@@ -3862,6 +3867,7 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     }
   }
   function open() {
+    if (hideTimer) { window.clearTimeout(hideTimer); hideTimer = null; }
     last = document.activeElement;
     pal.hidden = false;
     input.value = "";
@@ -3875,13 +3881,19 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // still visibility:hidden, and a deferred frame is not guaranteed.
     void pal.offsetWidth;
     pal.classList.add("open");
+    isOpen = true;
     input.focus();
   }
   function shut() {
+    isOpen = false;
     pal.classList.remove("open");
     input.setAttribute("aria-expanded", "false");
-    window.setTimeout(function () { pal.hidden = true; }, 220);
-    if (last && last.focus) { last.focus(); }
+    hideTimer = window.setTimeout(function () { pal.hidden = true; hideTimer = null; }, 220);
+    /* Focus must leave with the pane. Where it came from the body, there
+       is nothing to hand it back to, so the field is blurred rather than
+       left holding the keyboard inside a pane nobody can see. */
+    if (last && last.focus && last !== document.body) { last.focus(); }
+    else if (input.blur) { input.blur(); }
   }
   function filter() {
     var q = input.value.trim().toLowerCase();
@@ -3896,8 +3908,9 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
   document.addEventListener("keydown", function (e) {
-    var typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
-    if (!pal.hidden) {
+    var ae = document.activeElement;
+    var typing = /^(INPUT|TEXTAREA)$/.test((ae && ae.tagName) || "");
+    if (isOpen) {
       if (e.key === "Escape") { e.preventDefault(); shut(); return; }
       // The dialog claims aria-modal, so Tab must not walk out of it.
       if (e.key === "Tab") { e.preventDefault(); input.focus(); return; }
@@ -3912,7 +3925,11 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       }
       return;
     }
-    if ((e.key === "/" && !typing) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")) {
+    /* A bare slash belongs to whatever is taking typed characters. Any
+       other focus keeps the shortcut, so a keyboard reader partway down
+       the page can still open the palette from wherever they are. */
+    var held = !!(typing || (ae && ae.isContentEditable));
+    if ((e.key === "/" && !held) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")) {
       e.preventDefault();
       open();
     }
@@ -3922,6 +3939,14 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (e.target === pal) { shut(); }
     if (e.target.closest("a")) { shut(); }
   });
+})();
+
+/* ---------- the chord, in the reader's own idiom ---------- */
+(function () {
+  var k = document.getElementById("palchord");
+  if (!k) { return; }
+  var mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || "");
+  if (mac) { k.textContent = "\u2318 K"; }
 })();
 
 /* ---------- footer countersign ---------- */

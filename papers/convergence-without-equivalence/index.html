@@ -539,6 +539,11 @@ h1 .sub,h2 .sub{display:block;font-family:var(--serif,"Instrument Serif",Georgia
     var fwd = (k === "j" || k === "J" || k === "ArrowDown" || k === "ArrowRight");
     var back = (k === "k" || k === "K" || k === "ArrowUp" || k === "ArrowLeft");
     if ((!fwd && !back) || !inPlay()) { return; }
+    /* The arrows are ordinary scrolling keys, but a bare letter belongs
+       to whatever holds the keyboard: J and K page the paper only while
+       focus is loose or inside the reader itself. */
+    var ae = document.activeElement;
+    if (/^[jkJK]$/.test(k) && ae && ae !== document.body && !reader.contains(ae)) { return; }
     var target = fwd ? nextPage() : prevPage();
     if (target < 0) { return; }
     e.preventDefault();
