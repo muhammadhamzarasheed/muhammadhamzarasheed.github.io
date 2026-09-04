@@ -936,19 +936,6 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   }
 }
 .item:last-child{border-bottom:1px solid var(--line);}
-/* Stacked on a phone the dates follow the title and the institution,
-   where a reader scanning a record looks for them, rather than
-   trailing the description: the entry's inner box dissolves into the
-   grid and the pieces take their reading order. */
-@media (max-width:47.99rem){
-  .item > div{display:contents;}
-  .item h3{order:1;}
-  .item .who{order:2;}
-  .item .meta{order:3;margin-top:.1rem;}
-  .item .note{order:4;}
-  .item .prior{order:5;}
-  .item .exhibit{order:6;}
-}
 @media (min-width:48rem){
   .item{grid-template-columns:minmax(0,1fr) 12rem;gap:2.5rem;align-items:start;}
   .item .meta{text-align:right;}
@@ -1327,7 +1314,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-2);
 }
 .ans b{color:var(--text);font-weight:600;}
-.ans a{color:var(--brass);border-bottom:1px solid rgba(201,170,124,.45);transition:border-color .25s ease;}
+.ans a{color:var(--brass);border-bottom:1px solid rgba(201,170,124,.6);transition:border-color .25s ease;}
 .ans a:hover{border-bottom-color:var(--brass);}
 .ans .src{
   display:block;
@@ -1429,7 +1416,7 @@ a.qlink:hover{border-bottom-color:var(--brass);}
 
 footer{border-top:1px solid var(--line);padding:2.5rem 0 3.5rem;}
 footer .shell{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;align-items:baseline;}
-footer .label a{border-bottom:1px solid var(--line-2);transition:color .25s ease,border-color .25s ease;}
+footer .label a{border-bottom:1px solid rgba(201,170,124,.6);transition:color .25s ease,border-color .25s ease;}
 footer .label a:hover{color:var(--brass);border-color:var(--brass);}
 /* The monogram signs the page off: three strokes drawn in order once
    the reader reaches the footer, once per load. Same dashoffset trick
@@ -1559,7 +1546,7 @@ footer .label a:hover{color:var(--brass);border-color:var(--brass);}
    back entirely: otherwise it fades in set in the fallback face, blinks
    out, and is written again. The class is set synchronously by the
    script that will split it, and lifted by a timer as a safety net. */
-.js .hero h1.pending{visibility:hidden;}
+.js .hero h1.pending{opacity:0;}
 .js .hero h1 .word{display:inline-block;white-space:nowrap;}
 .js .hero h1 .c{
   visibility:hidden;
@@ -1710,6 +1697,18 @@ section h2{position:relative;}
    pin released, the shelves stacked, the instruments and the chrome
    left on screen where they belong. */
 @media print{
+  /* The screen's ground is dark and printers drop backgrounds, so the
+     whole page is repainted in ink on paper before anything else. */
+  html,body{background:#fff !important;color:#111 !important;}
+  h1,h2,h3,.q,.q .w,.ans b,.item h3,.tile h3,.principle h3{color:#111 !important;}
+  .prose,.creed,.note,.tile p,.principle p,.cols p,.qclose,.sub,.signoff{color:#222 !important;}
+  .label,.meta,.who,.exlabel,figcaption,.grp dt,.grp dd span,.cols h3,.chk{color:#444 !important;}
+  /* The name is written in brass on screen, letter by letter; on paper
+     it is simply the name, whole and in ink. */
+  .js .hero h1 .c,.js .hero h1 .c.ink{color:#111 !important;text-shadow:none !important;}
+  .rule,.item,.principle,.grp,.band,.now-figs,.creedbox,footer,.exhibit .plate,.prior li{border-color:#bbb !important;}
+  .fig dt,.q p.turn .w,.label b,.paperlink{color:#6b5836 !important;}
+  .tile,.item,.prior li,.exhibit .plate,.reach a{background:transparent !important;}
   .nav,.menu,.spine,.field,.glow,.cue,.pal,.burger,.hours,.cf,.hint,.wx,.skip,body::after{display:none !important;}
   .js .up,.js h2 .w,.js .qclose,.js .hero h1 .c,.js .grp.up dd span{opacity:1 !important;transform:none !important;visibility:visible !important;}
   .js .hero h1.pending{visibility:visible !important;}
@@ -1726,8 +1725,7 @@ section h2{position:relative;}
   .strip .item,#experience.crossing .item{max-width:none !important;min-width:0 !important;margin:0 0 1rem !important;}
   .letterhead{display:block !important;}
   .letterhead .exhibit{max-width:9rem !important;margin-bottom:1rem;}
-  a{color:inherit !important;}
-  .reach a::after{content:" " attr(href);font-family:var(--mono);font-size:.7rem;}
+  a{color:inherit !important;text-decoration:none !important;border:0 !important;}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1740,7 +1738,7 @@ section h2{position:relative;}
   *,*::before,*::after{transition-duration:.001ms !important;transition-delay:0s !important;animation-duration:.001ms !important;}
 }
 #research .orcid{align-self:flex-start;text-align:left;margin-top:1.4rem;}
-#research .orcid a{color:inherit;border-bottom:1px solid rgba(201,170,124,.45);padding-bottom:1px;transition:border-color .25s ease;}
+#research .orcid a{color:inherit;border-bottom:1px solid rgba(201,170,124,.6);padding-bottom:1px;transition:border-color .25s ease;}
 #research .orcid a:hover{border-bottom-color:var(--brass);}
 </style>
 </head>
