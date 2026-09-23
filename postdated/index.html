@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The seal holds &middot; Muhammad Hamza</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://muhammadhamza.co.uk/appendix/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400;600&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --void:#0A0B0C;
+  --raise:#121415;
+  --line:#22262A;
+  --text:#EDEAE4;
+  --text-2:#A0A8AD;
+  --text-3:#7B858C;
+  --brass:#C9AA7C;
+  --sans:"Instrument Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:1.0625rem;
+  line-height:1.75;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem 1.5rem;
+}
+.desk{max-width:34rem;width:100%;text-align:center;}
+.wax{
+  width:88px;
+  height:88px;
+  margin:0 auto 1.4rem;
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#E2C79A,#C9AA7C 45%,#8A6D3F 100%);
+  box-shadow:0 10px 30px rgba(201,170,124,.25),inset 0 2px 6px rgba(255,255,255,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.wax svg{height:2rem;width:auto;color:#0A0B0C;}
+h1{margin:0;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;}
+.when{
+  margin:.7rem 0 0;
+  font-family:var(--mono);
+  font-variant-numeric:tabular-nums;
+  font-size:.8125rem;
+  color:var(--text-3);
+}
+.letter{
+  margin-top:1.4rem;
+  padding:1.6rem 1.5rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.6rem;
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:1.15rem;
+  line-height:1.8;
+  color:var(--text);
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  text-align:left;
+}
+.btn{
+  font-family:var(--mono);
+  font-size:.75rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  background:none;
+  border:1px solid var(--brass);
+  color:var(--brass);
+  padding:.55rem 1.2rem;
+  border-radius:2rem;
+  cursor:pointer;
+  margin-top:1.4rem;
+}
+.small{
+  margin:1.3rem 0 0;
+  font-family:var(--mono);
+  font-size:.6875rem;
+  letter-spacing:.06em;
+  color:var(--text-3);
+}
+.small a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(201,170,124,.5);}
+</style>
+</head>
+<body>
+
+<div class="desk" id="desk" hidden>
+  <div class="wax" aria-hidden="true"><svg viewBox="8 15 48 34" focusable="false"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 45V19l10 13 10-13v26"/><path d="M52 19v26"/><path d="M36 32h16"/></g></svg></div>
+  <h1 id="head">The seal holds.</h1>
+  <p class="when" id="when"></p>
+  <div class="letter" id="letter" hidden></div>
+  <button class="btn" id="act" type="button" hidden>Unseal it</button>
+  <p class="small" id="note">This desk no longer takes new notes, but the register honours its seals. <a href="/appendix/">After hours is through here.</a></p>
+</div>
+
+<script>
+(function () {
+  // The desk closed for new notes, but a note sealed here is a promise
+  // this page still keeps. No note in this browser: straight through
+  // to after hours.
+  var note = null;
+  try { note = JSON.parse(localStorage.getItem("postdated-note") || "null"); } catch (e) {}
+  if (!note || typeof note.text !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(note.openAt || "") ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(note.sealedAt || "")) {
+    location.replace("/appendix/");
+    return;
+  }
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function nice(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+    return parseInt(m[3], 10) + " " + MONTHS[parseInt(m[2], 10) - 1] + " " + m[1];
+  }
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(note.openAt);
+  var target = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+  var t = new Date();
+  var today = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
+  var left = Math.round((target - today) / 86400000);
+
+  document.getElementById("desk").hidden = false;
+  var whenEl = document.getElementById("when");
+  var act = document.getElementById("act");
+  if (left > 0) {
+    whenEl.textContent = "Sealed " + nice(note.sealedAt) + ". Opens " + nice(note.openAt) +
+      ", in " + left + (left === 1 ? " day." : " days.");
+  } else {
+    whenEl.textContent = "Sealed " + nice(note.sealedAt) + ". The date has arrived.";
+    act.hidden = false;
+  }
+  act.addEventListener("click", function () {
+    document.getElementById("head").textContent = "Unsealed.";
+    whenEl.textContent = "Sealed " + nice(note.sealedAt) + ", for " + nice(note.openAt) + ".";
+    var letter = document.getElementById("letter");
+    letter.textContent = note.text;
+    letter.hidden = false;
+    act.textContent = "Save it as a file";
+    act.onclick = function () {
+      var blob = new Blob(["A note sealed " + nice(note.sealedAt) + ", for " + nice(note.openAt) + "\r\n\r\n" +
+        note.text.split(/\r?\n/).join("\r\n")], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "post-dated-note-" + note.openAt + ".txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    };
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>
