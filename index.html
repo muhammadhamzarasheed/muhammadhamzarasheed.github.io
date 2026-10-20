@@ -1684,40 +1684,6 @@ section h2{position:relative;}
 }
 .h2tick.drawn path{stroke-dashoffset:0;}
 
-/* ---------- the forme ---------- */
-/* The motto set at architecture scale between Research and Contact:
-   loose type that locks into the forme as the reader scrolls it into
-   place, the way a page of metal type is locked up before printing.
-   The letters are wrapped in spans by JS; without JS or with reduced
-   motion the lines simply stand, already set. */
-.forme{
-  padding:clamp(5rem,12vw,9rem) 0;
-  overflow:hidden;
-}
-.forme .shell{text-align:left;}
-.forme p{
-  margin:0;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:-.03em;
-  line-height:.95;
-  font-size:clamp(2.6rem,11.5vw,10.5rem);
-  color:var(--text);
-  white-space:nowrap;
-}
-.forme p.dim{color:var(--text-3);}
-.forme .stop{color:var(--brass);}
-.forme p span{display:inline-block;}
-.forme .mnote{
-  margin:1.6rem 0 0;
-  font-family:var(--mono);
-  font-size:.6875rem;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-  color:var(--text-3);
-}
-.forme .mnote b{color:var(--brass);font-weight:400;}
-
 /* ---------- turning the page ---------- */
 /* Cross-document view transitions: the whole site is one ledger, and
    moving between its pages should read as a page being turned in front
@@ -2258,15 +2224,6 @@ section h2{position:relative;}
       <p class="cf up"><a href="#contact">Carried forward <b>08</b> &middot; Contact</a></p>
     </div>
   </section>
-
-  <div class="forme" id="forme" role="presentation">
-    <div class="shell" aria-hidden="true">
-      <p data-settle>Reconcile</p>
-      <p data-settle class="dim">before you</p>
-      <p data-settle>Report<span class="stop">.</span></p>
-      <p class="mnote">The method, set in type <b>&middot;</b> lock it up before it prints</p>
-    </div>
-  </div>
 
   <section id="contact">
     <div class="shell mid">
@@ -4176,66 +4133,6 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }, { passive: true });
 })();
 
-/* ---------- the forme ---------- */
-/* Loose type locks up as it scrolls into place. Each glyph gets a
-   span; progress is read from the band's position every frame while
-   it is on screen, so the settle scrubs with the scroll in both
-   directions and lands exactly as the band reaches the reading line. */
-(function () {
-  var band = document.getElementById("forme");
-  if (!band || RM || !("IntersectionObserver" in window) || !window.requestAnimationFrame) { return; }
-  var lines = [].slice.call(band.querySelectorAll("[data-settle]"));
-  var glyphs = [];
-  lines.forEach(function (line) {
-    var nodes = [].slice.call(line.childNodes);
-    nodes.forEach(function (n) {
-      if (n.nodeType === 3) {
-        var frag = document.createDocumentFragment();
-        n.textContent.split("").forEach(function (ch) {
-          if (ch === " ") {
-            frag.appendChild(document.createTextNode(" "));
-            return;
-          }
-          var s = document.createElement("span");
-          s.textContent = ch;
-          frag.appendChild(s);
-          glyphs.push(s);
-        });
-        line.replaceChild(frag, n);
-      } else if (n.nodeType === 1) {
-        glyphs.push(n); // the brass full stop settles last, as a unit
-      }
-    });
-  });
-  var N = glyphs.length;
-  var seed = [];
-  for (var i = 0; i < N; i++) {
-    // deterministic scatter: alternating tilt, varied drop
-    seed.push({ r: (i % 2 ? 1 : -1) * (2 + (i * 7) % 5), y: 0.22 + ((i * 13) % 7) / 18 });
-  }
-  var visible = false, raf = 0;
-  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
-  function frame() {
-    var rect = band.getBoundingClientRect();
-    var vh = window.innerHeight;
-    // 0 when the band's top crosses the fold, 1 by the reading line
-    var p = clamp01((vh * 0.92 - rect.top) / (vh * 0.6));
-    for (var i = 0; i < N; i++) {
-      var pi = clamp01(p * 1.7 - (i / N) * 0.7);
-      var e = 1 - (1 - pi) * (1 - pi); // ease out
-      var g = glyphs[i].style;
-      g.opacity = (0.06 + 0.94 * e).toFixed(3);
-      g.transform = "translateY(" + ((1 - e) * seed[i].y).toFixed(3) + "em) rotate(" + ((1 - e) * seed[i].r).toFixed(2) + "deg)";
-    }
-    if (visible) { raf = window.requestAnimationFrame(frame); }
-    else { raf = 0; }
-  }
-  var io = new IntersectionObserver(function (entries) {
-    visible = entries[0].isIntersecting;
-    if (visible && !raf) { raf = window.requestAnimationFrame(frame); }
-  }, { rootMargin: "10% 0px 10% 0px" });
-  io.observe(band);
-})();
 </script>
 
 </body>
