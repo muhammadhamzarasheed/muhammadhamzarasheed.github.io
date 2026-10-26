@@ -49,6 +49,16 @@
     "addressLocality": "Manchester",
     "addressCountry": "GB"
   },
+  "hasCredential": [
+    { "@type": "EducationalOccupationalCredential", "name": "Goldman Sachs Internal Audit Job Simulation", "credentialCategory": "certificate", "identifier": "6adf8cc5718cebb68c217744", "recognizedBy": { "@type": "Organization", "name": "Forage" } },
+    { "@type": "EducationalOccupationalCredential", "name": "Goldman Sachs Risk Job Simulation", "credentialCategory": "certificate", "identifier": "6adf8d0c2a45c6c2364c8044", "recognizedBy": { "@type": "Organization", "name": "Forage" } },
+    { "@type": "EducationalOccupationalCredential", "name": "KPMG U.S. Career Catalyst: Audit Job Simulation", "credentialCategory": "certificate", "identifier": "6adf73402a45c6c236467bac", "recognizedBy": { "@type": "Organization", "name": "Forage" } },
+    { "@type": "EducationalOccupationalCredential", "name": "ACCA Sustainability in Banking Job Simulation", "credentialCategory": "certificate", "identifier": "6adf8220718cebb68c1f18f1", "recognizedBy": { "@type": "Organization", "name": "Forage" } },
+    { "@type": "EducationalOccupationalCredential", "name": "Accountancy Work Experience with BDO", "credentialCategory": "certificate", "identifier": "qs9silbu1to5", "recognizedBy": { "@type": "Organization", "name": "Springpod" } },
+    { "@type": "EducationalOccupationalCredential", "name": "Anti-Money Laundering for Accountants", "credentialCategory": "certificate", "identifier": "79079352-d4fe-44a9-a225-05947bcd2378", "recognizedBy": { "@type": "Organization", "name": "Learnsignal" } },
+    { "@type": "EducationalOccupationalCredential", "name": "ChatGPT for Accountants", "credentialCategory": "certificate", "identifier": "df4b9c67-dd83-4b92-a85c-8ecec3170990", "recognizedBy": { "@type": "Organization", "name": "Learnsignal" } },
+    { "@type": "EducationalOccupationalCredential", "name": "AI for Social Impact Global Challenge Program", "credentialCategory": "certificate", "identifier": "UNITAR-AI-2026-000250", "recognizedBy": { "@type": "Organization", "name": "United Nations Institute for Training and Research" } }
+  ],
   "sameAs": [
     "https://www.linkedin.com/in/muhammadhamzarasheed/",
     "https://orcid.org/0009-0005-3366-2603"
@@ -975,6 +985,36 @@ a.qlink:hover{border-bottom-color:var(--brass);}
   color:var(--text-2);
 }
 .prior i{font-style:normal;font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--text-3);font-variant-numeric:tabular-nums;text-transform:uppercase;}
+
+/* ---------- certifications ---------- */
+/* Eight certificates filed under Education as a register: name,
+   issuer, month and the credential ID as issued, so each one can be
+   checked rather than taken on trust. */
+.certs{margin-top:clamp(2.25rem,4vw,3rem);width:100%;text-align:left;}
+.certlist{
+  margin:1.1rem 0 0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:.6rem;
+}
+@media (min-width:52rem){ .certlist{grid-template-columns:1fr 1fr;} }
+.certlist li{
+  display:flex;
+  flex-direction:column;
+  gap:.45rem;
+  padding:.85rem 1rem .8rem;
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-radius:.7rem;
+}
+.certlist b{font-size:.9375rem;font-weight:600;letter-spacing:-.01em;color:var(--text);line-height:1.35;}
+.certlist .iss{font-family:var(--mono);font-size:.6875rem;letter-spacing:.13em;text-transform:uppercase;color:var(--brass);}
+.certlist .iss em{font-style:normal;color:var(--text-3);}
+.certlist .cid{font-family:var(--mono);font-size:.6563rem;letter-spacing:.04em;color:var(--text-3);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
+.certnote{margin:1rem 0 0;font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;color:var(--text-3);}
+.certnote a{color:var(--brass);border-bottom:1px solid rgba(201,170,124,.5);transition:border-color .25s ease;}
+.certnote a:hover{border-bottom-color:var(--brass);}
 
 /* ---------- exhibits ---------- */
 /* Photographs enter the record the way evidence does: framed in a
@@ -2037,6 +2077,21 @@ section h2{position:relative;}
           </div>
           <p class="meta"><b>2018 to 2021</b>Pakistan</p>
         </article>
+      </div>
+
+      <div class="certs up">
+        <p class="label"><b>Certifications</b> &middot; eight, all October 2026</p>
+        <ul class="certlist">
+          <li><b>Goldman Sachs Internal Audit Job Simulation</b><span class="iss">Forage <em>&middot; Oct 2026</em></span><span class="cid">Credential 6adf8cc5718cebb68c217744</span></li>
+          <li><b>Goldman Sachs Risk Job Simulation</b><span class="iss">Forage <em>&middot; Oct 2026</em></span><span class="cid">Credential 6adf8d0c2a45c6c2364c8044</span></li>
+          <li><b>KPMG U.S. Career Catalyst: Audit Job Simulation</b><span class="iss">Forage <em>&middot; Oct 2026</em></span><span class="cid">Credential 6adf73402a45c6c236467bac</span></li>
+          <li><b>ACCA Sustainability in Banking Job Simulation</b><span class="iss">Forage <em>&middot; Oct 2026</em></span><span class="cid">Credential 6adf8220718cebb68c1f18f1</span></li>
+          <li><b>Accountancy Work Experience with BDO</b><span class="iss">Springpod <em>&middot; Oct 2026</em></span><span class="cid">Credential qs9silbu1to5</span></li>
+          <li><b>Anti-Money Laundering for Accountants, CPD</b><span class="iss">Learnsignal <em>&middot; Oct 2026</em></span><span class="cid">Credential 79079352-d4fe-44a9-a225-05947bcd2378</span></li>
+          <li><b>ChatGPT for Accountants, CPD</b><span class="iss">Learnsignal <em>&middot; Oct 2026</em></span><span class="cid">Credential df4b9c67-dd83-4b92-a85c-8ecec3170990</span></li>
+          <li><b>AI for Social Impact Global Challenge Program: AI Ethics, Governance and Responsible AI</b><span class="iss">UNITAR <em>&middot; Oct 2026</em></span><span class="cid">Credential UNITAR-AI-2026-000250</span></li>
+        </ul>
+        <p class="certnote">Credential IDs as issued. Each is also filed on the <a href="https://www.linkedin.com/in/muhammadhamzarasheed/details/certifications/" target="_blank" rel="noopener">LinkedIn certifications register</a>.</p>
       </div>
 
       <div class="cols">
@@ -3694,7 +3749,12 @@ var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // 72 · Citing the papers. Source: /papers/ lede and the reader notice, verbatim.
     { k: ["can i cite your papers", "cite", "citation", "cite your paper", "cite your work", "quotation", "reproduce", "reproduction", "full text", "request the full text", "copy of the paper", "download the paper", "pdf of the paper"],
       a: "All four papers can be cited from their SSRN pages, which are the version of record. The DOIs are on <a href=\"/papers/\" target=\"_blank\" rel=\"noopener\">the research register</a>, and each paper page carries its own. Anything else about them: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.",
-      s: "Working papers", h: "/papers/", rel: [71, 33, 40] }
+      s: "Working papers", h: "/papers/", rel: [71, 33, 40] },
+    // 73 · Certifications. Source: #education certifications register, eight entries counted.
+    { k: ["certifications", "certification", "certificates", "certificate", "cpd", "forage", "job simulation", "simulation", "goldman", "goldman sachs", "kpmg", "bdo", "springpod", "unitar", "learnsignal", "aml", "anti-money laundering", "money laundering", "sustainability in banking", "ai ethics", "ai governance", "chatgpt for accountants"],
+      a: "<b>Eight certifications</b>, all October 2026, filed under <a href=\"#education\">Education</a> with their credential IDs: the Goldman Sachs Internal Audit and Risk job simulations, the KPMG U.S. Career Catalyst audit simulation and ACCA's Sustainability in Banking simulation (all Forage); accountancy work experience with BDO (Springpod); Anti-Money Laundering for Accountants and ChatGPT for Accountants, both CPD (Learnsignal); and UNITAR's AI for Social Impact programme on AI ethics, governance and responsible AI. Each is also on the <a href=\"https://www.linkedin.com/in/muhammadhamzarasheed/details/certifications/\" target=\"_blank\" rel=\"noopener\">LinkedIn certifications register</a>.",
+      s: "Education", h: "#education", rel: [17, 18, 21] }
+
   ];
 
   var FALLBACK = "That one is not in the record yet, and I would rather say so than guess. The direct route works: <a href=\"mailto:hello@muhammadhamza.co.uk\">hello@muhammadhamza.co.uk</a>.<span class=\"src\">From the record: <a href=\"#contact\">Contact</a></span>";
